@@ -1,0 +1,14 @@
+http://www.cplusplus.com/reference/string/string/
+http://www.cplusplus.com/reference/string/string/string/
+http://www.cplusplus.com/reference/string/string/operator=/
+
+http://www.cplusplus.com/reference/istream/istream/
+http://www.cplusplus.com/reference/istream/istream/istream/
+http://www.cplusplus.com/reference/istream/istream/operator>>/
+
+http://www.cplusplus.com/reference/ostream/ostream/
+http://www.cplusplus.com/reference/ostream/ostream/ostream/
+http://www.cplusplus.com/reference/ostream/ostream/operator<</
+
+http://www.cplusplus.com/reference/fstream/ifstream/
+http://www.cplusplus.com/reference/fstream/ifstream/ifstream/
