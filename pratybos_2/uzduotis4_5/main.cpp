@@ -8,33 +8,35 @@ using namespace std;
 
 int main() {
 
-    Automobilis automobilis1;
-    automobilis1.setGamintojas("BMW");
-    automobilis1.setModelis("520d");
-    automobilis1.setVariklioTuris(3.0);
+    Automobilis* automobilis1 = new Automobilis();
+    automobilis1->setGamintojas("BMW");
+    automobilis1->setModelis("520d");
+    automobilis1->setVariklioTuris(3.0);
 
-    Automobilis automobilis2;
-    automobilis2.setGamintojas("Audi");
-    automobilis2.setModelis("A4");
-    automobilis2.setVariklioTuris(2.0);
+    Automobilis* automobilis2 = new Automobilis();
+    automobilis2->setGamintojas("Audi");
+    automobilis2->setModelis("A4");
+    automobilis2->setVariklioTuris(2.0);
 
     //vector<Automobilis> v;
 
     //v.push_back(automobilis1);
     //v.push_back(automobilis2);
-
-     //for(int i = 0; i < v.size(); i++) {
-        //v[i].print();
-     //}
      
-/*    Stack <Automobilis> s1;*/
+    Stack <Automobilis*> s1;
 
-    //s1.init();
-    //s1.push(automobilis1);
-    //s1.push(automobilis2);
-    //s1.printStack();
-    //s1.pop();
-    //s1.printStack();
+    s1.init();
+
+    //for(int i = 0; i < v.size(); i++) {
+       //s1.push(v[i]);
+    //}
+
+    s1.push(automobilis1);
+    s1.push(automobilis2);
+
+    s1.printStack();
+    s1.pop();
+    s1.printStack();
 
 
     Stack <float> s2;
