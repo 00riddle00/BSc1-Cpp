@@ -1,19 +1,16 @@
-CC=g++
-CFLAGS=-Wall -Wextra -g -lm 
+CFLAGS=-Wall -Wextra -g -lm -std=gnu11
 
-program: program.cpp helpers.o binary_file.o filter.o sorting.o
-	$(CC) $(CFLAGS) -o program program.cpp helpers.o binary_file.o filter.o sorting.o 
+program: program.c binary_file.o filter.o sorting.o
+	gcc -o program program.c binary_file.o filter.o sorting.o -L${LD_LIBRARY_PATH} -l_riddle -lm
 
-binary_file.o: helpers.o binary_file.h binary_file.cpp 
+binary_file.o: binary_file.h binary_file.c 
 
-sorting.o: database.h sorting.cpp sorting.h
+sorting.o: database.h sorting.c sorting.h
 
-filter.o: database.h filter.cpp filter.h 
-
-helpers.o: helpers.h helpers.cpp
+filter.o: database.h filter.c filter.h
 
 clean:
-	rm -f program helpers.o binary_file.o sorting.o filter.o
+	rm -f program binary_file.o sorting.o filter.o
 
 rebuild: clean program
 
