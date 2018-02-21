@@ -1,0 +1,37 @@
+Starting program @Wed Feb 21 14:14:42 2018
+Time spent: 0.000823 seconds
+-----------------------
+Starting program @Wed Feb 21 14:15:39 2018
+Time spent: 0.000334 seconds
+-----------------------
+Starting program @Wed Feb 21 15:29:30 2018
+Time spent: 0.002248 seconds
+-----------------------
+Starting program @Wed Feb 21 16:37:00 2018
+Time spent: 0.020573 seconds
+-----------------------
+Starting program @Wed Feb 21 16:37:26 2018
+Time spent: 0.000718 seconds
+-----------------------
+Starting program @Wed Feb 21 17:50:26 2018
+Time spent: 0.000681 seconds
+-----------------------
+Starting program @Wed Feb 21 18:18:47 2018
+Time spent: 0.135714 seconds
+-----------------------
+Starting program @Wed Feb 21 18:20:55 2018
+Time spent: 0.126163 seconds
+-----------------------
+Starting program @Wed Feb 21 18:22:46 2018
+Time spent: 0.131468 seconds
+-----------------------
+Starting program @Wed Feb 21 18:25:01 2018
+Time spent: 0.104667 seconds
+-----------------------
+Starting program @Wed Feb 21 18:26:32 2018
+Time spent: 0.121410 seconds
+-----------------------
+Starting program @Wed Feb 21 18:30:55 2018
+Time spent: 0.133279 seconds
+-----------------------
+Starting program @Wed Feb 21 18:33:21 2018

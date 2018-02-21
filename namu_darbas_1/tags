@@ -1,0 +1,90 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Address	database.h	/^} Address;$/;"	t	typeref:struct:__anon4
+CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -g -lm -std=gnu11$/;"	m
+CHUNK_SIZE	binary_file.h	8;"	d
+CHUNK_SIZE	program.c	66;"	d	file:
+Car	program.c	/^} Car;$/;"	t	typeref:struct:__anon2	file:
+Connection	binary_file.h	/^} Connection;$/;"	t	typeref:struct:__anon1
+Database	database.h	/^} Database;$/;"	t	typeref:struct:__anon5
+EARLIEST_YEAR	program.c	65;"	d	file:
+Input	program.c	/^} Input;$/;"	t	typeref:struct:__anon3	file:
+LATEST_YEAR	program.c	64;"	d	file:
+LOGFILE	program.c	67;"	d	file:
+MAX_LINE	program.c	61;"	d	file:
+MAX_PARAMS	program.c	63;"	d	file:
+MAX_TEXT_LENGTH	database.h	7;"	d
+MAX_TEXT_LENGTH	program.c	62;"	d	file:
+_LIB_RIDDLE_	lib_riddle.h	2;"	d
+__BINARY_FILE_	binary_file.h	2;"	d
+__DATABASE_H_	database.h	2;"	d
+__FILTER_H_	filter.h	2;"	d
+__SORTING_H_	sorting.h	2;"	d
+__dbg_h_	dbg.h	2;"	d
+address_print	program.c	/^void address_print(Address *addr) {$/;"	f
+begin	program.c	/^clock_t begin;$/;"	v
+capacity	database.h	/^    int capacity;$/;"	m	struct:__anon5
+car_make	database.h	/^    char car_make[MAX_TEXT_LENGTH];$/;"	m	struct:__anon4
+car_model	database.h	/^    char car_model[MAX_TEXT_LENGTH];$/;"	m	struct:__anon4
+car_price	database.h	/^    int car_price;$/;"	m	struct:__anon4
+car_year	database.h	/^    int car_year;$/;"	m	struct:__anon4
+check	dbg.h	23;"	d
+check_debug	dbg.h	29;"	d
+check_mem	dbg.h	27;"	d
+clean_errno	dbg.h	15;"	d
+clear_input	program.c	/^void clear_input(Input* input) {$/;"	f
+clocks	program.c	/^double clocks;$/;"	v
+count	program.c	/^    int count;$/;"	m	struct:__anon3	file:
+database_clear	program.c	/^void database_clear(Connection *conn) {$/;"	f
+database_close	binary_file.c	/^void database_close(Connection *conn) {$/;"	f
+database_create	binary_file.c	/^void database_create(Connection *conn) {$/;"	f
+database_delete	program.c	/^void database_delete(Connection *conn, int id) {$/;"	f
+database_get	program.c	/^void database_get(Connection *conn, int id) {$/;"	f
+database_list	program.c	/^void database_list(Database* db, int reverse) {$/;"	f
+database_list_filtered	program.c	/^void database_list_filtered(Database* db, int reverse) {$/;"	f
+database_open	binary_file.c	/^Connection *database_open(const char* filename) {$/;"	f
+database_set	program.c	/^void database_set(Connection* conn, int id, Car *car) { $/;"	f
+database_write	binary_file.c	/^void database_write(Connection *conn) {$/;"	f
+db	binary_file.h	/^    Database *db;$/;"	m	struct:__anon1
+debug	dbg.h	10;"	d
+debug	dbg.h	12;"	d
+debugTable	program.c	/^void debugTable(Connection* conn) {$/;"	f
+end	program.c	/^clock_t end;$/;"	v
+exiting	program.c	/^void exiting() {$/;"	f
+file	binary_file.h	/^    FILE *file;$/;"	m	struct:__anon1
+filter	database.h	/^    int filter;$/;"	m	struct:__anon4
+filter_by_make	filter.c	/^void filter_by_make(Database* db, int type, char* value) {$/;"	f
+filter_by_model	filter.c	/^void filter_by_model(Database* db, int type, char* value) {$/;"	f
+filter_by_price	filter.c	/^void filter_by_price(Database* db, int type, char* value) {$/;"	f
+filter_by_year	filter.c	/^void filter_by_year(Database* db, int type, char* value) {$/;"	f
+get_car	program.c	/^void get_car(Car *car) {$/;"	f
+get_input	program.c	/^void get_input(Input* input) {$/;"	f
+id	database.h	/^    int id;$/;"	m	struct:__anon4
+log_err	dbg.h	17;"	d
+log_info	dbg.h	21;"	d
+log_warn	dbg.h	19;"	d
+logfile	program.c	/^static FILE* logfile;$/;"	v	file:
+main	program.c	/^int main(int argc, char *argv[]) {$/;"	f
+make	program.c	/^    char *make;$/;"	m	struct:__anon2	file:
+model	program.c	/^    char *model;$/;"	m	struct:__anon2	file:
+params	program.c	/^    char** params;$/;"	m	struct:__anon3	file:
+perform_action	program.c	/^void perform_action(int action, Database* db) {$/;"	f
+price	program.c	/^    int price;$/;"	m	struct:__anon2	file:
+print_heading	program.c	/^void print_heading() {$/;"	f
+reset_filter	filter.c	/^void reset_filter(Database* db) {$/;"	f
+rows	database.h	/^    Address** rows;$/;"	m	struct:__anon5
+sentinel	dbg.h	25;"	d
+size	database.h	/^    int size;$/;"	m	struct:__anon5
+sort_by_id	sorting.c	/^void sort_by_id(Database* db, int first, int last)$/;"	f
+sort_by_price	sorting.c	/^void sort_by_price(Database* db, int first, int last) {$/;"	f
+sort_by_year	sorting.c	/^void sort_by_year(Database* db, int first, int last) {$/;"	f
+sort_lex_by_make	sorting.c	/^void sort_lex_by_make(Database* db, int first, int last) {$/;"	f
+sort_lex_by_model	sorting.c	/^void sort_lex_by_model(Database* db, int first, int last) {$/;"	f
+time_spent	program.c	/^double time_spent;$/;"	v
+valid	program.c	/^    int valid;$/;"	m	struct:__anon3	file:
+valid_input	program.c	/^int valid_input(Input* input) {$/;"	f
+year	program.c	/^    int year;$/;"	m	struct:__anon2	file:
