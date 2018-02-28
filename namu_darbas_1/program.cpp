@@ -174,7 +174,7 @@ static FILE* logfile;
 
 int main(int argc, char *argv[]) {
 
-    if (argc < 2) die ("USAGE: test <dbfile> <action> [action params]");
+    if (argc < 2) die ((char*)"USAGE: test <dbfile> <action> [action params]");
 
     logfile = fopen(LOGFILE, "ab+");
 
@@ -195,15 +195,15 @@ int main(int argc, char *argv[]) {
     char* filename = argv[1];
     Connection* conn = database_open(filename);
 
-    char* about = "This is a car database program, where one can perform get, list, create, edit and delete "
+    char* about = (char*)"This is a car database program, where one can perform get, list, create, edit and delete "
             "operations. The database is loaded from and saved to the binary file. Version: v.0";
 
-    char* info = "Usage: in the main shell, input the Action[1] and ID[2].\n\n[1] Action - g=get, l=list, "
+    char* info = (char*)"Usage: in the main shell, input the Action[1] and ID[2].\n\n[1] Action - g=get, l=list, "
         "s=set, d=delete, c=clear database, q=quit, i=info.\n[2] ID - a positive integer. Only get, "
         "set and delete operations require ID parameter.\nExamples: (1) get 1 (get 1st element) (2) l (list elements) "
         "(3) set 2 (set 2nd element)";
 
-    char* separator = "---------------------------------------------------";
+    char* separator = (char*)"---------------------------------------------------";
 
     // shows whether the were command line arguments to a program
     int cmd = 0;
@@ -213,7 +213,7 @@ int main(int argc, char *argv[]) {
 
     /* initialize input variable*/
     Input* input = (Input*) malloc(sizeof(Input));
-    input->params = malloc(MAX_PARAMS * sizeof(char *));
+    input->params = (char**)malloc(MAX_PARAMS * sizeof(char *));
     input->count = 0;
     input->valid = 0;
 
@@ -268,19 +268,21 @@ int main(int argc, char *argv[]) {
         free(input);
 
         switch (action) {
-            case 'a':
+            case 'a': {
                 printf("What action would you like to perform? (enter a number)\n");
                 printf("(1) Filter\n");
                 printf("(2) Sort\n");
 
                 Database *db = conn->db;
-                action = get_num_interval("(Enter a number) > ", "Such option does not exist", 1, 2);
+                action = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 2);
                 perform_action(action, db);
                 break;
-            case 'g':
+            }
+            case 'g': {
                 database_get(conn, id);
                 break;
-            case 's':; // An empty statement before a label
+            }
+            case 's':; { // An empty statement before a label
                 int no_change = 0;
 
 				for (int i = 0; i < conn->db->capacity; i++) {
@@ -299,8 +301,8 @@ int main(int argc, char *argv[]) {
                 if (no_change)
                     break;
 
-                Car *car = malloc(sizeof(Car));
-                if (car == NULL) die("Memory error");
+                Car *car = (Car*) malloc(sizeof(Car));
+                if (car == NULL) die((char*)"Memory error");
                 get_car(car);
 
                 if (choice("Would you like to save?")) {
@@ -311,28 +313,35 @@ int main(int argc, char *argv[]) {
                 free(car->model);
                 free(car);
                 break;
-            case 'd':
+            }
+            case 'd': {
                 database_delete(conn, id);
                 database_write(conn);
                 break;
-            case 'l':
+            }
+            case 'l': {
                 sort_by_id(conn->db, 0, conn->db->size - 1);
 				database_list(conn->db, 0);
                 break;
-            case 'c':
+            }
+            case 'c': {
                 database_clear(conn);
                 break;
-            case 'i':
+            }
+            case 'i': {
                 printf("\n%s\n", separator);
                 printf("%s\n\n", info);
                 // TODO rm debug printing
                 debugTable(conn);
                 break;
-            case 'q':
+            }
+            case 'q': {
                 database_close(conn);
                 return 0;
-            default:
+            }
+            default: {
                 printf("Invalid action, only: g=get, s=set, d=delete, l=list, q=quit, i=info\n");
+            }
         }
 
     }
@@ -373,7 +382,7 @@ void get_input(Input* input) {
             if (input->count < MAX_PARAMS + 1) {
                 // malloc() is used in strdup;
                 input->params[input->count] = pch ? strdup(pch) : pch;
-                if (!pch) die("Memory error");
+                if (!pch) die((char*)"Memory error");
             }
 
             pch = strtok(NULL, " \n");
@@ -410,7 +419,7 @@ int valid_input(Input* input) {
 
     // Validate action
     
-    char *all_actions = "a,g,s,d,l,c,i,q,action,get,set,delete,list,clear,info,quit";
+    char *all_actions = (char*)"a,g,s,d,l,c,i,q,action,get,set,delete,list,clear,info,quit";
     if (strstr(all_actions, input->params[0]) == NULL) {
         printf("Such action does not exist\n");
         return 0;
@@ -419,7 +428,7 @@ int valid_input(Input* input) {
 
     char action = input->params[0][0];
 
-    char *actions = "agsdlciq";
+    char *actions = (char*)"agsdlciq";
     if (strchr(actions, action) == NULL) {
         printf("Such action does not exist\n");
         return 0;
@@ -427,7 +436,7 @@ int valid_input(Input* input) {
 
 
     if (count == 1) {
-        char *actions = "gsd";
+        char *actions = (char*)"gsd";
         if (strchr(actions, action) != NULL) {
             printf("ID is not submitted\n");
             return 0;
@@ -439,7 +448,7 @@ int valid_input(Input* input) {
     
     if (count > 1) {
 
-        char *one_args = "alicq";
+        char *one_args = (char*)"alicq";
         if (strchr(one_args, action) != NULL) {
             printf("Too much arguments for this action\n");
             return 0;
@@ -469,15 +478,16 @@ void clear_input(Input* input) {
 
 
 void get_car(Car *car) {
-    car->make = malloc(MAX_TEXT_LENGTH);
-    car->model= malloc(MAX_TEXT_LENGTH);
+    car->make = (char*)malloc(MAX_TEXT_LENGTH);
+    car->model= (char*)malloc(MAX_TEXT_LENGTH);
     
     int temp;
     int error;
 
     // Enter make
     while (1) {
-        printf("Enter make > ");
+        printf((char*)"Enter make > ");
+        // FIXME cpp warning
         memset(car->make,0,sizeof(car->make));
 
         if (scanf("%[^\n]%*c", car->make) == 1) {
@@ -505,13 +515,13 @@ void get_car(Car *car) {
     }
 
     // Enter model
-    car->model = get_word("Enter model > ", car->model);
+    car->model = get_word((char*)"Enter model > ", car->model);
 
     // Enter year
-    car->year =  get_num_interval("Enter year > ", "Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
+    car->year =  get_num_interval((char*)"Enter year > ", (char*)"Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
 
     // Enter price
-    car->price = get_pos_num("Enter price > ", 0);
+    car->price = get_pos_num((char*)"Enter price > ", 0);
 
 }
 
@@ -541,7 +551,7 @@ void perform_action(int action, Database* db) {
             printf("(3) Year\n");
             printf("(4) Price\n");
 
-            field = get_num_interval("(Enter a number) > ", "Such option does not exist", 1, 4);
+            field = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 4);
 
             printf("How would you like to filter?\n");
             printf("(1) Entry is equal to the given value\n");
@@ -549,11 +559,11 @@ void perform_action(int action, Database* db) {
             printf("(3) Entry is not equal to the given value\n");
             printf("(4) Entry does not contain the given value\n");
 
-            type = get_num_interval("(Enter a number) > ", "Such option does not exist", 1, 4);
+            type = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 4);
 
             printf("Please enter a value to be filtered by\n");
-            value = malloc(sizeof(char) * MAX_TEXT_LENGTH);
-            value = get_text("(Enter a value) > ", value);
+            value = (char*) malloc(sizeof(char) * MAX_TEXT_LENGTH);
+            value = get_text((char*)"(Enter a value) > ", value);
 
             switch(field) {
                 case 1:
@@ -581,13 +591,13 @@ void perform_action(int action, Database* db) {
             printf("(3) Year\n");
             printf("(4) Price\n");
 
-            field = get_num_interval("(Enter a number) > ", "Such option does not exist", 1, 4);
+            field = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 4);
 
             printf("How would you like to sort?\n");
             printf("(1) Ascending order\n");
             printf("(2) Descending order\n");
 
-            type = get_num_interval("(Enter a number) > ", "Such option does not exist", 1, 2);
+            type = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 2);
 
             int reverse = (type == 1) ? 0 : 1;
 
@@ -625,9 +635,9 @@ void exiting() {
 void database_set(Connection* conn, int id, Car *car) { 
     if (conn->db->size == conn->db->capacity) {
         conn->db->capacity += CHUNK_SIZE;
-        conn->db->rows = realloc(conn->db->rows, conn->db->capacity * sizeof(Address*));
+        conn->db->rows = (Address**) realloc(conn->db->rows, conn->db->capacity * sizeof(Address*));
         for (int i = conn->db->size; i < conn->db->capacity; i++) {
-            conn->db->rows[i] = calloc(1, sizeof(Address));
+            conn->db->rows[i] = (Address*) calloc(1, sizeof(Address));
         }
     }
    
@@ -728,7 +738,7 @@ void database_delete(Connection *conn, int id) {
         if (addr->id == id) {
             if (choice("Do you really want to delete this entry?")) {
                 addr->id = 0;
-                conn->db->rows[i] = calloc(1, sizeof(Address));
+                conn->db->rows[i] = (Address*) calloc(1, sizeof(Address));
                 conn->db->size--;
                 printf("Successfully deleted\n");
                 return;
