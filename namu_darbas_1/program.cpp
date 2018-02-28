@@ -44,6 +44,11 @@
  +===========================================================================*/
 
 
+#include <string>
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -65,6 +70,8 @@
 #define EARLIEST_YEAR 1920
 #define CHUNK_SIZE 2
 #define LOGFILE "log.txt"
+
+using namespace std;
 
 // car (make, model, year of making, car price)
 typedef struct {
@@ -163,8 +170,8 @@ void database_delete(Connection* conn, int id);
 // ::params: conn - Connection struct
 void database_clear(Connection *conn);
 
-clock_t begin;
-clock_t end;
+clock_t start;
+clock_t finish;
 
 double clocks;
 double time_spent;
@@ -187,7 +194,7 @@ int main(int argc, char *argv[]) {
     c_time_string = ctime(&current_time);
 
     fprintf(logfile, "Starting program @%s", c_time_string);
-    begin = clock();
+    start = clock();
 
     /* register the termination function */
     atexit(exiting);
@@ -622,9 +629,9 @@ void perform_action(int action, Database* db) {
 }
 
 void exiting() {
-    end = clock();
+    finish = clock();
 
-    clocks = (double)(end - begin);
+    clocks = (double)(finish - start);
     time_spent = clocks / CLOCKS_PER_SEC;
     fprintf(logfile, "Time spent: %lf seconds\n", time_spent);
     fputs("-----------------------\n", logfile);
