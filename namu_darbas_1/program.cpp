@@ -10,7 +10,6 @@
  |
  |     Language:  GNU C (using gcc on Lenovo Y50-70, OS: Arch Linux x86_64)
  |     Version:   0.0
- |   To Compile:  gcc -Wall -g -lm -std=gnu11 namu_darbas.c -o namu_darbas
  |
  +-----------------------------------------------------------------------------
  |
@@ -71,14 +70,6 @@
 
 using namespace std;
 
-// car (make, model, year of making, car price)
-/*typedef struct {*/
-    //char *make;
-    //char *model;
-    //int year;
-    //int price;
-//} Car;
-
 class Car {
     public:
         string make;
@@ -91,81 +82,58 @@ class Car {
         void get_car();
 };
 
-// TODO add validation
+
 void Car::get_car() {
 
+    char* char_make = (char*)malloc(MAX_TEXT_LENGTH);
+    char* char_model= (char*)malloc(MAX_TEXT_LENGTH);
+    
+    int temp;
+    int error;
+
     // Enter make
-    cout << "Enter make > ";
-    cin >> make;
+    while (1) {
+        printf((char*)"Enter make > ");
+        // FIXME cpp warning
+        //memset(this->make,0,sizeof(this->make));
+
+        if (scanf("%[^\n]%*c", char_make) == 1) {
+
+            error = 0;
+
+            for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
+                if(isdigit(char_make[i])) {
+                    error = 1;
+                    break;
+                }
+            }
+
+            if(error) {
+                printf("Car make cannot contain numbers\n");
+                continue;
+            }
+
+            break;
+
+        } else {
+            while((temp=getchar()) != EOF && temp != '\n');
+            printf("Please make sure that make is normal format\n");
+        }
+    }
 
     // Enter model
-    cout << "Enter model > ";
-    cin >> model;
+    char_model = get_word((char*)"Enter model > ", char_model);
+
+    this->make = char_make;
+    this->model = char_model;
 
     // Enter year
-    cout << "Enter year > ";
-    cin >> year;
+    this->year =  get_num_interval((char*)"Enter year > ", (char*)"Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
 
     // Enter price
-    cout << "Enter price > ";
-    cin >> price;
+    this->price = get_pos_num((char*)"Enter price > ", 0);
 
-
-    //void get_car(Car *car) {
-        //car->make = (char*)malloc(MAX_TEXT_LENGTH);
-        //car->model= (char*)malloc(MAX_TEXT_LENGTH);
-        
-        //int temp;
-        //int error;
-
-        //// Enter make
-        //while (1) {
-            //printf((char*)"Enter make > ");
-            //// FIXME cpp warning
-            //memset(car->make,0,sizeof(car->make));
-
-            //if (scanf("%[^\n]%*c", car->make) == 1) {
-
-                //error = 0;
-
-                //for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
-                    //if(isdigit(car->make[i])) {
-                        //error = 1;
-                        //break;
-                    //}
-                //}
-
-                //if(error) {
-                    //printf("Car make cannot contain numbers\n");
-                    //continue;
-                //}
-
-                //break;
-
-            //} else {
-                //while((temp=getchar()) != EOF && temp != '\n');
-                //printf("Please make sure that make is normal format\n");
-            //}
-        //}
-
-        //// Enter model
-        //car->model = get_word((char*)"Enter model > ", car->model);
-
-        //// Enter year
-        //car->year =  get_num_interval((char*)"Enter year > ", (char*)"Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
-
-        //// Enter price
-        //car->price = get_pos_num((char*)"Enter price > ", 0);
-
-    //}
 };
-
-/*// input structure*/
-//typedef struct {
-    //int count;
-    //int valid;
-    //char** params;
-//} Input;
 
 class Input {
     public:
@@ -301,18 +269,6 @@ void Input::clear_input() {
     this->count = 0;
 }
 
-
-// database address 
-/*typedef struct {*/
-    //int id;
-    //int filter;
-    //char car_make[MAX_TEXT_LENGTH];
-    //char car_model[MAX_TEXT_LENGTH];
-    //int car_year;
-    //int car_price;
-//} Address;
-
-
 class Address {
     public:
         int id;
@@ -323,13 +279,6 @@ class Address {
         int car_price;
 };
 
-
-// database
-/*typedef struct {*/
-    //Address** rows;
-    //int size;
-    //int capacity;
-//} Database;
 
 
 class Database {
@@ -1038,17 +987,6 @@ void Database::sort_by_id(int first, int last)
 }
 
 
-
-
-
-
-
-// Connection structure
-// has a pointer to file and a pointer to database
-/*typedef struct {*/
-    //FILE *file;
-    //Database *db;
-//} Connection;
 
 class Connection {
     public:
