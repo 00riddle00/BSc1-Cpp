@@ -313,11 +313,246 @@ typedef struct {
 } Address;
 
 // database
-typedef struct {
-    Address** rows;
-    int size;
-    int capacity;
-} Database;
+/*typedef struct {*/
+    //Address** rows;
+    //int size;
+    //int capacity;
+//} Database;
+
+
+class Database {
+    public: 
+        Address** rows;
+        int size;
+        int capacity;
+
+        // print the heading of the table
+        void print_heading();
+
+        // print address from database
+        //
+        // ::params: addr - Address
+        void address_print(Address *addr);
+
+        // function for debugging
+        // print the table including empty spaces
+        //
+        // ::params: conn - Connection structure
+        void debugTable();
+
+        // set Address struct in database
+        //
+        // ::params: db - Database
+        // ::params: id - entry id (user input)
+        // ::params: car - car struct
+        void database_set(int id, Car *car);
+
+        // get address from database
+        //
+        // ::params: conn - connection struct
+        // ::params: id - entry id (user input)
+        void database_get(int id);
+
+        // get address from database
+        //
+        // ::params: db - Database
+        // ::params: reverse - whether to print in 
+        // reverse order (used in sorting)
+        void database_list(int reverse);
+
+        // get entries from database, if they pass the filter
+        // (check if address->filter is true)
+        //
+        // ::params: db - Database
+        // ::params: reverse - whether to print in 
+        // reverse order (used in sorting)
+        void database_list_filtered(int reverse);
+
+        // delete address from database
+        //
+        // ::params: conn - Connection struct
+        // ::params: id - entry id (user input)
+        void database_delete(int id);
+
+        // clear database
+        // 
+        // ::params: conn - Connection struct
+        void database_clear();
+}; 
+
+
+void Database::print_heading() {
+    printf("__________________________________________________________________________________________\n");
+    printf("| ID |            Make              |            Model             |   Year   |   Price  |\n");
+    printf("|_ __|______________________________|______________________________|__________|__________|\n");
+}
+
+void Database::address_print(Address *addr) {
+
+    printf("|%4d|%30s|%30s|%10d|%10d|\n", addr->id, addr->car_make, addr->car_model, addr->car_year, addr->car_price);
+    printf("|____|______________________________|______________________________|__________|__________|\n");
+}
+
+
+// function for debugging
+void Database::debugTable() {
+    int i = 0;
+
+    debug("db size: %d", this->size);
+    debug("db capacity: %d", this->capacity);
+
+    printf("__________________________________________________________________________________________\n");
+    printf("| ID |            Make              |            Model             |   Year   |   Price  |\n");
+    printf("|_ __|______________________________|______________________________|__________|__________|\n");
+
+    for (i = 0; i < this->capacity; i++) {
+        this->address_print(this->rows[i]);
+    }
+}
+
+
+void Database::database_set(int id, Car *car) { 
+    if (this->size == this->capacity) {
+        this->capacity += CHUNK_SIZE;
+        this->rows = (Address**) realloc(this->rows, this->capacity * sizeof(Address*));
+        for (int i = this->size; i < this->capacity; i++) {
+            this->rows[i] = (Address*) calloc(1, sizeof(Address));
+        }
+    }
+   
+    int i;
+    for (i = 0; i < this->capacity; i++) {
+        if (this->rows[i]->id == 0) {
+            break;
+        }
+    }
+
+
+    strcpy(this->rows[i]->car_make, (car->make).c_str());
+    strcpy(this->rows[i]->car_model, (car->model).c_str());
+    this->rows[i]->car_year = car->year;
+    this->rows[i]->car_price = car->price;
+    this->rows[i]->id = id;
+    this->rows[i]->filter = 1;
+
+    this->size += 1;
+
+    printf("Successfully saved, ID = %d\n", id);
+}
+
+
+void Database::database_get(int id) {
+    for (int i = 0; i < this->size; i++) {
+        Address *addr = this->rows[i];
+        if (addr->id == id) {
+            if (addr) {
+                this->print_heading();
+                this->address_print(addr);
+                return;
+            } 
+        }
+    }
+    printf("ID is not set\n");
+}
+
+
+void Database::database_list(int reverse) {
+
+    this->print_heading();
+
+    if (this->size == 0) {
+        printf("No entries.\n");
+        return;
+    }
+
+    int i = 0;
+
+    if (!reverse) {
+        for (i = 0; i < this->capacity; i++) {
+            if (this->rows[i]->id) {
+                this->address_print(this->rows[i]);
+            }
+        }
+    } else {
+        for (i = this->capacity - 1; i >= 0; i--) {
+            if (this->rows[i]->id) {
+                this->address_print(this->rows[i]);
+            }
+        }
+    }
+
+}
+
+
+
+void Database::database_list_filtered(int reverse) {
+
+    this->print_heading();
+
+    if (this->size == 0) {
+        printf("No entries.\n");
+        return;
+    }
+
+    int i = 0;
+
+    if (!reverse) {
+        for (i = 0; i < this->capacity; i++) {
+            if (this->rows[i]->filter) {
+                this->address_print(this->rows[i]);
+            }
+        }
+    } else {
+        for (i = this->capacity - 1; i >= 0; i--) {
+            if (this->rows[i]->filter) {
+                this->address_print(this->rows[i]);
+            }
+        }
+    }
+
+}
+
+void Database::database_delete(int id) {
+    for (int i = 0; i < this->capacity; i++) {
+        Address *addr = this->rows[i];
+        if (addr->id == id) {
+            if (choice("Do you really want to delete this entry?")) {
+                addr->id = 0;
+                this->rows[i] = (Address*) calloc(1, sizeof(Address));
+                this->size--;
+                printf("Successfully deleted\n");
+                return;
+            }
+        }
+    }
+    printf("No such entry in database\n");
+}
+
+
+void Database::database_clear() {
+
+    if (this->size) {
+        printf("Database has no entries. Nothing to clear.\n");
+        return;
+    }
+
+    if (choice("Do you really want to clear the entire database?")) {
+
+        this->size = 0;
+
+        for (int i = 0; i < this->capacity; i++) {
+            free(this->rows[i]);
+        }
+        printf("Database has been successfully cleared.\n");
+
+    }
+}
+
+
+
+
+
+
 
 
 // Connection structure
@@ -438,21 +673,6 @@ void Connection::database_close() {
 
 
 
-
-// function for debugging
-// print the table including empty spaces
-//
-// ::params: conn - Connection structure
-void debugTable(Connection* conn);
-
-// print the heading of the table
-void print_heading();
-
-// print address from database
-//
-// ::params: addr - Address
-void address_print(Address *addr);
-
 // perform action on a database
 // (filtering or sorting)
 //
@@ -465,44 +685,7 @@ void perform_action(int action, Database* db);
 // displays goodbye message
 void exiting();
 
-// set Address struct in database
-//
-// ::params: db - Database
-// ::params: id - entry id (user input)
-// ::params: car - car struct
-void database_set(Connection* conn, int id, Car *car);
 
-// get address from database
-//
-// ::params: conn - connection struct
-// ::params: id - entry id (user input)
-void database_get(Connection *conn, int id);
-
-// get address from database
-//
-// ::params: db - Database
-// ::params: reverse - whether to print in 
-// reverse order (used in sorting)
-void database_list(Database* db, int reverse);
-
-// get entries from database, if they pass the filter
-// (check if address->filter is true)
-//
-// ::params: db - Database
-// ::params: reverse - whether to print in 
-// reverse order (used in sorting)
-void database_list_filtered(Database* db, int reverse);
-
-// delete address from database
-//
-// ::params: conn - Connection struct
-// ::params: id - entry id (user input)
-void database_delete(Connection* conn, int id);
-
-// clear database
-// 
-// ::params: conn - Connection struct
-void database_clear(Connection *conn);
 
 
 // functions to filter database in a given manner
@@ -663,7 +846,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'g': {
-                database_get(conn, id);
+                conn->db->database_get(id);
                 break;
             }
             case 's':; { // An empty statement before a label
@@ -672,9 +855,9 @@ int main(int argc, char *argv[]) {
 				for (int i = 0; i < conn->db->capacity; i++) {
                     if (conn->db->rows[i]->id == id) {
                         printf("Such entry already exists:\n");
-                        database_get(conn, id);
+                        conn->db->database_get(id);
                         if (choice("Would you like to change it?")) {
-                            database_delete(conn, id);
+                            conn->db->database_delete(id);
                             conn->database_write();
                         } else {
                             no_change = 1;
@@ -691,7 +874,7 @@ int main(int argc, char *argv[]) {
                 car->get_car();
 
                 if (choice("Would you like to save?")) {
-                    database_set(conn, id, car);
+                    conn->db->database_set(id, car);
 					conn->database_write();
                 }
                 // TODO free car
@@ -701,24 +884,27 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'd': {
-                database_delete(conn, id);
+                conn->db->database_delete(id);
                 conn->database_write();
                 break;
             }
             case 'l': {
                 sort_by_id(conn->db, 0, conn->db->size - 1);
-				database_list(conn->db, 0);
+				conn->db->database_list(0);
                 break;
             }
             case 'c': {
-                database_clear(conn);
+                conn->db->database_clear();
+                // FIXME moved out from a clear function
+                conn->database_create();
+                conn->database_write();
                 break;
             }
             case 'i': {
                 printf("\n%s\n", separator);
                 printf("%s\n\n", info);
                 // TODO rm debug printing
-                debugTable(conn);
+                conn->db->debugTable();
                 break;
             }
             case 'q': {
@@ -732,36 +918,6 @@ int main(int argc, char *argv[]) {
 
     }
 }
-
-
-// function for debugging
-void debugTable(Connection* conn) {
-    int i = 0;
-
-    debug("db size: %d", conn->db->size);
-    debug("db capacity: %d", conn->db->capacity);
-
-    printf("__________________________________________________________________________________________\n");
-    printf("| ID |            Make              |            Model             |   Year   |   Price  |\n");
-    printf("|_ __|______________________________|______________________________|__________|__________|\n");
-
-    for (i = 0; i < conn->db->capacity; i++) {
-        address_print(conn->db->rows[i]);
-    }
-}
-
-void print_heading() {
-    printf("__________________________________________________________________________________________\n");
-    printf("| ID |            Make              |            Model             |   Year   |   Price  |\n");
-    printf("|_ __|______________________________|______________________________|__________|__________|\n");
-}
-
-void address_print(Address *addr) {
-
-    printf("|%4d|%30s|%30s|%10d|%10d|\n", addr->id, addr->car_make, addr->car_model, addr->car_year, addr->car_price);
-    printf("|____|______________________________|______________________________|__________|__________|\n");
-}
-
 
 void perform_action(int action, Database* db) {
     int field; 
@@ -804,7 +960,7 @@ void perform_action(int action, Database* db) {
                     filter_by_price(db, type, value);
                     break;
             }
-            database_list_filtered(db, 0);
+            db->database_list_filtered(0);
             reset_filter(db);
             free(value);
             break;
@@ -840,7 +996,7 @@ void perform_action(int action, Database* db) {
                     sort_by_price(db, 0, db->size - 1);
                     break;
             }
-            database_list(db, reverse);
+            db->database_list(reverse);
             break;
     }
 
@@ -857,144 +1013,6 @@ void exiting() {
     printf("Goodbye!\n");
 }
 
-void database_set(Connection* conn, int id, Car *car) { 
-    if (conn->db->size == conn->db->capacity) {
-        conn->db->capacity += CHUNK_SIZE;
-        conn->db->rows = (Address**) realloc(conn->db->rows, conn->db->capacity * sizeof(Address*));
-        for (int i = conn->db->size; i < conn->db->capacity; i++) {
-            conn->db->rows[i] = (Address*) calloc(1, sizeof(Address));
-        }
-    }
-   
-    int i;
-    for (i = 0; i < conn->db->capacity; i++) {
-        if (conn->db->rows[i]->id == 0) {
-            break;
-        }
-    }
-
-
-    strcpy(conn->db->rows[i]->car_make, (car->make).c_str());
-    strcpy(conn->db->rows[i]->car_model, (car->model).c_str());
-    conn->db->rows[i]->car_year = car->year;
-    conn->db->rows[i]->car_price = car->price;
-    conn->db->rows[i]->id = id;
-    conn->db->rows[i]->filter = 1;
-
-    conn->db->size += 1;
-
-    printf("Successfully saved, ID = %d\n", id);
-}
-
-
-void database_get(Connection *conn, int id) {
-    for (int i = 0; i < conn->db->size; i++) {
-        Address *addr = conn->db->rows[i];
-        if (addr->id == id) {
-            if (addr) {
-                print_heading();
-                address_print(addr);
-                return;
-            } 
-        }
-    }
-    printf("ID is not set\n");
-}
-
-
-void database_list(Database* db, int reverse) {
-
-    print_heading();
-
-    if (db->size == 0) {
-        printf("No entries.\n");
-        return;
-    }
-
-    int i = 0;
-
-    if (!reverse) {
-        for (i = 0; i < db->capacity; i++) {
-            if (db->rows[i]->id) {
-                address_print(db->rows[i]);
-            }
-        }
-    } else {
-        for (i = db->capacity - 1; i >= 0; i--) {
-            if (db->rows[i]->id) {
-                address_print(db->rows[i]);
-            }
-        }
-    }
-
-}
-
-
-
-void database_list_filtered(Database* db, int reverse) {
-
-    print_heading();
-
-    if (db->size == 0) {
-        printf("No entries.\n");
-        return;
-    }
-
-    int i = 0;
-
-    if (!reverse) {
-        for (i = 0; i < db->capacity; i++) {
-            if (db->rows[i]->filter) {
-                address_print(db->rows[i]);
-            }
-        }
-    } else {
-        for (i = db->capacity - 1; i >= 0; i--) {
-            if (db->rows[i]->filter) {
-                address_print(db->rows[i]);
-            }
-        }
-    }
-
-}
-
-void database_delete(Connection *conn, int id) {
-    for (int i = 0; i < conn->db->capacity; i++) {
-        Address *addr = conn->db->rows[i];
-        if (addr->id == id) {
-            if (choice("Do you really want to delete this entry?")) {
-                addr->id = 0;
-                conn->db->rows[i] = (Address*) calloc(1, sizeof(Address));
-                conn->db->size--;
-                printf("Successfully deleted\n");
-                return;
-            }
-        }
-    }
-    printf("No such entry in database\n");
-}
-
-
-void database_clear(Connection *conn) {
-
-    if (!conn->db->size) {
-        printf("Database has no entries. Nothing to clear.\n");
-        return;
-    }
-
-    if (choice("Do you really want to clear the entire database?")) {
-
-        conn->db->size = 0;
-
-        for (int i = 0; i < conn->db->capacity; i++) {
-            free(conn->db->rows[i]);
-        }
-        conn->database_create();
-        conn->database_write();
-        printf("Database has been successfully cleared.\n");
-
-    }
-}
 
 void reset_filter(Database* db) {
 
