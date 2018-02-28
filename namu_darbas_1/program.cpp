@@ -322,119 +322,117 @@ typedef struct {
 
 // Connection structure
 // has a pointer to file and a pointer to database
-typedef struct {
-    FILE *file;
-    Database *db;
-} Connection;
+/*typedef struct {*/
+    //FILE *file;
+    //Database *db;
+//} Connection;
 
+class Connection {
+    public:
+        FILE *file;
+        Database *db;
 
-// open database from file. If file does not
-// exist, return an error and exit. If database is failed
-// to load, prompt user to create a new database
-//
-// ::params: filename - name of a file
-// ::return: connection struct
-Connection *database_open(const char* filename);
+        // ::return: connection struct
+        void database_open(const char* filename);
 
-// create database
-// allocate memory for address rows, 
-// set size and capacity of the database
-//
-// ::params: conn - Connection struct
-void database_create(Connection *conn);
+        // create database
+        // allocate memory for address rows, 
+        // set size and capacity of the database
+        //
+        // ::params: conn - Connection struct
+        void database_create();
 
-// write current state of database to a file
-//
-// ::params: conn - Connection struct
-void database_write(Connection *conn);
+        // write current state of database to a file
+        //
+        // ::params: conn - Connection struct
+        void database_write();
 
-// close connection to a file, and free
-// database (conn->db) as well as connection (conn) structs
-// 
-// ::params: conn - Connection struct
-void database_close(Connection *conn);
+        // close connection to a file, and free
+        // database (conn->db) as well as connection (conn) structs
+        // 
+        // ::params: conn - Connection struct
+        void database_close();
+};
 
+void Connection::database_open(const char* filename) {
+	//Connection *conn = new Connection;
+	//if(!conn) die((char*)"Memory error");
 
-Connection *database_open(const char* filename) {
-	Connection *conn = new Connection;
-	if(!conn) die((char*)"Memory error");
+    this->db = new Database;
+	//if(!conn->db) die((char*)"Memory error");
 
-    conn->db = new Database;
-	if(!conn->db) die((char*)"Memory error");
-
-	conn->file = fopen(filename, "r+");
-	if (!conn->file) {
+	this->file = fopen(filename, "r+");
+	if (!this->file) {
         printf((char*)"Failed to open the file, creating a new one\n");
-        conn->file = fopen(filename, "w+");
+        this->file = fopen(filename, "w+");
     }
 
-	if(conn->file) {
+	if(this->file) {
 		// load database from file
-		int rc = fread(conn->db, sizeof(Database), 1, conn->file);
+		int rc = fread(this->db, sizeof(Database), 1, this->file);
 
-        conn->db->rows = new Address*[conn->db->capacity];
+        this->db->rows = new Address*[this->db->capacity];
 
-        for (int i = 0; i < conn->db->capacity; i++) {
-            conn->db->rows[i] = new(Address);
+        for (int i = 0; i < this->db->capacity; i++) {
+            this->db->rows[i] = new(Address);
         }
 
-        for (int i = 0; i < conn->db->capacity; i++) {
-            rc = fread(conn->db->rows[i], sizeof(Address), 1, conn->file);
+        for (int i = 0; i < this->db->capacity; i++) {
+            rc = fread(this->db->rows[i], sizeof(Address), 1, this->file);
         }
 
 		// if database is loaded unsuccessfully
 		if (rc != 1) {
 			printf("Failed to load database\n");
 			if (choice("Would you like to create a new one?\n")) {
-				conn->file = fopen(filename, "w");
-                database_create(conn);
-                database_write(conn);
+				this->file = fopen(filename, "w");
+                this->database_create();
+                this->database_write();
 			}
 		}
 	} 
 
 
-	return conn;
+	//return conn;
 }
 
 
-void database_create(Connection *conn) {
+void Connection::database_create() {
 
-    conn->db->capacity = CHUNK_SIZE;
-    conn->db->size = 0;
-    conn->db->rows = new Address*[conn->db->capacity];
+    this->db->capacity = CHUNK_SIZE;
+    this->db->size = 0;
+    this->db->rows = new Address*[this->db->capacity];
 
-    for (int i = 0; i < conn->db->capacity; i++) {
-        conn->db->rows[i] = new Address;
+    for (int i = 0; i < this->db->capacity; i++) {
+        this->db->rows[i] = new Address;
     }
 }
 
-void database_write(Connection *conn) {
-	rewind(conn->file);
+void Connection::database_write() {
+	rewind(this->file);
 
-	int rc = fwrite(conn->db, sizeof(Database), 1, conn->file);
+	int rc = fwrite(this->db, sizeof(Database), 1, this->file);
 	if (rc != 1) die((char*)"Failed to write database");
 
-    for (int i = 0; i < conn->db->capacity; i++) {
-        rc = fwrite(conn->db->rows[i], sizeof(Address), 1, conn->file);
+    for (int i = 0; i < this->db->capacity; i++) {
+        rc = fwrite(this->db->rows[i], sizeof(Address), 1, this->file);
     }
 
-	rc = fflush(conn->file);
+	rc = fflush(this->file);
 	if (rc == -1) die((char*)"Cannot flush database");
 }
 
 
-void database_close(Connection *conn) {
-	if (conn) {
-		if (conn->file) fclose(conn->file);
+void Connection::database_close() {
+    if (this->file) fclose(this->file);
 
-        for (int i = 0; i < conn->db->capacity; i++) {
-            free(conn->db->rows[i]);
-        }
-		free(conn->db->rows);
-		free(conn->db);
-		free(conn);
-	}
+    for (int i = 0; i < this->db->capacity; i++) {
+        free(this->db->rows[i]);
+    }
+    // TODO free connection
+    //free(conn->db->rows);
+    //free(conn->db);
+    //free(conn);
 }
 
 
@@ -575,7 +573,9 @@ int main(int argc, char *argv[]) {
     atexit(exiting);
 
     char* filename = argv[1];
-    Connection* conn = database_open(filename);
+    Connection* conn = new Connection;
+    conn->database_open(filename);
+    //Connection* conn = database_open(filename);
 
     char* about = (char*)"This is a car database program, where one can perform get, list, create, edit and delete "
             "operations. The database is loaded from and saved to the binary file. Version: v.0";
@@ -675,7 +675,7 @@ int main(int argc, char *argv[]) {
                         database_get(conn, id);
                         if (choice("Would you like to change it?")) {
                             database_delete(conn, id);
-                            database_write(conn);
+                            conn->database_write();
                         } else {
                             no_change = 1;
                             break;
@@ -692,7 +692,7 @@ int main(int argc, char *argv[]) {
 
                 if (choice("Would you like to save?")) {
                     database_set(conn, id, car);
-					database_write(conn);
+					conn->database_write();
                 }
                 // TODO free car
 /*                free(car->make);*/
@@ -702,7 +702,7 @@ int main(int argc, char *argv[]) {
             }
             case 'd': {
                 database_delete(conn, id);
-                database_write(conn);
+                conn->database_write();
                 break;
             }
             case 'l': {
@@ -722,7 +722,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'q': {
-                database_close(conn);
+                conn->database_close();
                 return 0;
             }
             default: {
@@ -989,8 +989,8 @@ void database_clear(Connection *conn) {
         for (int i = 0; i < conn->db->capacity; i++) {
             free(conn->db->rows[i]);
         }
-        database_create(conn);
-        database_write(conn);
+        conn->database_create();
+        conn->database_write();
         printf("Database has been successfully cleared.\n");
 
     }
