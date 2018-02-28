@@ -58,7 +58,6 @@
 
 #include "dbg.h"
 #include "database.h"
-#include "binary_file.h"
 #include "filter.h"
 #include "sorting.h"
 #include "lib_riddle.h"
@@ -306,6 +305,122 @@ void Input::clear_input() {
 
 
 
+// Connection structure
+// has a pointer to file and a pointer to database
+typedef struct {
+    FILE *file;
+    Database *db;
+} Connection;
+
+
+// open database from file. If file does not
+// exist, return an error and exit. If database is failed
+// to load, prompt user to create a new database
+//
+// ::params: filename - name of a file
+// ::return: connection struct
+Connection *database_open(const char* filename);
+
+// create database
+// allocate memory for address rows, 
+// set size and capacity of the database
+//
+// ::params: conn - Connection struct
+void database_create(Connection *conn);
+
+// write current state of database to a file
+//
+// ::params: conn - Connection struct
+void database_write(Connection *conn);
+
+// close connection to a file, and free
+// database (conn->db) as well as connection (conn) structs
+// 
+// ::params: conn - Connection struct
+void database_close(Connection *conn);
+
+
+Connection *database_open(const char* filename) {
+	Connection *conn = new Connection;
+	if(!conn) die((char*)"Memory error");
+
+    conn->db = new Database;
+	if(!conn->db) die((char*)"Memory error");
+
+	conn->file = fopen(filename, "r+");
+	if (!conn->file) {
+        printf((char*)"Failed to open the file, creating a new one\n");
+        conn->file = fopen(filename, "w+");
+    }
+
+	if(conn->file) {
+		// load database from file
+		int rc = fread(conn->db, sizeof(Database), 1, conn->file);
+
+        conn->db->rows = new Address*[conn->db->capacity];
+
+        for (int i = 0; i < conn->db->capacity; i++) {
+            conn->db->rows[i] = new(Address);
+        }
+
+        for (int i = 0; i < conn->db->capacity; i++) {
+            rc = fread(conn->db->rows[i], sizeof(Address), 1, conn->file);
+        }
+
+		// if database is loaded unsuccessfully
+		if (rc != 1) {
+			printf("Failed to load database\n");
+			if (choice("Would you like to create a new one?\n")) {
+				conn->file = fopen(filename, "w");
+                database_create(conn);
+                database_write(conn);
+			}
+		}
+	} 
+
+
+	return conn;
+}
+
+
+void database_create(Connection *conn) {
+
+    conn->db->capacity = CHUNK_SIZE;
+    conn->db->size = 0;
+    conn->db->rows = new Address*[conn->db->capacity];
+
+    for (int i = 0; i < conn->db->capacity; i++) {
+        conn->db->rows[i] = new Address;
+    }
+}
+
+void database_write(Connection *conn) {
+	rewind(conn->file);
+
+	int rc = fwrite(conn->db, sizeof(Database), 1, conn->file);
+	if (rc != 1) die((char*)"Failed to write database");
+
+    for (int i = 0; i < conn->db->capacity; i++) {
+        rc = fwrite(conn->db->rows[i], sizeof(Address), 1, conn->file);
+    }
+
+	rc = fflush(conn->file);
+	if (rc == -1) die((char*)"Cannot flush database");
+}
+
+
+void database_close(Connection *conn) {
+	if (conn) {
+		if (conn->file) fclose(conn->file);
+
+        for (int i = 0; i < conn->db->capacity; i++) {
+            free(conn->db->rows[i]);
+        }
+		free(conn->db->rows);
+		free(conn->db);
+		free(conn);
+	}
+}
 
 
 
