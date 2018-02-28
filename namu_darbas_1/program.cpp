@@ -1,14 +1,14 @@
 /*==============================================================================
  |
- |  Assignment:  Homework #1, #2
+ |  Assignment:  Homework #1
  |
  |       Author:  Tomas Giedraitis
  |  Study group:  VU MIF INFO1, 1st group
  |     Contacts:  tomasgiedraitis@gmail.com
  |        Class:  Programming Basics
- |         Date:  December 20th, 2017
+ |         Date:  March 8th, 2018
  |
- |     Language:  GNU C (using gcc on Lenovo Y50-70, OS: Arch Linux x86_64)
+ |     Language:  C++ (using gcc on Lenovo Y50-70, OS: Arch Linux x86_64)
  |     Version:   0.0
  |
  +-----------------------------------------------------------------------------
@@ -38,27 +38,17 @@
  |       TODOS:   (1) Add unit tests
  |
  | Version
- | updates:       Version 1.5
+ | updates:       Version 1.6
  |
  +===========================================================================*/
-
 
 #include <string>
 #include <iostream>
 #include <vector>
 #include <cstdlib>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <errno.h>
-#include <math.h>
-#include <time.h>
-
 #include "dbg.h"
-/*#include "filter.h"*/
-//#include "sorting.h"
-#include "lib_riddle.h"
+#include "helpers.h"
 
 #define MAX_LINE 100
 #define MAX_TEXT_LENGTH 30
@@ -70,70 +60,6 @@
 
 using namespace std;
 
-class Car {
-    public:
-        string make;
-        string model;
-        int year;
-        int price;
-
-        // prompt user to enter a new database entry (car) 
-        // ::params: car object is modified
-        void get_car();
-};
-
-
-void Car::get_car() {
-
-    char* char_make = (char*)malloc(MAX_TEXT_LENGTH);
-    char* char_model= (char*)malloc(MAX_TEXT_LENGTH);
-    
-    int temp;
-    int error;
-
-    // Enter make
-    while (1) {
-        printf((char*)"Enter make > ");
-        // FIXME cpp warning
-        //memset(this->make,0,sizeof(this->make));
-
-        if (scanf("%[^\n]%*c", char_make) == 1) {
-
-            error = 0;
-
-            for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
-                if(isdigit(char_make[i])) {
-                    error = 1;
-                    break;
-                }
-            }
-
-            if(error) {
-                printf("Car make cannot contain numbers\n");
-                continue;
-            }
-
-            break;
-
-        } else {
-            while((temp=getchar()) != EOF && temp != '\n');
-            printf("Please make sure that make is normal format\n");
-        }
-    }
-
-    // Enter model
-    char_model = get_word((char*)"Enter model > ", char_model);
-
-    this->make = char_make;
-    this->model = char_model;
-
-    // Enter year
-    this->year =  get_num_interval((char*)"Enter year > ", (char*)"Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
-
-    // Enter price
-    this->price = get_pos_num((char*)"Enter price > ", 0);
-
-};
 
 class Input {
     public:
@@ -277,8 +203,62 @@ class Address {
         char car_model[MAX_TEXT_LENGTH];
         int car_year;
         int car_price;
+
+        void getAddress();
 };
 
+
+void Address::getAddress() {
+
+    char* char_make = (char*)malloc(MAX_TEXT_LENGTH);
+    char* char_model= (char*)malloc(MAX_TEXT_LENGTH);
+    
+    int temp;
+    int error;
+
+    // Enter make
+    while (1) {
+        printf((char*)"Enter make > ");
+        // FIXME cpp warning
+        //memset(this->make,0,sizeof(this->make));
+
+        if (scanf("%[^\n]%*c", char_make) == 1) {
+
+            error = 0;
+
+            for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
+                if(isdigit(char_make[i])) {
+                    error = 1;
+                    break;
+                }
+            }
+
+            if(error) {
+                printf("Car make cannot contain numbers\n");
+                continue;
+            }
+
+            break;
+
+        } else {
+            while((temp=getchar()) != EOF && temp != '\n');
+            printf("Please make sure that make is normal format\n");
+        }
+    }
+
+    // Enter model
+    char_model = get_word((char*)"Enter model > ", char_model);
+
+    strcpy(this->car_make, char_make);
+    strcpy(this->car_model, char_model);
+
+    // Enter year
+    this->car_year =  get_num_interval((char*)"Enter year > ", (char*)"Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
+
+    // Enter price
+    this->car_price = get_pos_num((char*)"Enter price > ", 0);
+
+};
 
 
 class Database {
@@ -306,7 +286,7 @@ class Database {
         // ::params: db - Database
         // ::params: id - entry id (user input)
         // ::params: car - car struct
-        void database_set(int id, Car *car);
+        void database_set(int id, Address *address);
 
         // get address from database
         //
@@ -415,7 +395,7 @@ void Database::debugTable() {
 }
 
 
-void Database::database_set(int id, Car *car) { 
+void Database::database_set(int id, Address* addr) { 
     if (this->size == this->capacity) {
         this->capacity += CHUNK_SIZE;
         this->rows = (Address**) realloc(this->rows, this->capacity * sizeof(Address*));
@@ -432,10 +412,10 @@ void Database::database_set(int id, Car *car) {
     }
 
 
-    strcpy(this->rows[i]->car_make, (car->make).c_str());
-    strcpy(this->rows[i]->car_model, (car->model).c_str());
-    this->rows[i]->car_year = car->year;
-    this->rows[i]->car_price = car->price;
+    strcpy(this->rows[i]->car_make, addr->car_make);
+    strcpy(this->rows[i]->car_model, addr->car_model);
+    this->rows[i]->car_year = addr->car_year;
+    this->rows[i]->car_price = addr->car_price;
     this->rows[i]->id = id;
     this->rows[i]->filter = 1;
 
@@ -1250,11 +1230,12 @@ int main(int argc, char *argv[]) {
 
                 //Car *car = (Car*) malloc(sizeof(Car));
                 //if (car == NULL) die((char*)"Memory error");
-                Car *car = new Car;
-                car->get_car();
+                //
+                Address* addr = new Address;
+                addr->getAddress();
 
                 if (choice("Would you like to save?")) {
-                    conn->db->database_set(id, car);
+                    conn->db->database_set(id, addr);
 					conn->database_write();
                 }
                 // TODO free car
