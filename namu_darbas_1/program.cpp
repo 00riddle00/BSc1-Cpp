@@ -57,9 +57,8 @@
 #include <time.h>
 
 #include "dbg.h"
-#include "database.h"
-#include "filter.h"
-#include "sorting.h"
+/*#include "filter.h"*/
+//#include "sorting.h"
 #include "lib_riddle.h"
 
 #define MAX_LINE 100
@@ -303,6 +302,22 @@ void Input::clear_input() {
 }
 
 
+// database address 
+typedef struct {
+    int id;
+    int filter;
+    char car_make[MAX_TEXT_LENGTH];
+    char car_model[MAX_TEXT_LENGTH];
+    int car_year;
+    int car_price;
+} Address;
+
+// database
+typedef struct {
+    Address** rows;
+    int size;
+    int capacity;
+} Database;
 
 
 // Connection structure
@@ -490,6 +505,45 @@ void database_delete(Connection* conn, int id);
 // 
 // ::params: conn - Connection struct
 void database_clear(Connection *conn);
+
+
+// functions to filter database in a given manner
+
+// reset filter
+void reset_filter(Database* db);
+
+// filter by car make
+void filter_by_make(Database* db, int type, char* value);
+
+// filter by car model
+void filter_by_model(Database* db, int type, char* value);
+
+// filter by car year
+void filter_by_year(Database* db, int type, char* value);
+
+// filter by car price
+void filter_by_price(Database* db, int type, char* value);
+
+
+// functions to sort database in a given manner
+
+// sort numerically by entry id
+void sort_by_id(Database* db, int first, int last);
+
+// sort lexicographically by car make
+void sort_lex_by_make(Database* db, int first, int last);
+
+// sort lexicographically by car model
+void sort_lex_by_model(Database* db, int first, int last);
+
+// sort numerically by car year
+void sort_by_year(Database* db, int first, int last);
+
+// sort numerically by car price
+void sort_by_price(Database* db, int first, int last);
+
+
+
 
 clock_t start;
 clock_t finish;
@@ -939,6 +993,355 @@ void database_clear(Connection *conn) {
         database_write(conn);
         printf("Database has been successfully cleared.\n");
 
+    }
+}
+
+void reset_filter(Database* db) {
+
+    for (int i = 0; i < db->size; i++) {
+        Address *cur = db->rows[i];
+        if (cur) {
+            cur->filter = 1;
+        }
+    }
+}
+
+void filter_by_make(Database* db, int type, char* value) {
+
+    switch(type) {
+        case 1:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    if (strcmp(cur->car_make, value) != 0) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 2:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    if (strstr(cur->car_make, value) == NULL) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 3:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    if (strcmp(cur->car_make, value) == 0) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 4:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    if (strstr(cur->car_make, value) != NULL) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+    }
+}
+
+void filter_by_model(Database* db, int type, char* value) {
+
+    switch(type) {
+        case 1:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    if (strcmp(cur->car_model, value) != 0) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 2:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    if (strstr(cur->car_model, value) == NULL) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 3:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    if (strcmp(cur->car_model, value) == 0) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 4:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    if (strstr(cur->car_model, value) != NULL) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+    }
+}
+
+
+void filter_by_year(Database* db, int type, char* value) {
+
+    char year_string[MAX_TEXT_LENGTH];
+
+    switch(type) {
+        case 1:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    sprintf(year_string, "%d", cur->car_year);
+                    if (strcmp(year_string, value) != 0) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 2:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    sprintf(year_string, "%d", cur->car_year);
+                    if (strstr(year_string, value) == NULL) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 3:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    sprintf(year_string, "%d", cur->car_year);
+                    if (strcmp(year_string, value) == 0) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 4:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    sprintf(year_string, "%d", cur->car_year);
+                    if (strstr(year_string, value) != NULL) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+    }
+}
+
+
+void filter_by_price(Database* db, int type, char* value) {
+
+    char price_string[MAX_TEXT_LENGTH];
+
+    switch(type) {
+        case 1:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    sprintf(price_string, "%d", cur->car_price);
+                    if (strcmp(price_string, value) != 0) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 2:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    sprintf(price_string, "%d", cur->car_price);
+                    if (strstr(price_string, value) == NULL) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 3:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    sprintf(price_string, "%d", cur->car_price);
+                    if (strcmp(price_string, value) == 0) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 4:
+            for (int i = 0; i < db->size; i++) {
+                Address *cur = db->rows[i];
+                if (cur) {
+                    sprintf(price_string, "%d", cur->car_price);
+                    if (strstr(price_string, value) != NULL) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+    }
+}
+
+
+
+void sort_lex_by_make(Database* db, int first, int last) {
+
+    int i, j;
+    Address* temp;
+
+    for (i = first; i < last; ++i)
+
+        for (j = i + 1; j < last + 1; ++j) {
+
+            if (strcmp(db->rows[i]->car_make, db->rows[j]->car_make) > 0) {
+                temp = db->rows[i];
+                db->rows[i] = db->rows[j];
+                db->rows[j] = temp;
+            }
+        }
+}
+
+
+void sort_lex_by_model(Database* db, int first, int last) {
+
+    int i, j;
+    Address* temp;
+
+    for (i = first; i < last; ++i)
+
+        for (j = i + 1; j < last + 1; ++j) {
+
+            if (strcmp(db->rows[i]->car_model, db->rows[j]->car_model) > 0) {
+                temp = db->rows[i];
+                db->rows[i] = db->rows[j];
+                db->rows[j] = temp;
+            }
+        }
+}
+
+void sort_by_year(Database* db, int first, int last) {
+
+    Address* temp;
+    int pivot, j, i;
+
+    if (first < last) {
+        pivot = first;
+        i = first;
+        j = last;
+
+        while (i < j) {
+            while (
+                db->rows[i]->car_year <= db->rows[pivot]->car_year && i < last) {
+                i++;
+            }
+            while (db->rows[j]->car_year > db->rows[pivot]->car_year) {
+                j--;
+            }
+            if (i < j) {
+                temp = db->rows[i];
+                db->rows[i] = db->rows[j];
+                db->rows[j] = temp;
+            }
+        }
+
+        temp = db->rows[pivot];
+        db->rows[pivot] = db->rows[j];
+        db->rows[j] = temp;
+
+        sort_by_year(db, first, j - 1);
+        sort_by_year(db, j + 1, last);
+    }
+}
+
+void sort_by_price(Database* db, int first, int last) {
+
+    Address* temp;
+    int pivot, j, i;
+
+    if (first < last) {
+        pivot = first;
+        i = first;
+        j = last;
+
+        while (i < j) {
+            while (
+                db->rows[i]->car_price <= db->rows[pivot]->car_price && i < last) {
+                i++;
+            }
+            while (db->rows[j]->car_price > db->rows[pivot]->car_price) {
+                j--;
+            }
+            if (i < j) {
+                temp = db->rows[i];
+                db->rows[i] = db->rows[j];
+                db->rows[j] = temp;
+            }
+        }
+
+        temp = db->rows[pivot];
+        db->rows[pivot] = db->rows[j];
+        db->rows[j] = temp;
+
+        sort_by_price(db, first, j - 1);
+        sort_by_price(db, j + 1, last);
+    }
+}
+
+
+void sort_by_id(Database* db, int first, int last)
+{
+
+    Address* temp;
+    int pivot, j, i;
+
+    if (first < last) {
+        pivot = first;
+        i = first;
+        j = last;
+
+        while (i < j) {
+            while (
+                db->rows[i]->id <= db->rows[pivot]->id && i < last) {
+                i++;
+            }
+            while (db->rows[j]->id > db->rows[pivot]->id) {
+                j--;
+            }
+            if (i < j) {
+                temp = db->rows[i];
+                db->rows[i] = db->rows[j];
+                db->rows[j] = temp;
+            }
+        }
+
+        temp = db->rows[pivot];
+        db->rows[pivot] = db->rows[j];
+        db->rows[j] = temp;
+
+        sort_by_id(db, first, j - 1);
+        sort_by_id(db, j + 1, last);
     }
 }
 
