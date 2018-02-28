@@ -111,35 +111,211 @@ void Car::get_car() {
     // Enter price
     cout << "Enter price > ";
     cin >> price;
+
+
+    //void get_car(Car *car) {
+        //car->make = (char*)malloc(MAX_TEXT_LENGTH);
+        //car->model= (char*)malloc(MAX_TEXT_LENGTH);
+        
+        //int temp;
+        //int error;
+
+        //// Enter make
+        //while (1) {
+            //printf((char*)"Enter make > ");
+            //// FIXME cpp warning
+            //memset(car->make,0,sizeof(car->make));
+
+            //if (scanf("%[^\n]%*c", car->make) == 1) {
+
+                //error = 0;
+
+                //for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
+                    //if(isdigit(car->make[i])) {
+                        //error = 1;
+                        //break;
+                    //}
+                //}
+
+                //if(error) {
+                    //printf("Car make cannot contain numbers\n");
+                    //continue;
+                //}
+
+                //break;
+
+            //} else {
+                //while((temp=getchar()) != EOF && temp != '\n');
+                //printf("Please make sure that make is normal format\n");
+            //}
+        //}
+
+        //// Enter model
+        //car->model = get_word((char*)"Enter model > ", car->model);
+
+        //// Enter year
+        //car->year =  get_num_interval((char*)"Enter year > ", (char*)"Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
+
+        //// Enter price
+        //car->price = get_pos_num((char*)"Enter price > ", 0);
+
+    //}
+};
+
+/*// input structure*/
+//typedef struct {
+    //int count;
+    //int valid;
+    //char** params;
+//} Input;
+
+class Input {
+    public:
+        int count;
+        int valid;
+        //vector<string> params;
+        char** params;
+
+        // ::params: input - input structure is modified
+        void get_input();
+
+        // ::params: input - input structure 
+        // ::return: 1 if input is valid, else 0
+        int valid_input();
+
+        // set input value and input count to 0, nullify pointers 
+        // inside input->params
+        //
+        // ::params: input - input structure is modified
+        void clear_input();
+};
+
+
+
+void Input::get_input() {
+
+    char *pch;
+
+    char line[MAX_LINE];
+
+    while (1) {
+        printf("[enter \"i\" for info] main shell > ");
+
+        fgets(line, sizeof(line), stdin);
+
+        pch = strtok(line, " \n");
+        while (pch != NULL) {
+
+            if (this->count < MAX_PARAMS + 1) {
+                // malloc() is used in strdup;
+                this->params[this->count] = pch ? strdup(pch) : pch;
+                if (!pch) die((char*)"Memory error");
+            }
+
+            pch = strtok(NULL, " \n");
+            this->count++;
+        }
+
+        // break if input is valid
+        if (this->valid_input()) {
+            this->valid = 1;
+            break;
+        // else clear input and repeat
+        } else {
+            this->clear_input();
+        }
+    }
+}
+
+int Input::valid_input() {
+
+    // Validate argument count
+   
+    int count = this->count;
+
+    if (count == 0) {
+        printf("The input is empty.\n");
+        return 0;
+    }
+
+    if (count > MAX_PARAMS) {
+        printf("Too many arguments\n");
+        return 0;
+    }
+
+
+    // Validate action
+    
+    char *all_actions = (char*)"a,g,s,d,l,c,i,q,action,get,set,delete,list,clear,info,quit";
+    if (strstr(all_actions, this->params[0]) == NULL) {
+        printf("Such action does not exist\n");
+        return 0;
+    }
+
+
+    char action = this->params[0][0];
+
+    char *actions = (char*)"agsdlciq";
+    if (strchr(actions, action) == NULL) {
+        printf("Such action does not exist\n");
+        return 0;
+    }
+
+
+    if (count == 1) {
+        char *actions = (char*)"gsd";
+        if (strchr(actions, action) != NULL) {
+            printf("ID is not submitted\n");
+            return 0;
+        }
+    }
+
+
+    // Validate id
+    
+    if (count > 1) {
+
+        char *one_args = (char*)"alicq";
+        if (strchr(one_args, action) != NULL) {
+            printf("Too much arguments for this action\n");
+            return 0;
+        }
+
+        int id = atoi(this->params[1]);
+
+        // id being equal to 0 in condition
+        // below also validates from char input
+        if (id <= 0) {
+            printf("ID should be a positive integer.\n");
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+
+void Input::clear_input() {
+    for (int i = 0; i < MAX_PARAMS; ++i) {
+        this->params[i] = NULL;
+    }
+    this->valid = 0;
+    this->count = 0;
 }
 
 
 
-// input structure
-typedef struct {
-    int count;
-    int valid;
-    char** params;
-} Input;
+
+
+
+
+
 
 // function for debugging
 // print the table including empty spaces
 //
 // ::params: conn - Connection structure
 void debugTable(Connection* conn);
-
-// ::params: input - input structure is modified
-void get_input(Input* input);
-
-// ::params: input - input structure 
-// ::return: 1 if input is valid, else 0
-int valid_input(Input* input);
-
-// set input value and input count to 0, nullify pointers 
-// inside input->params
-//
-// ::params: input - input structure is modified
-void clear_input(Input* input);
 
 // print the heading of the table
 void print_heading();
@@ -249,7 +425,8 @@ int main(int argc, char *argv[]) {
     int id;
 
     /* initialize input variable*/
-    Input* input = (Input*) malloc(sizeof(Input));
+    //Input* input = (Input*) malloc(sizeof(Input));
+    Input* input = new Input;
     input->params = (char**)malloc(MAX_PARAMS * sizeof(char *));
     input->count = 0;
     input->valid = 0;
@@ -283,14 +460,14 @@ int main(int argc, char *argv[]) {
         // in case of argv input
         if (cmd) {
             cmd = 0;
-            if (!valid_input(input)) {
-                clear_input(input);
+            if (!input->valid_input()) {
+                input->clear_input();
                 continue;
             }
         // else get input from user
         } else {
-            clear_input(input);
-            get_input(input);
+            input->clear_input();
+            input->get_input();
         }
 
         // setting action from input
@@ -301,8 +478,9 @@ int main(int argc, char *argv[]) {
             id = atoi(input->params[1]);
         }
 
-        free(input->params);
-        free(input);
+        // TODO free input
+        //free(input->params);
+        //free(input);
 
         switch (action) {
             case 'a': {
@@ -347,10 +525,10 @@ int main(int argc, char *argv[]) {
                     database_set(conn, id, car);
 					database_write(conn);
                 }
+                // TODO free car
 /*                free(car->make);*/
                 //free(car->model);
                 //free(car);
-                //delete Car;
                 break;
             }
             case 'd': {
@@ -402,167 +580,6 @@ void debugTable(Connection* conn) {
         address_print(conn->db->rows[i]);
     }
 }
-
-
-void get_input(Input* input) {
-
-    char *pch;
-
-    char line[MAX_LINE];
-
-    while (1) {
-        printf("[enter \"i\" for info] main shell > ");
-
-        fgets(line, sizeof(line), stdin);
-
-        pch = strtok(line, " \n");
-        while (pch != NULL) {
-
-            if (input->count < MAX_PARAMS + 1) {
-                // malloc() is used in strdup;
-                input->params[input->count] = pch ? strdup(pch) : pch;
-                if (!pch) die((char*)"Memory error");
-            }
-
-            pch = strtok(NULL, " \n");
-            input->count++;
-        }
-
-        // break if input is valid
-        if (valid_input(input)) {
-            input->valid = 1;
-            break;
-        // else clear input and repeat
-        } else {
-            clear_input(input);
-        }
-    }
-}
-
-int valid_input(Input* input) {
-
-    // Validate argument count
-   
-    int count = input->count;
-
-    if (count == 0) {
-        printf("The input is empty.\n");
-        return 0;
-    }
-
-    if (count > MAX_PARAMS) {
-        printf("Too many arguments\n");
-        return 0;
-    }
-
-
-    // Validate action
-    
-    char *all_actions = (char*)"a,g,s,d,l,c,i,q,action,get,set,delete,list,clear,info,quit";
-    if (strstr(all_actions, input->params[0]) == NULL) {
-        printf("Such action does not exist\n");
-        return 0;
-    }
-
-
-    char action = input->params[0][0];
-
-    char *actions = (char*)"agsdlciq";
-    if (strchr(actions, action) == NULL) {
-        printf("Such action does not exist\n");
-        return 0;
-    }
-
-
-    if (count == 1) {
-        char *actions = (char*)"gsd";
-        if (strchr(actions, action) != NULL) {
-            printf("ID is not submitted\n");
-            return 0;
-        }
-    }
-
-
-    // Validate id
-    
-    if (count > 1) {
-
-        char *one_args = (char*)"alicq";
-        if (strchr(one_args, action) != NULL) {
-            printf("Too much arguments for this action\n");
-            return 0;
-        }
-
-        int id = atoi(input->params[1]);
-
-        // id being equal to 0 in condition
-        // below also validates from char input
-        if (id <= 0) {
-            printf("ID should be a positive integer.\n");
-            return 0;
-        }
-    }
-
-    return 1;
-}
-
-
-void clear_input(Input* input) {
-    for (int i = 0; i < MAX_PARAMS; ++i) {
-        input->params[i] = NULL;
-    }
-    input->valid = 0;
-    input->count = 0;
-}
-
-
-//void get_car(Car *car) {
-    //car->make = (char*)malloc(MAX_TEXT_LENGTH);
-    //car->model= (char*)malloc(MAX_TEXT_LENGTH);
-    
-    //int temp;
-    //int error;
-
-    //// Enter make
-    //while (1) {
-        //printf((char*)"Enter make > ");
-        //// FIXME cpp warning
-        //memset(car->make,0,sizeof(car->make));
-
-        //if (scanf("%[^\n]%*c", car->make) == 1) {
-
-            //error = 0;
-
-            //for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
-                //if(isdigit(car->make[i])) {
-                    //error = 1;
-                    //break;
-                //}
-            //}
-
-            //if(error) {
-                //printf("Car make cannot contain numbers\n");
-                //continue;
-            //}
-
-            //break;
-
-        //} else {
-            //while((temp=getchar()) != EOF && temp != '\n');
-            //printf("Please make sure that make is normal format\n");
-        //}
-    //}
-
-    //// Enter model
-    //car->model = get_word((char*)"Enter model > ", car->model);
-
-    //// Enter year
-    //car->year =  get_num_interval((char*)"Enter year > ", (char*)"Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
-
-    //// Enter price
-    //car->price = get_pos_num((char*)"Enter price > ", 0);
-
-//}
 
 void print_heading() {
     printf("__________________________________________________________________________________________\n");
