@@ -7,14 +7,14 @@
 
 Connection *database_open(const char* filename) {
 	Connection *conn = new Connection;
-	if(!conn) die("Memory error");
+	if(!conn) die((char*)"Memory error");
 
     conn->db = new Database;
-	if(!conn->db) die("Memory error");
+	if(!conn->db) die((char*)"Memory error");
 
 	conn->file = fopen(filename, "r+");
 	if (!conn->file) {
-        printf("Failed to open the file, creating a new one\n");
+        printf((char*)"Failed to open the file, creating a new one\n");
         conn->file = fopen(filename, "w+");
     }
 
@@ -63,14 +63,14 @@ void database_write(Connection *conn) {
 	rewind(conn->file);
 
 	int rc = fwrite(conn->db, sizeof(Database), 1, conn->file);
-	if (rc != 1) die("Failed to write database");
+	if (rc != 1) die((char*)"Failed to write database");
 
     for (int i = 0; i < conn->db->capacity; i++) {
         rc = fwrite(conn->db->rows[i], sizeof(Address), 1, conn->file);
     }
 
 	rc = fflush(conn->file);
-	if (rc == -1) die("Cannot flush database");
+	if (rc == -1) die((char*)"Cannot flush database");
 }
 
 

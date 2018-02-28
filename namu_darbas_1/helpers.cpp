@@ -6,19 +6,6 @@
 
 #include "helpers.h"
 
-struct _PointerStats {
-    char* pointerName;
-    int pointerMemory;
-};
-
-struct _MemoryStats {
-    struct _PointerStats* memJournal;
-    int JournalPointerCount;
-    int memUsed;
-    int memUsedByJournal;
-};
-
-struct _MemoryStats memoryStats;
 
 char* get_word(char* message, char* output)
 {
@@ -147,7 +134,7 @@ char** get_tokens(
                 // malloc() is used in strdup;
                 tokens[count] = pch ? strdup(pch) : pch;
                 if (!pch)
-                    die("Memory error");
+                    die((char*)"Memory error");
             }
 
             pch = strtok(NULL, " \n");

@@ -10,7 +10,6 @@
  |
  |     Language:  GNU C (using gcc on Lenovo Y50-70, OS: Arch Linux x86_64)
  |     Version:   0.0
- |   To Compile:  gcc -Wall -g -lm -std=gnu11 namu_darbas.c -o namu_darbas
  |
  +-----------------------------------------------------------------------------
  |
@@ -43,6 +42,9 @@
  |
  +===========================================================================*/
 
+#include <string>
+#include <iostream>
+#include <vector>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -70,19 +72,180 @@
 using namespace std;
 
 // car (make, model, year of making, car price)
-typedef struct {
-    char *make;
-    char *model;
-    int year;
-    int price;
-} Car;
+class Car {
+    public: 
+        string make;
+        string model;
+        int year;
+        int price;
 
-// input structure
-typedef struct {
-    int count;
-    int valid;
-    char** params;
-} Input;
+        void get_car();
+};
+
+
+// TODO add validation
+void Car::get_car() {
+
+    // Enter make
+    cout << "Enter make > ";
+    cin >> make;
+
+    // Enter model
+    cout << "Enter model > ";
+    cin >> model;
+
+    // Enter year
+    cout << "Enter year > ";
+    cin >> year;
+
+    // Enter price
+    cout << "Enter price > ";
+    cin >> price;
+}
+
+
+class Input {
+    public:
+        int count;
+        int valid;
+        vector<string> params;
+
+        void get_input();
+
+        int valid_input();
+
+        void clear_input();
+};
+
+
+void Input::get_input() {
+
+    char *pch;
+
+    char line[MAX_LINE];
+
+    while (1) {
+        printf("[enter \"i\" for info] main shell > ");
+
+        fgets(line, sizeof(line), stdin);
+
+        pch = strtok(line, " \n");
+        while (pch != NULL) {
+
+            if (this->count < MAX_PARAMS + 1) {
+                // malloc() is used in strdup;
+                this->params[this->count] = pch ? strdup(pch) : pch;
+                if (!pch) die((char*)"Memory error");
+            }
+
+            pch = strtok(NULL, " \n");
+            this->count++;
+        }
+
+        // break if input is valid
+        if (this->valid_input()) {
+            this->valid = 1;
+            break;
+        // else clear input and repeat
+        } else {
+            this->clear_input();
+        }
+    }
+
+}
+
+int Input::valid_input() {
+    return 1;
+}
+//
+//
+//int Input::valid_input() {
+    //// Validate argument count
+   
+    //int count = this->count;
+
+    //if (count == 0) {
+        //printf("The input is empty.\n");
+        //return 0;
+    //}
+
+    //if (count > MAX_PARAMS) {
+        //printf("Too many arguments\n");
+        //return 0;
+    //}
+
+
+    //// Validate action
+    
+    //// TODO rewrite using string find() method
+    ////char *all_actions = "a,g,s,d,l,c,i,q,action,get,set,delete,list,clear,info,quit";
+    ////if (strstr(all_actions, this->params[0]) == NULL) {
+        ////printf("Such action does not exist\n");
+        ////return 0;
+    ////}
+
+
+    //char action = this->params[0][0];
+
+    //char *actions = "agsdlciq";
+    //if (strchr(actions, action) == NULL) {
+        //printf("Such action does not exist\n");
+        //return 0;
+    //}
+
+
+    //if (count == 1) {
+        //char *actions = "gsd";
+        //if (strchr(actions, action) != NULL) {
+            //printf("ID is not submitted\n");
+            //return 0;
+        //}
+    //}
+
+
+    //// Validate id
+    
+    //if (count > 1) {
+
+        //char *one_args = "alicq";
+        //if (strchr(one_args, action) != NULL) {
+            //printf("Too much arguments for this action\n");
+            //return 0;
+        //}
+
+        //int id = atoi(this->params[1]);
+
+        //// id being equal to 0 in condition
+        //// below also validates from char input
+        //if (id <= 0) {
+            //printf("ID should be a positive integer.\n");
+            //return 0;
+        //}
+    //}
+
+    //return 1;
+
+//}
+
+void Input::clear_input() {
+    cout << "Input cleared" << endl;
+}
+//void Input::clear_input() {
+
+    //for (int i = 0; i < MAX_PARAMS; ++i) {
+        //this->params[i] = NULL;
+    //}
+    //this->valid = 0;
+    //this->count = 0;
+
+//}
+
+
+//typedef struct {
+    //int count;
+    //int valid;
+    //char** params;
+//} Input;
 
 // function for debugging
 // print the table including empty spaces
@@ -90,22 +253,6 @@ typedef struct {
 // ::params: conn - Connection structure
 void debugTable(Connection* conn);
 
-// ::params: input - input structure is modified
-void get_input(Input* input);
-
-// ::params: input - input structure 
-// ::return: 1 if input is valid, else 0
-int valid_input(Input* input);
-
-// set input value and input count to 0, nullify pointers 
-// inside input->params
-//
-// ::params: input - input structure is modified
-void clear_input(Input* input);
-
-// prompt user to enter a new database entry (car) 
-// ::params: car object is modified
-void get_car(Car *car);
 
 // print the heading of the table
 void print_heading();
@@ -166,8 +313,8 @@ void database_delete(Connection* conn, int id);
 // ::params: conn - Connection struct
 void database_clear(Connection *conn);
 
-clock_t begin;
-clock_t end;
+clock_t start;
+clock_t finish;
 
 double clocks;
 double time_spent;
@@ -177,7 +324,7 @@ static FILE* logfile;
 
 int main(int argc, char *argv[]) {
 
-    if (argc < 2) die ("USAGE: test <dbfile> <action> [action params]");
+    if (argc < 2) die ((char*)"USAGE: test <dbfile> <action> [action params]");
 
     logfile = fopen(LOGFILE, "ab+");
 
@@ -190,7 +337,7 @@ int main(int argc, char *argv[]) {
     c_time_string = ctime(&current_time);
 
     fprintf(logfile, "Starting program @%s", c_time_string);
-    begin = clock();
+    start = clock();
 
     /* register the termination function */
     atexit(exiting);
@@ -198,15 +345,15 @@ int main(int argc, char *argv[]) {
     char* filename = argv[1];
     Connection* conn = database_open(filename);
 
-    char* about = "This is a car database program, where one can perform get, list, create, edit and delete "
+    char* about = (char*)"This is a car database program, where one can perform get, list, create, edit and delete "
             "operations. The database is loaded from and saved to the binary file. Version: v.0";
 
-    char* info = "Usage: in the main shell, input the Action[1] and ID[2].\n\n[1] Action - g=get, l=list, "
+    char* info = (char*)"Usage: in the main shell, input the Action[1] and ID[2].\n\n[1] Action - g=get, l=list, "
         "s=set, d=delete, c=clear database, q=quit, i=info.\n[2] ID - a positive integer. Only get, "
         "set and delete operations require ID parameter.\nExamples: (1) get 1 (get 1st element) (2) l (list elements) "
         "(3) set 2 (set 2nd element)";
 
-    char* separator = "---------------------------------------------------";
+    char* separator = (char*)"---------------------------------------------------";
 
     // shows whether the were command line arguments to a program
     int cmd = 0;
@@ -216,7 +363,7 @@ int main(int argc, char *argv[]) {
 
     /* initialize input variable*/
     Input* input = new Input;
-    input->params = new char*[MAX_PARAMS];
+    //input->params = new char*[MAX_PARAMS];
     input->count = 0;
     input->valid = 0;
 
@@ -249,26 +396,28 @@ int main(int argc, char *argv[]) {
         // in case of argv input
         if (cmd) {
             cmd = 0;
-            if (!valid_input(input)) {
-                clear_input(input);
+            if (!input->valid_input()) {
+                input->clear_input();
                 continue;
             }
         // else get input from user
         } else {
-            clear_input(input);
-            get_input(input);
+            input->clear_input();
+            input->get_input();
         }
 
         // setting action from input
         char action = (input->params)[0][0];
 
+        // TODO fix
         // setting id from input
-        if (input->params[1] != NULL) {
-            id = atoi(input->params[1]);
-        }
+        //if (input->params[1] != NULL) {
+            //id = atoi(input->params[1]);
+        //}
 
-        free(input->params);
-        free(input);
+        id = 3;
+
+        // TODO free input
 
         switch (action) {
             case 'a':
@@ -278,7 +427,7 @@ int main(int argc, char *argv[]) {
                 printf("(2) Sort\n");
 
                 Database *db = conn->db;
-                action = get_num_interval("(Enter a number) > ", "Such option does not exist", 1, 2);
+                action = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 2);
                 perform_action(action, db);
                 break;
             }
@@ -308,16 +457,13 @@ int main(int argc, char *argv[]) {
                     break;
 
                 Car *car = new Car;
-                if (car == NULL) die("Memory error");
-                get_car(car);
+                car->get_car();
 
                 if (choice("Would you like to save?")) {
                     database_set(conn, id, car);
 					database_write(conn);
                 }
-                free(car->make);
-                free(car->model);
-                free(car);
+                // TODO add car delete
                 break;
              }
             case 'd':
@@ -375,165 +521,6 @@ void debugTable(Connection* conn) {
 }
 
 
-void get_input(Input* input) {
-
-    char *pch;
-
-    char line[MAX_LINE];
-
-    while (1) {
-        printf("[enter \"i\" for info] main shell > ");
-
-        fgets(line, sizeof(line), stdin);
-
-        pch = strtok(line, " \n");
-        while (pch != NULL) {
-
-            if (input->count < MAX_PARAMS + 1) {
-                // malloc() is used in strdup;
-                input->params[input->count] = pch ? strdup(pch) : pch;
-                if (!pch) die("Memory error");
-            }
-
-            pch = strtok(NULL, " \n");
-            input->count++;
-        }
-
-        // break if input is valid
-        if (valid_input(input)) {
-            input->valid = 1;
-            break;
-        // else clear input and repeat
-        } else {
-            clear_input(input);
-        }
-    }
-}
-
-int valid_input(Input* input) {
-
-    // Validate argument count
-   
-    int count = input->count;
-
-    if (count == 0) {
-        printf("The input is empty.\n");
-        return 0;
-    }
-
-    if (count > MAX_PARAMS) {
-        printf("Too many arguments\n");
-        return 0;
-    }
-
-
-    // Validate action
-    
-    char *all_actions = "a,g,s,d,l,c,i,q,action,get,set,delete,list,clear,info,quit";
-    if (strstr(all_actions, input->params[0]) == NULL) {
-        printf("Such action does not exist\n");
-        return 0;
-    }
-
-
-    char action = input->params[0][0];
-
-    char *actions = "agsdlciq";
-    if (strchr(actions, action) == NULL) {
-        printf("Such action does not exist\n");
-        return 0;
-    }
-
-
-    if (count == 1) {
-        char *actions = "gsd";
-        if (strchr(actions, action) != NULL) {
-            printf("ID is not submitted\n");
-            return 0;
-        }
-    }
-
-
-    // Validate id
-    
-    if (count > 1) {
-
-        char *one_args = "alicq";
-        if (strchr(one_args, action) != NULL) {
-            printf("Too much arguments for this action\n");
-            return 0;
-        }
-
-        int id = atoi(input->params[1]);
-
-        // id being equal to 0 in condition
-        // below also validates from char input
-        if (id <= 0) {
-            printf("ID should be a positive integer.\n");
-            return 0;
-        }
-    }
-
-    return 1;
-}
-
-
-void clear_input(Input* input) {
-    for (int i = 0; i < MAX_PARAMS; ++i) {
-        input->params[i] = NULL;
-    }
-    input->valid = 0;
-    input->count = 0;
-}
-
-
-void get_car(Car *car) {
-    car->make = new char(MAX_TEXT_LENGTH);
-    car->model= new char(MAX_TEXT_LENGTH);
-    
-    int temp;
-    int error;
-
-    // Enter make
-    while (1) {
-        printf("Enter make > ");
-        memset(car->make,0,sizeof(car->make));
-
-        if (scanf("%[^\n]%*c", car->make) == 1) {
-
-            error = 0;
-
-            for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
-                if(isdigit(car->make[i])) {
-                    error = 1;
-                    break;
-                }
-            }
-
-            if(error) {
-                printf("Car make cannot contain numbers\n");
-                continue;
-            }
-
-            break;
-
-        } else {
-            while((temp=getchar()) != EOF && temp != '\n');
-            printf("Please make sure that make is normal format\n");
-        }
-    }
-
-    // Enter model
-    car->model = get_word("Enter model > ", car->model);
-
-    // Enter year
-    car->year =  get_num_interval("Enter year > ", "Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
-
-    // Enter price
-    car->price = get_pos_num("Enter price > ", 0);
-
-}
-
 void print_heading() {
     printf("__________________________________________________________________________________________\n");
     printf("| ID |            Make              |            Model             |   Year   |   Price  |\n");
@@ -560,7 +547,7 @@ void perform_action(int action, Database* db) {
             printf("(3) Year\n");
             printf("(4) Price\n");
 
-            field = get_num_interval("(Enter a number) > ", "Such option does not exist", 1, 4);
+            field = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 4);
 
             printf("How would you like to filter?\n");
             printf("(1) Entry is equal to the given value\n");
@@ -568,11 +555,11 @@ void perform_action(int action, Database* db) {
             printf("(3) Entry is not equal to the given value\n");
             printf("(4) Entry does not contain the given value\n");
 
-            type = get_num_interval("(Enter a number) > ", "Such option does not exist", 1, 4);
+            type = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 4);
 
             printf("Please enter a value to be filtered by\n");
             value = new char[MAX_TEXT_LENGTH];
-            value = get_text("(Enter a value) > ", value);
+            value = get_text((char*)"(Enter a value) > ", value);
 
             switch(field) {
                 case 1:
@@ -600,13 +587,13 @@ void perform_action(int action, Database* db) {
             printf("(3) Year\n");
             printf("(4) Price\n");
 
-            field = get_num_interval("(Enter a number) > ", "Such option does not exist", 1, 4);
+            field = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 4);
 
             printf("How would you like to sort?\n");
             printf("(1) Ascending order\n");
             printf("(2) Descending order\n");
 
-            type = get_num_interval("(Enter a number) > ", "Such option does not exist", 1, 2);
+            type = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 2);
 
             int reverse = (type == 1) ? 0 : 1;
 
@@ -631,9 +618,9 @@ void perform_action(int action, Database* db) {
 }
 
 void exiting() {
-    end = clock();
+    finish = clock();
 
-    clocks = (double)(end - begin);
+    clocks = (double)(finish - start);
     time_spent = clocks / CLOCKS_PER_SEC;
     fprintf(logfile, "Time spent: %lf seconds\n", time_spent);
     fputs("-----------------------\n", logfile);
@@ -657,8 +644,8 @@ void database_set(Connection* conn, int id, Car *car) {
         }
     }
 
-    strcpy(conn->db->rows[i]->car_make, car->make);
-    strcpy(conn->db->rows[i]->car_model, car->model);
+    //conn->db->rows[i]->car_make = car->make;
+    //conn->db->rows[i]->car_model = car->model;
     conn->db->rows[i]->car_year = car->year;
     conn->db->rows[i]->car_price = car->price;
     conn->db->rows[i]->id = id;
