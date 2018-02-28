@@ -74,12 +74,46 @@
 using namespace std;
 
 // car (make, model, year of making, car price)
-typedef struct {
-    char *make;
-    char *model;
-    int year;
-    int price;
-} Car;
+/*typedef struct {*/
+    //char *make;
+    //char *model;
+    //int year;
+    //int price;
+//} Car;
+
+class Car {
+    public:
+        string make;
+        string model;
+        int year;
+        int price;
+
+        // prompt user to enter a new database entry (car) 
+        // ::params: car object is modified
+        void get_car();
+};
+
+// TODO add validation
+void Car::get_car() {
+
+    // Enter make
+    cout << "Enter make > ";
+    cin >> make;
+
+    // Enter model
+    cout << "Enter model > ";
+    cin >> model;
+
+    // Enter year
+    cout << "Enter year > ";
+    cin >> year;
+
+    // Enter price
+    cout << "Enter price > ";
+    cin >> price;
+}
+
+
 
 // input structure
 typedef struct {
@@ -106,10 +140,6 @@ int valid_input(Input* input);
 //
 // ::params: input - input structure is modified
 void clear_input(Input* input);
-
-// prompt user to enter a new database entry (car) 
-// ::params: car object is modified
-void get_car(Car *car);
 
 // print the heading of the table
 void print_heading();
@@ -308,17 +338,19 @@ int main(int argc, char *argv[]) {
                 if (no_change)
                     break;
 
-                Car *car = (Car*) malloc(sizeof(Car));
-                if (car == NULL) die((char*)"Memory error");
-                get_car(car);
+                //Car *car = (Car*) malloc(sizeof(Car));
+                //if (car == NULL) die((char*)"Memory error");
+                Car *car = new Car;
+                car->get_car();
 
                 if (choice("Would you like to save?")) {
                     database_set(conn, id, car);
 					database_write(conn);
                 }
-                free(car->make);
-                free(car->model);
-                free(car);
+/*                free(car->make);*/
+                //free(car->model);
+                //free(car);
+                //delete Car;
                 break;
             }
             case 'd': {
@@ -484,53 +516,53 @@ void clear_input(Input* input) {
 }
 
 
-void get_car(Car *car) {
-    car->make = (char*)malloc(MAX_TEXT_LENGTH);
-    car->model= (char*)malloc(MAX_TEXT_LENGTH);
+//void get_car(Car *car) {
+    //car->make = (char*)malloc(MAX_TEXT_LENGTH);
+    //car->model= (char*)malloc(MAX_TEXT_LENGTH);
     
-    int temp;
-    int error;
+    //int temp;
+    //int error;
 
-    // Enter make
-    while (1) {
-        printf((char*)"Enter make > ");
-        // FIXME cpp warning
-        memset(car->make,0,sizeof(car->make));
+    //// Enter make
+    //while (1) {
+        //printf((char*)"Enter make > ");
+        //// FIXME cpp warning
+        //memset(car->make,0,sizeof(car->make));
 
-        if (scanf("%[^\n]%*c", car->make) == 1) {
+        //if (scanf("%[^\n]%*c", car->make) == 1) {
 
-            error = 0;
+            //error = 0;
 
-            for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
-                if(isdigit(car->make[i])) {
-                    error = 1;
-                    break;
-                }
-            }
+            //for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
+                //if(isdigit(car->make[i])) {
+                    //error = 1;
+                    //break;
+                //}
+            //}
 
-            if(error) {
-                printf("Car make cannot contain numbers\n");
-                continue;
-            }
+            //if(error) {
+                //printf("Car make cannot contain numbers\n");
+                //continue;
+            //}
 
-            break;
+            //break;
 
-        } else {
-            while((temp=getchar()) != EOF && temp != '\n');
-            printf("Please make sure that make is normal format\n");
-        }
-    }
+        //} else {
+            //while((temp=getchar()) != EOF && temp != '\n');
+            //printf("Please make sure that make is normal format\n");
+        //}
+    //}
 
-    // Enter model
-    car->model = get_word((char*)"Enter model > ", car->model);
+    //// Enter model
+    //car->model = get_word((char*)"Enter model > ", car->model);
 
-    // Enter year
-    car->year =  get_num_interval((char*)"Enter year > ", (char*)"Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
+    //// Enter year
+    //car->year =  get_num_interval((char*)"Enter year > ", (char*)"Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
 
-    // Enter price
-    car->price = get_pos_num((char*)"Enter price > ", 0);
+    //// Enter price
+    //car->price = get_pos_num((char*)"Enter price > ", 0);
 
-}
+//}
 
 void print_heading() {
     printf("__________________________________________________________________________________________\n");
@@ -655,8 +687,9 @@ void database_set(Connection* conn, int id, Car *car) {
         }
     }
 
-    strcpy(conn->db->rows[i]->car_make, car->make);
-    strcpy(conn->db->rows[i]->car_model, car->model);
+
+    strcpy(conn->db->rows[i]->car_make, (car->make).c_str());
+    strcpy(conn->db->rows[i]->car_model, (car->model).c_str());
     conn->db->rows[i]->car_year = car->year;
     conn->db->rows[i]->car_price = car->price;
     conn->db->rows[i]->id = id;
