@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <iomanip>
 #include <string>
 #include <vector>
@@ -24,6 +25,7 @@ int main(int argc, char *argv[]) {
 
     const string textFile = argv[1];
     const string binaryFile = argv[2];
+    const string csvFile = argv[3];
 
     WriteToTextFile wt(textFile);
     wt.write(automobilis01.getGamintojas());
@@ -34,8 +36,13 @@ int main(int argc, char *argv[]) {
     wt.write("");
     wt.close();
 
+    cout << separator;
+    cout << "Automobilis1 irasytas i tesktini faila" << endl;
+    cout << separator;
+
     WriteToBinaryFile wb(binaryFile);
 
+    // track the length of string variables before writing them to a binary file
     const int len_gamintojas = automobilis01.getGamintojas().size();
     const int len_modelis = automobilis01.getModelis().size();
 
@@ -46,7 +53,15 @@ int main(int argc, char *argv[]) {
     wb.write(automobilis01.getKaina());
     wb.close();
 
+    cout << separator;
+    cout << "Automobilis1 irasytas i binarini faila" << endl;
+    cout << separator;
+
     Automobilis automobilis02;
+    cout << separator;
+    cout << "Automobilis2 inicializuotas be parametru:" << endl;
+    automobilis02.print();
+    cout << separator;
 
     LoadFromTextFile lt(textFile);
     automobilis02.setGamintojas(lt.readline());
@@ -57,11 +72,14 @@ int main(int argc, char *argv[]) {
     lt.close();
 
     cout << separator;
-    cout << "Automobilis2:" << endl;
+    cout << "Automobilis2 uzpildytas parametrais is tekstinio failo:" << endl;
     automobilis02.print();
     cout << separator;
 
     Automobilis automobilis03;
+    cout << separator;
+    cout << "Automobilis3 inicializuotas be parametru:" << endl;
+    automobilis03.print();
 
     LoadFromBinaryFile lb(binaryFile);
 
@@ -73,8 +91,78 @@ int main(int argc, char *argv[]) {
     lb.close();
 
     cout << separator;
-    cout << "Automobilis3:" << endl;
+    cout << "Automobilis3 uzpildytas parametrais is binarinio failo:" << endl;
     automobilis03.print();
     cout << separator;
+
+    /* write vector to CSV file */
+
+	vector<Automobilis*> autos;
+	autos.push_back(new Automobilis("BMW", "520", 2.5, 2000, 3000));
+	autos.push_back(new Automobilis("Audi", "100", 2.0, 2000, 1500));
+	autos.push_back(new Automobilis("Chrevrolet", "Colorado", 3.5, 2000, 3500));
+	
+	ofstream outFailas(csvFile, ios::out);
+	
+	if (! outFailas) { //perkrautas ! operatorius!
+		cerr << "Failas neatidarytas rasymui" << endl;
+	}
+	else {
+		for (size_t i = 0; i < autos.size(); i++)
+			// ";" ir endl sukuria failo struktura (CSV su ; separatoriumi)
+			outFailas << autos[i]->getGamintojas() <<  ";" << autos[i]->getModelis() << ";" << autos[i]->getVariklioTuris() << ";" << autos[i]->getGamybosMetai() << ";" << autos[i]->getKaina() << endl;
+	}
+	
+	for (size_t i = 0; i < autos.size(); i ++)
+		delete autos[i];
+	
+	outFailas.close();
+    cout << separator;
+    cout << "Vektorius su automobiliais irasytas i CSV faila" << endl;
+    cout << separator;
+
+    /* read CSV file to vector */
+
+	ifstream inFailas(csvFile, ios::in);
+	
+	if (!inFailas) {
+		cerr << "Failas neatidarytas skaitymui" << endl;
+		return 1;
+	}
+	
+	vector<Automobilis*> autos2;
+	
+	string eilute;
+	while (getline(inFailas, eilute)) {
+		istringstream eiluteStream(eilute);
+		string g;
+		getline(eiluteStream, g, ';');
+		string m;
+		getline(eiluteStream, m, ';');
+		string VT;
+		getline(eiluteStream, VT, ';');
+		float vt = stof(VT);
+        string GM;
+		getline(eiluteStream, GM, ';');
+        int gm = stoi(GM);
+        string K;
+		getline(eiluteStream, K, ';');
+        int k = stoi(K);
+
+		autos2.push_back(new Automobilis(g, m, vt, gm, k));
+	}
+
+    cout << separator;
+    cout << "I vektoriu irasyti automobiliai is CSV failo" << endl;
+    cout << separator;
+	
+	for (size_t i = 0; i < autos2.size(); i++ )
+        cout << autos2[i]->getGamintojas() <<  " " << autos2[i]->getModelis() << " " << autos2[i]->getVariklioTuris() << " " << autos2[i]->getGamybosMetai() << " " << autos2[i]->getKaina() << endl;
+	
+	for (size_t i = 0; i < autos2.size(); i++ )
+		delete autos2[i];
+	
+	inFailas.close();
+
 }
 
