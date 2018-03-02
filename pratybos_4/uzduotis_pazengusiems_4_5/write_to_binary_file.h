@@ -1,5 +1,5 @@
-#ifndef __WRITE_TO_BINARY_FILE_H
-#define __WRITE_TO_BINARY_FILE_H
+#ifndef __WRITE_TO_BINARY_FILE_H_
+#define __WRITE_TO_BINARY_FILE_H_
 
 class WriteToBinaryFile {
     std::ofstream otf;
