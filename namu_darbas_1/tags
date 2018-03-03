@@ -4,102 +4,91 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-Address	database.h	/^} Address;$/;"	t	typeref:struct:__anon2
+Address	program.cpp	/^class Address {$/;"	c	file:
 CC	Makefile	/^CC=g++$/;"	m
-CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -g -lm $/;"	m
-CHUNK_SIZE	binary_file.h	8;"	d
-CHUNK_SIZE	program.cpp	71;"	d	file:
-Car	program.cpp	/^class Car {$/;"	c	file:
-Connection	binary_file.h	/^} Connection;$/;"	t	typeref:struct:__anon1
-Database	database.h	/^} Database;$/;"	t	typeref:struct:__anon3
-EARLIEST_YEAR	program.cpp	70;"	d	file:
+CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -g -lm -std=c++11$/;"	m
+CHUNK_SIZE	program.cpp	58;"	d	file:
+Connection	program.cpp	/^class Connection {$/;"	c	file:
+Database	program.cpp	/^class Database {$/;"	c	file:
+EARLIEST_YEAR	program.cpp	57;"	d	file:
 HELPERS_H	helpers.h	2;"	d
 Input	program.cpp	/^class Input {$/;"	c	file:
-LATEST_YEAR	program.cpp	69;"	d	file:
-LOGFILE	program.cpp	72;"	d	file:
-MAX_LINE	program.cpp	66;"	d	file:
-MAX_PARAMS	program.cpp	68;"	d	file:
-MAX_TEXT_LENGTH	database.h	7;"	d
-MAX_TEXT_LENGTH	program.cpp	67;"	d	file:
+LATEST_YEAR	program.cpp	56;"	d	file:
+LOGFILE	program.cpp	59;"	d	file:
+MAX_LINE	program.cpp	53;"	d	file:
+MAX_PARAMS	program.cpp	55;"	d	file:
+MAX_TEXT_LENGTH	program.cpp	54;"	d	file:
 _LIB_RIDDLE_	lib_riddle.h	2;"	d
-__BINARY_FILE_	binary_file.h	2;"	d
-__DATABASE_H_	database.h	2;"	d
-__FILTER_H_	filter.h	2;"	d
-__SORTING_H_	sorting.h	2;"	d
 __dbg_h_	dbg.h	2;"	d
-address_print	program.cpp	/^void address_print(Address *addr) {$/;"	f
-capacity	database.h	/^    int capacity;$/;"	m	struct:__anon3
-car_make	database.h	/^    char car_make[MAX_TEXT_LENGTH];$/;"	m	struct:__anon2
-car_model	database.h	/^    char car_model[MAX_TEXT_LENGTH];$/;"	m	struct:__anon2
-car_price	database.h	/^    int car_price;$/;"	m	struct:__anon2
-car_year	database.h	/^    int car_year;$/;"	m	struct:__anon2
+address_print	program.cpp	/^void Database::address_print(Address *addr) {$/;"	f	class:Database
+capacity	program.cpp	/^        int capacity;$/;"	m	class:Database	file:
+car_make	program.cpp	/^        char car_make[MAX_TEXT_LENGTH];$/;"	m	class:Address	file:
+car_model	program.cpp	/^        char car_model[MAX_TEXT_LENGTH];$/;"	m	class:Address	file:
+car_price	program.cpp	/^        int car_price;$/;"	m	class:Address	file:
+car_year	program.cpp	/^        int car_year;$/;"	m	class:Address	file:
 check	dbg.h	23;"	d
 check_debug	dbg.h	29;"	d
 check_mem	dbg.h	27;"	d
 choice	helpers.cpp	/^int choice(const char* message)$/;"	f
 clean_errno	dbg.h	15;"	d
-clear_input	program.cpp	/^void Input::clear_input(Input* input) {$/;"	f	class:Input
+clear_input	program.cpp	/^void Input::clear_input() {$/;"	f	class:Input
 clocks	program.cpp	/^double clocks;$/;"	v
 count	program.cpp	/^        int count;$/;"	m	class:Input	file:
-database_clear	program.cpp	/^void database_clear(Connection *conn) {$/;"	f
-database_close	binary_file.cpp	/^void database_close(Connection *conn) {$/;"	f
-database_create	binary_file.cpp	/^void database_create(Connection *conn) {$/;"	f
-database_delete	program.cpp	/^void database_delete(Connection *conn, int id) {$/;"	f
-database_get	program.cpp	/^void database_get(Connection *conn, int id) {$/;"	f
-database_list	program.cpp	/^void database_list(Database* db, int reverse) {$/;"	f
-database_list_filtered	program.cpp	/^void database_list_filtered(Database* db, int reverse) {$/;"	f
-database_open	binary_file.cpp	/^Connection *database_open(const char* filename) {$/;"	f
-database_set	program.cpp	/^void database_set(Connection* conn, int id, Car *car) { $/;"	f
-database_write	binary_file.cpp	/^void database_write(Connection *conn) {$/;"	f
-db	binary_file.h	/^    Database *db;$/;"	m	struct:__anon1
+database_clear	program.cpp	/^void Database::database_clear() {$/;"	f	class:Database
+database_close	program.cpp	/^void Connection::database_close() {$/;"	f	class:Connection
+database_create	program.cpp	/^void Connection::database_create() {$/;"	f	class:Connection
+database_delete	program.cpp	/^void Database::database_delete(int id) {$/;"	f	class:Database
+database_get	program.cpp	/^void Database::database_get(int id) {$/;"	f	class:Database
+database_list	program.cpp	/^void Database::database_list(int reverse) {$/;"	f	class:Database
+database_list_filtered	program.cpp	/^void Database::database_list_filtered(int reverse) {$/;"	f	class:Database
+database_open	program.cpp	/^void Connection::database_open(const char* filename) {$/;"	f	class:Connection
+database_set	program.cpp	/^void Database::database_set(int id, Address* addr) { $/;"	f	class:Database
+database_write	program.cpp	/^void Connection::database_write() {$/;"	f	class:Connection
+db	program.cpp	/^        Database *db;$/;"	m	class:Connection	file:
 debug	dbg.h	10;"	d
 debug	dbg.h	12;"	d
-debugTable	program.cpp	/^void debugTable(Connection* conn) {$/;"	f
+debugTable	program.cpp	/^void Database::debugTable() {$/;"	f	class:Database
 die	helpers.cpp	/^void die(char* message)$/;"	f
 exiting	program.cpp	/^void exiting() {$/;"	f
-file	binary_file.h	/^    FILE *file;$/;"	m	struct:__anon1
+file	program.cpp	/^        FILE *file;$/;"	m	class:Connection	file:
 fill_array	helpers.cpp	/^void fill_array(int* data, int size, int max)$/;"	f
-filter	database.h	/^    int filter;$/;"	m	struct:__anon2
-filter_by_make	filter.cpp	/^void filter_by_make(Database* db, int type, char* value) {$/;"	f
-filter_by_model	filter.cpp	/^void filter_by_model(Database* db, int type, char* value) {$/;"	f
-filter_by_price	filter.cpp	/^void filter_by_price(Database* db, int type, char* value) {$/;"	f
-filter_by_year	filter.cpp	/^void filter_by_year(Database* db, int type, char* value) {$/;"	f
+filter	program.cpp	/^        int filter;$/;"	m	class:Address	file:
+filter_by_make	program.cpp	/^void Database::filter_by_make(int type, char* value) {$/;"	f	class:Database
+filter_by_model	program.cpp	/^void Database::filter_by_model(int type, char* value) {$/;"	f	class:Database
+filter_by_price	program.cpp	/^void Database::filter_by_price(int type, char* value) {$/;"	f	class:Database
+filter_by_year	program.cpp	/^void Database::filter_by_year(int type, char* value) {$/;"	f	class:Database
 finish	program.cpp	/^clock_t finish;$/;"	v
-get_car	program.cpp	/^void Car::get_car() {$/;"	f	class:Car
-get_input	program.cpp	/^void Input::get_input(Input* input) {$/;"	f	class:Input
+getAddress	program.cpp	/^void Address::getAddress() {$/;"	f	class:Address
+get_input	program.cpp	/^void Input::get_input() {$/;"	f	class:Input
 get_num	helpers.cpp	/^int get_num(char* message)$/;"	f
 get_num_interval	helpers.cpp	/^int get_num_interval(char* message, char* err_msg, int min, int max)$/;"	f
 get_pos_num	helpers.cpp	/^int get_pos_num(char* message, int zero_allowed)$/;"	f
 get_text	helpers.cpp	/^char* get_text(char* message, char* output)$/;"	f
 get_tokens	helpers.cpp	/^char** get_tokens($/;"	f
 get_word	helpers.cpp	/^char* get_word(char* message, char* output)$/;"	f
-id	database.h	/^    int id;$/;"	m	struct:__anon2
+id	program.cpp	/^        int id;$/;"	m	class:Address	file:
 is_sorted	helpers.cpp	/^int is_sorted(int* data, int size)$/;"	f
 log_err	dbg.h	17;"	d
 log_info	dbg.h	21;"	d
 log_warn	dbg.h	19;"	d
 logfile	program.cpp	/^static FILE* logfile;$/;"	v	file:
 main	program.cpp	/^int main(int argc, char *argv[]) {$/;"	f
-make	program.cpp	/^        string make;$/;"	m	class:Car	file:
-model	program.cpp	/^        string model;$/;"	m	class:Car	file:
 params	program.cpp	/^        char** params;$/;"	m	class:Input	file:
-perform_action	program.cpp	/^void perform_action(int action, Database* db) {$/;"	f
-price	program.cpp	/^        int price;$/;"	m	class:Car	file:
+perform_action	program.cpp	/^void Database::perform_action(int action) {$/;"	f	class:Database
 print_array	helpers.cpp	/^void print_array(int* data, int size, char* message)$/;"	f
-print_heading	program.cpp	/^void print_heading() {$/;"	f
-reset_filter	filter.cpp	/^void reset_filter(Database* db) {$/;"	f
-rows	database.h	/^    Address** rows;$/;"	m	struct:__anon3
+print_heading	program.cpp	/^void Database::print_heading() {$/;"	f	class:Database
+reset_filter	program.cpp	/^void Database::reset_filter() {$/;"	f	class:Database
+rows	program.cpp	/^        Address** rows;$/;"	m	class:Database	file:
 sentinel	dbg.h	25;"	d
-size	database.h	/^    int size;$/;"	m	struct:__anon3
-sort_by_id	sorting.cpp	/^void sort_by_id(Database* db, int first, int last)$/;"	f
-sort_by_price	sorting.cpp	/^void sort_by_price(Database* db, int first, int last) {$/;"	f
-sort_by_year	sorting.cpp	/^void sort_by_year(Database* db, int first, int last) {$/;"	f
-sort_lex_by_make	sorting.cpp	/^void sort_lex_by_make(Database* db, int first, int last) {$/;"	f
-sort_lex_by_model	sorting.cpp	/^void sort_lex_by_model(Database* db, int first, int last) {$/;"	f
+size	program.cpp	/^        int size;$/;"	m	class:Database	file:
+sort_by_id	program.cpp	/^void Database::sort_by_id(int first, int last)$/;"	f	class:Database
+sort_by_price	program.cpp	/^void Database::sort_by_price(int first, int last) {$/;"	f	class:Database
+sort_by_year	program.cpp	/^void Database::sort_by_year(int first, int last) {$/;"	f	class:Database
+sort_lex_by_make	program.cpp	/^void Database::sort_lex_by_make(int first, int last) {$/;"	f	class:Database
+sort_lex_by_model	program.cpp	/^void Database::sort_lex_by_model(int first, int last) {$/;"	f	class:Database
 start	program.cpp	/^clock_t start;$/;"	v
 swap	helpers.cpp	/^void swap(int* a, int* b)$/;"	f
 swap_three	helpers.cpp	/^void swap_three(int* a, int* b, int* c)$/;"	f
 time_spent	program.cpp	/^double time_spent;$/;"	v
 valid	program.cpp	/^        int valid;$/;"	m	class:Input	file:
-valid_input	program.cpp	/^int Input::valid_input(Input* input) {$/;"	f	class:Input
-year	program.cpp	/^        int year;$/;"	m	class:Car	file:
+valid_input	program.cpp	/^int Input::valid_input() {$/;"	f	class:Input

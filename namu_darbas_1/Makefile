@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -Wextra -g -lm 
+CFLAGS=-Wall -Wextra -g -lm -std=c++11
 
 #program: program.cpp helpers.o filter.o sorting.o
    # $(CC) $(CFLAGS) -o program program.cpp helpers.o filter.o sorting.o 

@@ -9,7 +9,6 @@
  |         Date:  March 8th, 2018
  |
  |     Language:  C++ (using gcc on Lenovo Y50-70, OS: Arch Linux x86_64)
- |     Version:   0.0
  |
  +-----------------------------------------------------------------------------
  |
@@ -38,7 +37,7 @@
  |       TODOS:   (1) Add unit tests
  |
  | Version
- | updates:       Version 1.6
+ | updates:       Version 1.3
  |
  +===========================================================================*/
 
@@ -257,7 +256,6 @@ void Address::getAddress() {
 
     // Enter price
     this->car_price = get_pos_num((char*)"Enter price > ", 0);
-
 };
 
 
@@ -411,14 +409,10 @@ void Database::database_set(int id, Address* addr) {
         }
     }
 
+    addr->id = id;
+    addr->filter = 1;
 
-    strcpy(this->rows[i]->car_make, addr->car_make);
-    strcpy(this->rows[i]->car_model, addr->car_model);
-    this->rows[i]->car_year = addr->car_year;
-    this->rows[i]->car_price = addr->car_price;
-    this->rows[i]->id = id;
-    this->rows[i]->filter = 1;
-
+    this->rows[i] = addr;
     this->size += 1;
 
     printf("Successfully saved, ID = %d\n", id);
