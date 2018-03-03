@@ -10,10 +10,6 @@ WriteToBinaryFile::WriteToBinaryFile(const string& filename) {
     this->filename = filename;
     otf.open(filename, ios::out | ios::binary);
 
-    // FIXME is it needed?  
-    otf.clear();
-    otf.seekg(0);
-
     cout << "WriteToBinaryFile object is created" << endl;
 }
 

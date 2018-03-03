@@ -969,11 +969,12 @@ class Connection {
     public:
         std::ofstream output;
         std::ifstream input;
+        string filename;
         FILE *file;
         Database *db;
 
         // ::return: connection struct
-        void database_open(const char* filename);
+        void database_open();
 
         // create database
         // allocate memory for address rows, 
@@ -996,135 +997,51 @@ class Connection {
 
 
 
-
-
-
-
-
-
-
-//void Connection::database_open(const char* filename) {
-    ////Connection *conn = new Connection;
-    ////if(!conn) die((char*)"Memory error");
-
-    //this->db = new Database;
-    ////if(!conn->db) die((char*)"Memory error");
-
-    //this->file = fopen(filename, "r+");
-    //if (!this->file) {
-        //printf((char*)"Failed to open the file, creating a new one\n");
-        //this->file = fopen(filename, "w+");
-    //}
-
-    //if(this->file) {
-        //// load database from file
-        //int rc = fread(this->db, sizeof(Database), 1, this->file);
-
-        //this->db->rows = new Address*[this->db->capacity];
-
-        //for (int i = 0; i < this->db->capacity; i++) {
-            //this->db->rows[i] = new(Address);
-        //}
-
-        //for (int i = 0; i < this->db->capacity; i++) {
-            //rc = fread(this->db->rows[i], sizeof(Address), 1, this->file);
-        //}
-
-        //// if database is loaded unsuccessfully
-        //if (rc != 1) {
-            //printf("Failed to load database\n");
-            //if (choice("Would you like to create a new one?\n")) {
-                //this->file = fopen(filename, "w");
-                //this->database_create();
-                //this->database_write();
-            //}
-        //}
-    //}
-
-
-    ////return conn;
-//}
-
-
-
-
-
-
-
-
-
-
-void Connection::database_open(const char* filename) {
-    //Connection *conn = new Connection;
-    //if(!conn) die((char*)"Memory error");
+void Connection::database_open() {
 
     this->db = new Database;
-    //if(!conn->db) die((char*)"Memory error");
 
-    this->input.open(filename, ios::in | ios::binary);
+    this->input.open(this->filename, ios::in | ios::binary);
 
-    //this->file = fopen(filename, "r+");
-    //if (!this->file) {
-        //printf((char*)"Failed to open the file, creating a new one\n");
-        //this->file = fopen(filename, "w+");
-    //}
 
-    LoadFromBinaryFile lb(filename);
+    this->input.seekg(0, std::ios::end);
+    if (this->input.tellg() == 0)
+    {
+        std::cout << "File is empty" << std::endl;
+        this->database_create();
+        this->database_write();
+        this->input.close();
+        return;
+    }
 
-    debug("1");
+    LoadFromBinaryFile lb(this->filename);
 
     if(this->input.good()) {
-        // load database from file
-        //int rc = fread(this->db, sizeof(Database), 1, this->file);
-        debug("2");
         this->db->size = lb.readInt();
         this->db->capacity = lb.readInt();
 
-        debug("size %d", this->db->size);
-        debug("capacity %d", this->db->capacity);
-
         this->db->rows = new Address*[this->db->capacity];
 
-        debug("3");
 
         for (int i = 0; i < this->db->capacity; i++) {
             this->db->rows[i] = new(Address);
-            debug("new address");
         }
-        debug("4");
 
         for (int i = 0; i < this->db->capacity; i++) {
-            //rc = fread(this->db->rows[i], sizeof(Address), 1, this->file);
-
-            debug("5");
 
             this->db->rows[i]->id = lb.readInt();
             this->db->rows[i]->filter = lb.readInt();
 
-            debug("id = %d", this->db->rows[i]->id);
-            debug("filter = %d", this->db->rows[i]->filter);
-
-            debug("6");
-
             string temp1 = lb.readString(MAX_TEXT_LENGTH);
-
-            cout << "TEMP1: " << temp1 << endl;
-
-            debug("7");
 
             char tab1[MAX_TEXT_LENGTH];
             strcpy(tab1, temp1.c_str());
-
 
             for (int j = 0; j < MAX_TEXT_LENGTH; j++) {
                 this->db->rows[i]->car_make[j] = tab1[j];
             }
 
-            debug("8");
-
             string temp2 = lb.readString(MAX_TEXT_LENGTH);
-
-            debug("9");
 
             char tab2[MAX_TEXT_LENGTH];
             strcpy(tab2, temp2.c_str());
@@ -1132,32 +1049,14 @@ void Connection::database_open(const char* filename) {
                 this->db->rows[i]->car_model[j] = tab2[j];
             }
 
-            debug("10");
-
             this->db->rows[i]->car_year = lb.readInt();
             this->db->rows[i]->car_price = lb.readInt();
 
-            debug("11");
         }
 
-        // if database is loaded unsuccessfully
-        //if (rc != 1) {
-            //printf("Failed to load database\n");
-            //if (choice("Would you like to create a new one?\n")) {
-                //this->file = fopen(filename, "w");
-                //this->database_create();
-                //this->database_write();
-            //}
-        //}
         lb.close();
     } 
-
-
-    //return conn;
 }
-
-
-
 
 
 
@@ -1170,22 +1069,17 @@ void Connection::database_create() {
     this->db->rows = new Address*[this->db->capacity];
 
     for (int i = 0; i < this->db->capacity; i++) {
-        this->db->rows[i] = new Address;
+        this->db->rows[i] = new Address();
     }
 }
 
 void Connection::database_write() {
-	//rewind(this->file);
 
-    WriteToBinaryFile wb("outfile.dat");
+    WriteToBinaryFile wb(this->filename);
     wb.write(this->db->size);
     wb.write(this->db->capacity);
 
-	//int rc = fwrite(this->db, sizeof(Database), 1, this->file);
-	//if (rc != 1) die((char*)"Failed to write database");
-
     for (int i = 0; i < this->db->capacity; i++) {
-        //rc = fwrite(this->db->rows[i], sizeof(Address), 1, this->file);
         wb.write(this->db->rows[i]->id);
         wb.write(this->db->rows[i]->filter);
         wb.write(this->db->rows[i]->car_make, MAX_TEXT_LENGTH);
@@ -1194,8 +1088,6 @@ void Connection::database_write() {
         wb.write(this->db->rows[i]->car_price);
     }
 
-	//rc = fflush(this->file);
-	//if (rc == -1) die((char*)"Cannot flush database");
     wb.close();
 }
 
@@ -1251,10 +1143,14 @@ int main(int argc, char *argv[]) {
     /* register the termination function */
     atexit(exiting);
 
-    char* filename = argv[1];
     Connection* conn = new Connection;
-    conn->database_open(filename);
+    conn->filename = argv[1];
+    conn->database_open();
     //Connection* conn = database_open(filename);
+
+    //conn->db = new Database;
+    //conn->database_create();
+    //conn->database_write();
 
 
     //Address* addr01 = conn->db->rows[0];
