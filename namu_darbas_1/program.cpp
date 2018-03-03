@@ -994,47 +994,173 @@ class Connection {
         void database_close();
 };
 
+
+
+
+
+
+
+
+
+
+//void Connection::database_open(const char* filename) {
+    ////Connection *conn = new Connection;
+    ////if(!conn) die((char*)"Memory error");
+
+    //this->db = new Database;
+    ////if(!conn->db) die((char*)"Memory error");
+
+    //this->file = fopen(filename, "r+");
+    //if (!this->file) {
+        //printf((char*)"Failed to open the file, creating a new one\n");
+        //this->file = fopen(filename, "w+");
+    //}
+
+    //if(this->file) {
+        //// load database from file
+        //int rc = fread(this->db, sizeof(Database), 1, this->file);
+
+        //this->db->rows = new Address*[this->db->capacity];
+
+        //for (int i = 0; i < this->db->capacity; i++) {
+            //this->db->rows[i] = new(Address);
+        //}
+
+        //for (int i = 0; i < this->db->capacity; i++) {
+            //rc = fread(this->db->rows[i], sizeof(Address), 1, this->file);
+        //}
+
+        //// if database is loaded unsuccessfully
+        //if (rc != 1) {
+            //printf("Failed to load database\n");
+            //if (choice("Would you like to create a new one?\n")) {
+                //this->file = fopen(filename, "w");
+                //this->database_create();
+                //this->database_write();
+            //}
+        //}
+    //}
+
+
+    ////return conn;
+//}
+
+
+
+
+
+
+
+
+
+
 void Connection::database_open(const char* filename) {
-	//Connection *conn = new Connection;
-	//if(!conn) die((char*)"Memory error");
+    //Connection *conn = new Connection;
+    //if(!conn) die((char*)"Memory error");
 
     this->db = new Database;
-	//if(!conn->db) die((char*)"Memory error");
+    //if(!conn->db) die((char*)"Memory error");
 
-	this->file = fopen(filename, "r+");
-	if (!this->file) {
-        printf((char*)"Failed to open the file, creating a new one\n");
-        this->file = fopen(filename, "w+");
-    }
+    this->input.open(filename, ios::in | ios::binary);
 
-	if(this->file) {
-		// load database from file
-		int rc = fread(this->db, sizeof(Database), 1, this->file);
+    //this->file = fopen(filename, "r+");
+    //if (!this->file) {
+        //printf((char*)"Failed to open the file, creating a new one\n");
+        //this->file = fopen(filename, "w+");
+    //}
+
+    LoadFromBinaryFile lb(filename);
+
+    debug("1");
+
+    if(this->input.good()) {
+        // load database from file
+        //int rc = fread(this->db, sizeof(Database), 1, this->file);
+        debug("2");
+        this->db->size = lb.readInt();
+        this->db->capacity = lb.readInt();
+
+        debug("size %d", this->db->size);
+        debug("capacity %d", this->db->capacity);
 
         this->db->rows = new Address*[this->db->capacity];
 
+        debug("3");
+
         for (int i = 0; i < this->db->capacity; i++) {
             this->db->rows[i] = new(Address);
+            debug("new address");
         }
+        debug("4");
 
         for (int i = 0; i < this->db->capacity; i++) {
-            rc = fread(this->db->rows[i], sizeof(Address), 1, this->file);
+            //rc = fread(this->db->rows[i], sizeof(Address), 1, this->file);
+
+            debug("5");
+
+            this->db->rows[i]->id = lb.readInt();
+            this->db->rows[i]->filter = lb.readInt();
+
+            debug("id = %d", this->db->rows[i]->id);
+            debug("filter = %d", this->db->rows[i]->filter);
+
+            debug("6");
+
+            string temp1 = lb.readString(MAX_TEXT_LENGTH);
+
+            cout << "TEMP1: " << temp1 << endl;
+
+            debug("7");
+
+            char tab1[MAX_TEXT_LENGTH];
+            strcpy(tab1, temp1.c_str());
+
+
+            for (int j = 0; j < MAX_TEXT_LENGTH; j++) {
+                this->db->rows[i]->car_make[j] = tab1[j];
+            }
+
+            debug("8");
+
+            string temp2 = lb.readString(MAX_TEXT_LENGTH);
+
+            debug("9");
+
+            char tab2[MAX_TEXT_LENGTH];
+            strcpy(tab2, temp2.c_str());
+            for (int j = 0; j < MAX_TEXT_LENGTH; j++) {
+                this->db->rows[i]->car_model[j] = tab2[j];
+            }
+
+            debug("10");
+
+            this->db->rows[i]->car_year = lb.readInt();
+            this->db->rows[i]->car_price = lb.readInt();
+
+            debug("11");
         }
 
-		// if database is loaded unsuccessfully
-		if (rc != 1) {
-			printf("Failed to load database\n");
-			if (choice("Would you like to create a new one?\n")) {
-				this->file = fopen(filename, "w");
-                this->database_create();
-                this->database_write();
-			}
-		}
-	} 
+        // if database is loaded unsuccessfully
+        //if (rc != 1) {
+            //printf("Failed to load database\n");
+            //if (choice("Would you like to create a new one?\n")) {
+                //this->file = fopen(filename, "w");
+                //this->database_create();
+                //this->database_write();
+            //}
+        //}
+        lb.close();
+    } 
 
 
-	//return conn;
+    //return conn;
 }
+
+
+
+
+
+
 
 
 void Connection::database_create() {
@@ -1049,17 +1175,28 @@ void Connection::database_create() {
 }
 
 void Connection::database_write() {
-	rewind(this->file);
+	//rewind(this->file);
 
-	int rc = fwrite(this->db, sizeof(Database), 1, this->file);
-	if (rc != 1) die((char*)"Failed to write database");
+    WriteToBinaryFile wb("outfile.dat");
+    wb.write(this->db->size);
+    wb.write(this->db->capacity);
+
+	//int rc = fwrite(this->db, sizeof(Database), 1, this->file);
+	//if (rc != 1) die((char*)"Failed to write database");
 
     for (int i = 0; i < this->db->capacity; i++) {
-        rc = fwrite(this->db->rows[i], sizeof(Address), 1, this->file);
+        //rc = fwrite(this->db->rows[i], sizeof(Address), 1, this->file);
+        wb.write(this->db->rows[i]->id);
+        wb.write(this->db->rows[i]->filter);
+        wb.write(this->db->rows[i]->car_make, MAX_TEXT_LENGTH);
+        wb.write(this->db->rows[i]->car_model, MAX_TEXT_LENGTH);
+        wb.write(this->db->rows[i]->car_year);
+        wb.write(this->db->rows[i]->car_price);
     }
 
-	rc = fflush(this->file);
-	if (rc == -1) die((char*)"Cannot flush database");
+	//rc = fflush(this->file);
+	//if (rc == -1) die((char*)"Cannot flush database");
+    wb.close();
 }
 
 
@@ -1118,41 +1255,44 @@ int main(int argc, char *argv[]) {
     Connection* conn = new Connection;
     conn->database_open(filename);
     //Connection* conn = database_open(filename);
-    Address* addr01 = conn->db->rows[0];
-    //conn->output.open("output.dat", ios::out | ios::binary);
-    WriteToBinaryFile wtbf("output.dat");
-    wtbf.write(addr01->id);
-    wtbf.write(addr01->filter);
-    wtbf.write(addr01->car_make, MAX_TEXT_LENGTH);
-    wtbf.write(addr01->car_model, MAX_TEXT_LENGTH);
-    wtbf.write(addr01->car_year);
-    wtbf.write(addr01->car_price);
-    wtbf.close();
 
-    Address* addr02 = conn->db->rows[1];
-    LoadFromBinaryFile lfbf("output.dat");
-    addr02->id = lfbf.readInt();
-    addr02->filter = lfbf.readInt();
 
-    string temp1 = lfbf.readString(MAX_TEXT_LENGTH);
+    //Address* addr01 = conn->db->rows[0];
+    ////conn->output.open("output.dat", ios::out | ios::binary);
+    //WriteToBinaryFile wtbf("output.dat");
+    //wtbf.write(addr01->id);
+    //wtbf.write(addr01->filter);
+    //wtbf.write(addr01->car_make, MAX_TEXT_LENGTH);
+    //wtbf.write(addr01->car_model, MAX_TEXT_LENGTH);
+    //wtbf.write(addr01->car_year);
+    //wtbf.write(addr01->car_price);
+    //wtbf.close();
 
-    char tab1[MAX_TEXT_LENGTH];
-    strcpy(tab1, temp1.c_str());
-    for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
-        addr02->car_make[i] = tab1[i];
-    }
+    //Address* addr02 = conn->db->rows[1];
+    //LoadFromBinaryFile lfbf("output.dat");
 
-    string temp2 = lfbf.readString(MAX_TEXT_LENGTH);
+    //addr02->id = lfbf.readInt();
+    //addr02->filter = lfbf.readInt();
 
-    char tab2[MAX_TEXT_LENGTH];
-    strcpy(tab2, temp2.c_str());
-    for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
-        addr02->car_model[i] = tab2[i];
-    }
+    //string temp1 = lfbf.readString(MAX_TEXT_LENGTH);
 
-    addr02->car_year = lfbf.readInt();
-    addr02->car_price = lfbf.readInt();
-    lfbf.close();
+    //char tab1[MAX_TEXT_LENGTH];
+    //strcpy(tab1, temp1.c_str());
+    //for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
+        //addr02->car_make[i] = tab1[i];
+    //}
+
+    //string temp2 = lfbf.readString(MAX_TEXT_LENGTH);
+
+    //char tab2[MAX_TEXT_LENGTH];
+    //strcpy(tab2, temp2.c_str());
+    //for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
+        //addr02->car_model[i] = tab2[i];
+    //}
+
+    //addr02->car_year = lfbf.readInt();
+    //addr02->car_price = lfbf.readInt();
+    //lfbf.close();
 
     char* about = (char*)"This is a car database program, where one can perform get, list, create, edit and delete "
             "operations. The database is loaded from and saved to the binary file. Version: v.0";
@@ -1303,7 +1443,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'q': {
-                conn->database_close();
+                //conn->database_close();
                 return 0;
             }
             default: {
