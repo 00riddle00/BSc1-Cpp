@@ -201,8 +201,10 @@ class Address {
     public:
         int id;
         int filter;
-        char car_make[MAX_TEXT_LENGTH];
-        char car_model[MAX_TEXT_LENGTH];
+        //char car_make[MAX_TEXT_LENGTH];
+        //char car_model[MAX_TEXT_LENGTH];
+        string car_make;
+        string car_model;
         int car_year;
         int car_price;
 
@@ -251,8 +253,8 @@ void Address::getAddress() {
     // Enter model
     char_model = get_word((char*)"Enter model > ", char_model);
 
-    strcpy(this->car_make, char_make);
-    strcpy(this->car_model, char_model);
+    this->car_make = char_make;
+    this->car_model = char_model;
 
     // Enter year
     this->car_year =  get_num_interval((char*)"Enter year > ", (char*)"Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
@@ -335,16 +337,16 @@ class Database {
         void reset_filter();
 
         // filter by car make
-        void filter_by_make(int type, char* value);
+        void filter_by_make(int type, const string& value);
 
         // filter by car model
-        void filter_by_model(int type, char* value);
+        void filter_by_model(int type, const string& value);
 
         // filter by car year
-        void filter_by_year(int type, char* value);
+        void filter_by_year(int type, const string& value);
 
         // filter by car price
-        void filter_by_price(int type, char* value);
+        void filter_by_price(int type, const string& value);
 
 
         // functions to sort database in a given manner
@@ -374,7 +376,7 @@ void Database::print_heading() {
 
 void Database::address_print(Address *addr) {
 
-    printf("|%4d|%30s|%30s|%10d|%10d|\n", addr->id, addr->car_make, addr->car_model, addr->car_year, addr->car_price);
+    printf("|%4d|%30s|%30s|%10d|%10d|\n", addr->id, addr->car_make.c_str(), addr->car_model.c_str(), addr->car_year, addr->car_price);
     printf("|____|______________________________|______________________________|__________|__________|\n");
 }
 
@@ -532,10 +534,9 @@ void Database::database_clear() {
 void Database::perform_action(int action) {
     int field; 
     int type;
-    char* value;
 
     switch(action) {
-        case 1:
+        case 1: {
             printf("By which field would you like to filter? (enter a number)\n");
             printf("(1) Make\n");
             printf("(2) Model\n");
@@ -553,8 +554,11 @@ void Database::perform_action(int action) {
             type = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 4);
 
             printf("Please enter a value to be filtered by\n");
-            value = (char*) malloc(sizeof(char) * MAX_TEXT_LENGTH);
-            value = get_text((char*)"(Enter a value) > ", value);
+
+            string value;
+            // TODO add validation as in "get text" function
+            cout << "(Enter a value) > ";
+            cin >> value;
 
             switch(field) {
                 case 1:
@@ -572,10 +576,10 @@ void Database::perform_action(int action) {
             }
             this->database_list_filtered(0);
             this->reset_filter();
-            free(value);
             break;
+        }
 
-        case 2:
+        case 2: {
             printf("By which field would you like to sort? (enter a number)\n");
             printf("(1) Make\n");
             printf("(2) Model\n");
@@ -608,6 +612,7 @@ void Database::perform_action(int action) {
             }
             this->database_list(reverse);
             break;
+        }
     }
 
 }
@@ -624,14 +629,14 @@ void Database::reset_filter() {
     }
 }
 
-void Database::filter_by_make(int type, char* value) {
+void Database::filter_by_make(int type, const string& value) {
 
     switch(type) {
         case 1:
             for (int i = 0; i < this->size; i++) {
                 Address *cur = this->rows[i];
                 if (cur) {
-                    if (strcmp(cur->car_make, value) != 0) {
+                    if (cur->car_make != value) {
                         cur->filter = 0;
                     } 
                 }
@@ -641,9 +646,9 @@ void Database::filter_by_make(int type, char* value) {
             for (int i = 0; i < this->size; i++) {
                 Address *cur = this->rows[i];
                 if (cur) {
-                    if (strstr(cur->car_make, value) == NULL) {
+                    if (cur->car_make.find(value) == std::string::npos) {
                         cur->filter = 0;
-                    } 
+                    }
                 }
             }
             break;
@@ -651,7 +656,7 @@ void Database::filter_by_make(int type, char* value) {
             for (int i = 0; i < this->size; i++) {
                 Address *cur = this->rows[i];
                 if (cur) {
-                    if (strcmp(cur->car_make, value) == 0) {
+                    if (cur->car_make == value) {
                         cur->filter = 0;
                     } 
                 }
@@ -661,7 +666,7 @@ void Database::filter_by_make(int type, char* value) {
             for (int i = 0; i < this->size; i++) {
                 Address *cur = this->rows[i];
                 if (cur) {
-                    if (strstr(cur->car_make, value) != NULL) {
+                    if (cur->car_make.find(value) != std::string::npos) {
                         cur->filter = 0;
                     } 
                 }
@@ -670,14 +675,14 @@ void Database::filter_by_make(int type, char* value) {
     }
 }
 
-void Database::filter_by_model(int type, char* value) {
+void Database::filter_by_model(int type, const string& value) {
 
     switch(type) {
         case 1:
             for (int i = 0; i < this->size; i++) {
                 Address *cur = this->rows[i];
                 if (cur) {
-                    if (strcmp(cur->car_model, value) != 0) {
+                    if (cur->car_model != value) {
                         cur->filter = 0;
                     } 
                 }
@@ -687,7 +692,7 @@ void Database::filter_by_model(int type, char* value) {
             for (int i = 0; i < this->size; i++) {
                 Address *cur = this->rows[i];
                 if (cur) {
-                    if (strstr(cur->car_model, value) == NULL) {
+                    if (cur->car_model.find(value) == std::string::npos) {
                         cur->filter = 0;
                     } 
                 }
@@ -697,7 +702,7 @@ void Database::filter_by_model(int type, char* value) {
             for (int i = 0; i < this->size; i++) {
                 Address *cur = this->rows[i];
                 if (cur) {
-                    if (strcmp(cur->car_model, value) == 0) {
+                    if (cur->car_model == value) {
                         cur->filter = 0;
                     } 
                 }
@@ -707,60 +712,7 @@ void Database::filter_by_model(int type, char* value) {
             for (int i = 0; i < this->size; i++) {
                 Address *cur = this->rows[i];
                 if (cur) {
-                    if (strstr(cur->car_model, value) != NULL) {
-                        cur->filter = 0;
-                    } 
-                }
-            }
-            break;
-    }
-}
-
-
-void Database::filter_by_year(int type, char* value) {
-
-    char year_string[MAX_TEXT_LENGTH];
-
-    switch(type) {
-        case 1:
-            for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
-                if (cur) {
-                    sprintf(year_string, "%d", cur->car_year);
-                    if (strcmp(year_string, value) != 0) {
-                        cur->filter = 0;
-                    } 
-                }
-            }
-            break;
-        case 2:
-            for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
-                if (cur) {
-                    sprintf(year_string, "%d", cur->car_year);
-                    if (strstr(year_string, value) == NULL) {
-                        cur->filter = 0;
-                    } 
-                }
-            }
-            break;
-        case 3:
-            for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
-                if (cur) {
-                    sprintf(year_string, "%d", cur->car_year);
-                    if (strcmp(year_string, value) == 0) {
-                        cur->filter = 0;
-                    } 
-                }
-            }
-            break;
-        case 4:
-            for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
-                if (cur) {
-                    sprintf(year_string, "%d", cur->car_year);
-                    if (strstr(year_string, value) != NULL) {
+                    if (cur->car_model.find(value) != std::string::npos) {
                         cur->filter = 0;
                     } 
                 }
@@ -770,17 +722,16 @@ void Database::filter_by_year(int type, char* value) {
 }
 
 
-void Database::filter_by_price(int type, char* value) {
+void Database::filter_by_year(int type, const string& value) {
 
-    char price_string[MAX_TEXT_LENGTH];
 
     switch(type) {
         case 1:
             for (int i = 0; i < this->size; i++) {
                 Address *cur = this->rows[i];
                 if (cur) {
-                    sprintf(price_string, "%d", cur->car_price);
-                    if (strcmp(price_string, value) != 0) {
+                    string car_year = to_string(cur->car_year);
+                    if (car_year != value) {
                         cur->filter = 0;
                     } 
                 }
@@ -790,8 +741,8 @@ void Database::filter_by_price(int type, char* value) {
             for (int i = 0; i < this->size; i++) {
                 Address *cur = this->rows[i];
                 if (cur) {
-                    sprintf(price_string, "%d", cur->car_price);
-                    if (strstr(price_string, value) == NULL) {
+                    string car_year = to_string(cur->car_year);
+                    if (car_year.find(value) == std::string::npos) {
                         cur->filter = 0;
                     } 
                 }
@@ -801,8 +752,8 @@ void Database::filter_by_price(int type, char* value) {
             for (int i = 0; i < this->size; i++) {
                 Address *cur = this->rows[i];
                 if (cur) {
-                    sprintf(price_string, "%d", cur->car_price);
-                    if (strcmp(price_string, value) == 0) {
+                    string car_year = to_string(cur->car_year);
+                    if (car_year == value) {
                         cur->filter = 0;
                     } 
                 }
@@ -812,8 +763,60 @@ void Database::filter_by_price(int type, char* value) {
             for (int i = 0; i < this->size; i++) {
                 Address *cur = this->rows[i];
                 if (cur) {
-                    sprintf(price_string, "%d", cur->car_price);
-                    if (strstr(price_string, value) != NULL) {
+                    string car_year = to_string(cur->car_year);
+                    if (car_year.find(value) != std::string::npos) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+    }
+}
+
+
+void Database::filter_by_price(int type, const string& value) {
+
+
+    switch(type) {
+        case 1:
+            for (int i = 0; i < this->size; i++) {
+                Address *cur = this->rows[i];
+                if (cur) {
+                    string car_price = to_string(cur->car_price);
+                    if (car_price != value) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 2:
+            for (int i = 0; i < this->size; i++) {
+                Address *cur = this->rows[i];
+                if (cur) {
+                    string car_price = to_string(cur->car_price);
+                    if (car_price.find(value) == std::string::npos) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 3:
+            for (int i = 0; i < this->size; i++) {
+                Address *cur = this->rows[i];
+                if (cur) {
+                    string car_price = to_string(cur->car_price);
+                    if (car_price == value) {
+                        cur->filter = 0;
+                    } 
+                }
+            }
+            break;
+        case 4:
+            for (int i = 0; i < this->size; i++) {
+                Address *cur = this->rows[i];
+                if (cur) {
+                    string car_price = to_string(cur->car_price);
+                    if (car_price.find(value) != std::string::npos) {
                         cur->filter = 0;
                     } 
                 }
@@ -833,7 +836,7 @@ void Database::sort_lex_by_make(int first, int last) {
 
         for (j = i + 1; j < last + 1; ++j) {
 
-            if (strcmp(this->rows[i]->car_make, this->rows[j]->car_make) > 0) {
+            if (this->rows[i]->car_make > this->rows[j]->car_make) {
                 temp = this->rows[i];
                 this->rows[i] = this->rows[j];
                 this->rows[j] = temp;
@@ -851,7 +854,7 @@ void Database::sort_lex_by_model(int first, int last) {
 
         for (j = i + 1; j < last + 1; ++j) {
 
-            if (strcmp(this->rows[i]->car_model, this->rows[j]->car_model) > 0) {
+            if (this->rows[i]->car_model > this->rows[j]->car_model) {
                 temp = this->rows[i];
                 this->rows[i] = this->rows[j];
                 this->rows[j] = temp;
@@ -1032,22 +1035,26 @@ void Connection::database_open() {
             this->db->rows[i]->id = lb.readInt();
             this->db->rows[i]->filter = lb.readInt();
 
-            string temp1 = lb.readString(MAX_TEXT_LENGTH);
+            this->db->rows[i]->car_make = lb.readString(MAX_TEXT_LENGTH);
 
-            char tab1[MAX_TEXT_LENGTH];
-            strcpy(tab1, temp1.c_str());
+/*            string temp1 = lb.readString(MAX_TEXT_LENGTH);*/
 
-            for (int j = 0; j < MAX_TEXT_LENGTH; j++) {
-                this->db->rows[i]->car_make[j] = tab1[j];
-            }
+            //char tab1[MAX_TEXT_LENGTH];
+            //strcpy(tab1, temp1.c_str());
 
-            string temp2 = lb.readString(MAX_TEXT_LENGTH);
+            //for (int j = 0; j < MAX_TEXT_LENGTH; j++) {
+                //this->db->rows[i]->car_make[j] = tab1[j];
+            //}
 
-            char tab2[MAX_TEXT_LENGTH];
-            strcpy(tab2, temp2.c_str());
-            for (int j = 0; j < MAX_TEXT_LENGTH; j++) {
-                this->db->rows[i]->car_model[j] = tab2[j];
-            }
+            this->db->rows[i]->car_model = lb.readString(MAX_TEXT_LENGTH);
+
+            //string temp2 = lb.readString(MAX_TEXT_LENGTH);
+
+            //char tab2[MAX_TEXT_LENGTH];
+            //strcpy(tab2, temp2.c_str());
+            //for (int j = 0; j < MAX_TEXT_LENGTH; j++) {
+                //this->db->rows[i]->car_model[j] = tab2[j];
+            /*}*/
 
             this->db->rows[i]->car_year = lb.readInt();
             this->db->rows[i]->car_price = lb.readInt();
@@ -1146,49 +1153,6 @@ int main(int argc, char *argv[]) {
     Connection* conn = new Connection;
     conn->filename = argv[1];
     conn->database_open();
-    //Connection* conn = database_open(filename);
-
-    //conn->db = new Database;
-    //conn->database_create();
-    //conn->database_write();
-
-
-    //Address* addr01 = conn->db->rows[0];
-    ////conn->output.open("output.dat", ios::out | ios::binary);
-    //WriteToBinaryFile wtbf("output.dat");
-    //wtbf.write(addr01->id);
-    //wtbf.write(addr01->filter);
-    //wtbf.write(addr01->car_make, MAX_TEXT_LENGTH);
-    //wtbf.write(addr01->car_model, MAX_TEXT_LENGTH);
-    //wtbf.write(addr01->car_year);
-    //wtbf.write(addr01->car_price);
-    //wtbf.close();
-
-    //Address* addr02 = conn->db->rows[1];
-    //LoadFromBinaryFile lfbf("output.dat");
-
-    //addr02->id = lfbf.readInt();
-    //addr02->filter = lfbf.readInt();
-
-    //string temp1 = lfbf.readString(MAX_TEXT_LENGTH);
-
-    //char tab1[MAX_TEXT_LENGTH];
-    //strcpy(tab1, temp1.c_str());
-    //for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
-        //addr02->car_make[i] = tab1[i];
-    //}
-
-    //string temp2 = lfbf.readString(MAX_TEXT_LENGTH);
-
-    //char tab2[MAX_TEXT_LENGTH];
-    //strcpy(tab2, temp2.c_str());
-    //for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
-        //addr02->car_model[i] = tab2[i];
-    //}
-
-    //addr02->car_year = lfbf.readInt();
-    //addr02->car_price = lfbf.readInt();
-    //lfbf.close();
 
     char* about = (char*)"This is a car database program, where one can perform get, list, create, edit and delete "
             "operations. The database is loaded from and saved to the binary file. Version: v.0";
