@@ -266,7 +266,8 @@ void Address::getAddress() {
 
 class Database {
     public: 
-        Address** rows;
+        //Address** rows;
+        vector<Address*> rows;
         int size;
         int capacity;
 
@@ -401,7 +402,7 @@ void Database::debugTable() {
 void Database::database_set(int id, Address* addr) { 
     if (this->size == this->capacity) {
         this->capacity += CHUNK_SIZE;
-        this->rows = (Address**) realloc(this->rows, this->capacity * sizeof(Address*));
+        //this->rows = (Address**) realloc(this->rows, this->capacity * sizeof(Address*));
         for (int i = this->size; i < this->capacity; i++) {
             this->rows[i] = (Address*) calloc(1, sizeof(Address));
         }
@@ -1023,11 +1024,10 @@ void Connection::database_open() {
         this->db->size = lb.readInt();
         this->db->capacity = lb.readInt();
 
-        this->db->rows = new Address*[this->db->capacity];
-
+        //this->db->rows = new Address*[this->db->capacity];
 
         for (int i = 0; i < this->db->capacity; i++) {
-            this->db->rows[i] = new(Address);
+            this->db->rows.push_back(new Address());
         }
 
         for (int i = 0; i < this->db->capacity; i++) {
@@ -1037,24 +1037,7 @@ void Connection::database_open() {
 
             this->db->rows[i]->car_make = lb.readString(MAX_TEXT_LENGTH);
 
-/*            string temp1 = lb.readString(MAX_TEXT_LENGTH);*/
-
-            //char tab1[MAX_TEXT_LENGTH];
-            //strcpy(tab1, temp1.c_str());
-
-            //for (int j = 0; j < MAX_TEXT_LENGTH; j++) {
-                //this->db->rows[i]->car_make[j] = tab1[j];
-            //}
-
             this->db->rows[i]->car_model = lb.readString(MAX_TEXT_LENGTH);
-
-            //string temp2 = lb.readString(MAX_TEXT_LENGTH);
-
-            //char tab2[MAX_TEXT_LENGTH];
-            //strcpy(tab2, temp2.c_str());
-            //for (int j = 0; j < MAX_TEXT_LENGTH; j++) {
-                //this->db->rows[i]->car_model[j] = tab2[j];
-            /*}*/
 
             this->db->rows[i]->car_year = lb.readInt();
             this->db->rows[i]->car_price = lb.readInt();
@@ -1073,10 +1056,13 @@ void Connection::database_create() {
 
     this->db->capacity = CHUNK_SIZE;
     this->db->size = 0;
-    this->db->rows = new Address*[this->db->capacity];
+    debug("create");
+
+    //this->db->rows = new Address*[this->db->capacity];
 
     for (int i = 0; i < this->db->capacity; i++) {
-        this->db->rows[i] = new Address();
+        //this->db->rows[i] = new Address();
+        this->db->rows.push_back(new Address());
     }
 }
 
