@@ -43,11 +43,14 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <cstdlib>
 
 #include "dbg.h"
 #include "helpers.h"
+#include "load_from_binary_file.h"
+#include "write_to_binary_file.h"
 
 #define MAX_LINE 100
 #define MAX_TEXT_LENGTH 30
@@ -964,6 +967,8 @@ void Database::sort_by_id(int first, int last)
 
 class Connection {
     public:
+        std::ofstream output;
+        std::ifstream input;
         FILE *file;
         Database *db;
 
@@ -1113,6 +1118,41 @@ int main(int argc, char *argv[]) {
     Connection* conn = new Connection;
     conn->database_open(filename);
     //Connection* conn = database_open(filename);
+    Address* addr01 = conn->db->rows[0];
+    //conn->output.open("output.dat", ios::out | ios::binary);
+    WriteToBinaryFile wtbf("output.dat");
+    wtbf.write(addr01->id);
+    wtbf.write(addr01->filter);
+    wtbf.write(addr01->car_make, MAX_TEXT_LENGTH);
+    wtbf.write(addr01->car_model, MAX_TEXT_LENGTH);
+    wtbf.write(addr01->car_year);
+    wtbf.write(addr01->car_price);
+    wtbf.close();
+
+    Address* addr02 = conn->db->rows[1];
+    LoadFromBinaryFile lfbf("output.dat");
+    addr02->id = lfbf.readInt();
+    addr02->filter = lfbf.readInt();
+
+    string temp1 = lfbf.readString(MAX_TEXT_LENGTH);
+
+    char tab1[MAX_TEXT_LENGTH];
+    strcpy(tab1, temp1.c_str());
+    for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
+        addr02->car_make[i] = tab1[i];
+    }
+
+    string temp2 = lfbf.readString(MAX_TEXT_LENGTH);
+
+    char tab2[MAX_TEXT_LENGTH];
+    strcpy(tab2, temp2.c_str());
+    for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
+        addr02->car_model[i] = tab2[i];
+    }
+
+    addr02->car_year = lfbf.readInt();
+    addr02->car_price = lfbf.readInt();
+    lfbf.close();
 
     char* about = (char*)"This is a car database program, where one can perform get, list, create, edit and delete "
             "operations. The database is loaded from and saved to the binary file. Version: v.0";
