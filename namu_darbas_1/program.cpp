@@ -43,6 +43,7 @@
 
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -53,11 +54,13 @@
 #include "load_from_binary_file.h"
 #include "write_to_binary_file.h"
 
+#define MAX_ENTRY_SIZE 30
 #define MAX_LINE 100
 #define MAX_TEXT_LENGTH 30
 #define MAX_PARAMS 2
 #define LATEST_YEAR 2018
 #define EARLIEST_YEAR 1920
+#define MAX_PRICE 1e9
 #define CHUNK_SIZE 2
 #define LOGFILE "log.txt"
 
@@ -223,10 +226,16 @@ void Address::setCarMake(const string& car_make) {
     if (std::string::npos != car_make.find_first_of("0123456789")) {
         throw std::invalid_argument("Car make cannot contain numbers!");
     }
+    if (car_make.length() > MAX_ENTRY_SIZE) {
+        throw std::invalid_argument("Database entry cannot contain more than 30 characters!");
+    }
     this->car_make = car_make;
 };
 
 void Address::setCarModel(const string& car_model) {
+    if (car_model.length() > MAX_ENTRY_SIZE) {
+        throw std::invalid_argument("Database entry cannot contain more than 30 characters!");
+    }
     this->car_model = car_model;
 };
 
@@ -242,6 +251,9 @@ void Address::setCarYear(int car_year) {
 void Address::setCarPrice(int car_price) {
     if (car_price <= 0) {
         throw std::invalid_argument("Price cannot be zero or negative!");
+    }
+    if (car_price > MAX_PRICE) {
+        throw std::invalid_argument("Price has outgone its upper limit!");
     }
 
     this->car_price = car_price;
@@ -261,17 +273,28 @@ void Address::getAddress() {
             cout << e.what() << endl;
             continue;
         }
+        // flush input
+        // FIXME is it the right way to do it?
+        cin.get();
         break;
     }
 
-    // flush input
-    // FIXME is it the right way to do it?
-    cin.get();
+    while (1) {
 
-    string car_model;
-    cout << "Enter model > ";
-    getline(cin, car_model);
-    this->setCarModel(car_model);
+        cout << "Enter model > ";
+        string car_model;
+        getline(cin, car_model);
+        try {
+            this->setCarModel(car_model);
+        } catch (const std::invalid_argument& e) {
+            cout << e.what() << endl;
+            continue;
+        }
+        // flush input
+        // FIXME is it the right way to do it?
+        cin.get();
+        break;
+    }
 
     while(1) {
         cout << "Enter year > ";
@@ -409,15 +432,27 @@ class Database {
 
 
 void Database::print_heading() {
-    printf("__________________________________________________________________________________________\n");
-    printf("| ID |            Make              |            Model             |   Year   |   Price  |\n");
-    printf("|_ __|______________________________|______________________________|__________|__________|\n");
+    cout << "__________________________________________________________________________________________" << endl;
+    cout << "| ID |            Make              |            Model             |   Year   |   Price  |" << endl;
+    cout << "|_ __|______________________________|______________________________|__________|__________|" << endl;
 }
 
 void Database::address_print(Address *addr) {
 
-    printf("|%4d|%30s|%30s|%10d|%10d|\n", addr->id, addr->car_make.c_str(), addr->car_model.c_str(), addr->car_year, addr->car_price);
-    printf("|____|______________________________|______________________________|__________|__________|\n");
+    cout << "|" << setw(4) << addr->id << "|"
+         << setw(30) << addr->car_make << "|"
+         << setw(30) << addr->car_model << "|"
+         << setw(10) << addr->car_year << "|"
+         << setw(10) << addr->car_price << "|"
+         << endl;
+
+    cout << "|" << string(4, '_') << "|" 
+         << string(30, '_') << "|" 
+         << string(30, '_') << "|" 
+         << string(10, '_') << "|" 
+         << string(10, '_') << "|" 
+         << endl;
+
 }
 
 
@@ -428,9 +463,7 @@ void Database::debugTable() {
     debug("db size: %d", this->size);
     debug("db capacity: %d", this->capacity);
 
-    printf("__________________________________________________________________________________________\n");
-    printf("| ID |            Make              |            Model             |   Year   |   Price  |\n");
-    printf("|_ __|______________________________|______________________________|__________|__________|\n");
+    this->print_heading();
 
     for (i = 0; i < this->capacity; i++) {
         this->address_print(this->rows[i]);
