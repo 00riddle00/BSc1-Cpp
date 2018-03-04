@@ -72,6 +72,7 @@ class Input {
         // add additional space for one extra parameter in
         // order for the validation to work
         // (ie error "too many parameters" is displayed)
+        // TODO revise this logic
         string params[MAX_PARAMS + 1];
         //char** params;
 
@@ -142,6 +143,7 @@ int Input::valid_input() {
     // Validate action
     
     //char *all_actions = (char*)"a,g,s,d,l,c,i,q,action,get,set,delete,list,clear,info,quit";
+    // FIXME Define as constant
     string all_actions = "a,g,s,d,l,c,i,q,action,get,set,delete,list,clear,info,quit";
     
     // FIXME is it right
@@ -207,59 +209,97 @@ class Address {
         int car_year;
         int car_price;
 
+        void setCarMake(const string& car_make);
+        void setCarModel(const string& car_model);
+        void setCarYear(int car_year);
+        void setCarPrice(int car_price);
+
         void getAddress();
+};
+
+
+void Address::setCarMake(const string& car_make) {
+
+    if (std::string::npos != car_make.find_first_of("0123456789")) {
+        throw std::invalid_argument("Car make cannot contain numbers!");
+    }
+    this->car_make = car_make;
+};
+
+void Address::setCarModel(const string& car_model) {
+    this->car_model = car_model;
+};
+
+
+void Address::setCarYear(int car_year) {
+    if (car_year < EARLIEST_YEAR || car_year > LATEST_YEAR) {
+        throw std::invalid_argument("Please make sure that year is in normal format");
+    }
+
+    this->car_year = car_year;
+};
+
+void Address::setCarPrice(int car_price) {
+    if (car_price <= 0) {
+        throw std::invalid_argument("Price cannot be zero or negative!");
+    }
+
+    this->car_price = car_price;
 };
 
 
 void Address::getAddress() {
 
-    char* char_make = (char*)malloc(MAX_TEXT_LENGTH);
-    char* char_model= (char*)malloc(MAX_TEXT_LENGTH);
-    
-    int temp;
-    int error;
-
-    // Enter make
     while (1) {
-        printf((char*)"Enter make > ");
-        // FIXME cpp warning
-        //memset(this->make,0,sizeof(this->make));
 
-        if (scanf("%[^\n]%*c", char_make) == 1) {
-
-            error = 0;
-
-            for (int i = 0; i < MAX_TEXT_LENGTH; i++) {
-                if(isdigit(char_make[i])) {
-                    error = 1;
-                    break;
-                }
-            }
-
-            if(error) {
-                printf("Car make cannot contain numbers\n");
-                continue;
-            }
-
-            break;
-
-        } else {
-            while((temp=getchar()) != EOF && temp != '\n');
-            printf("Please make sure that make is normal format\n");
+        cout << "Enter make > ";
+        string car_make;
+        cin >> car_make;
+        try {
+            this->setCarMake(car_make);
+        } catch (const std::invalid_argument& e) {
+            cout << e.what() << endl;
+            continue;
         }
+        break;
     }
 
-    // Enter model
-    char_model = get_word((char*)"Enter model > ", char_model);
+    // flush input
+    // FIXME is it the right way to do it?
+    cin.get();
 
-    this->car_make = char_make;
-    this->car_model = char_model;
+    string car_model;
+    cout << "Enter model > ";
+    getline(cin, car_model);
+    this->setCarModel(car_model);
 
-    // Enter year
-    this->car_year =  get_num_interval((char*)"Enter year > ", (char*)"Please make sure that year is in normal format", EARLIEST_YEAR, LATEST_YEAR);
+    while(1) {
+        cout << "Enter year > ";
+        int car_year;
+        cin >> car_year;
 
-    // Enter price
-    this->car_price = get_pos_num((char*)"Enter price > ", 0);
+        try {
+            this->setCarYear(car_year);
+        } catch (const std::invalid_argument& e) {
+            cout << e.what() << endl;
+            continue;
+        }
+        break;
+    }
+
+    while(1) {
+        cout << "Enter price > ";
+        int car_price;
+        cin >> car_price;
+
+        try {
+            this->setCarPrice(car_price);
+        } catch (const std::invalid_argument& e) {
+            cout << e.what() << endl;
+            continue;
+        }
+        break;
+    }
 };
 
 
