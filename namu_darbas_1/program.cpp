@@ -101,7 +101,7 @@ void Input::get_input() {
     string line;
 
     while (1) {
-        printf("[enter \"i\" for info] main shell > ");
+        cout << "[enter \"i\" for info] main shell > ";
 
         // FIXME choose smaller read size
         //cin.getline(line, MAX_LINE);
@@ -134,12 +134,12 @@ int Input::valid_input() {
     int count = this->count;
 
     if (count == 0) {
-        printf("The input is empty.\n");
+        cout << "The input is empty." << endl;
         return 0;
     }
 
     if (count > MAX_PARAMS) {
-        printf("Too many arguments\n");
+        cout << "Too many arguments" << endl;
         return 0;
     }
 
@@ -153,7 +153,7 @@ int Input::valid_input() {
     // FIXME is it right
     if (all_actions.find(this->params[0]) == std::string::npos) {
     //if (strstr(all_actions, this->params[0]) == NULL) {
-        printf("Such action does not exist\n");
+        cout << "Such action does not exist" << endl;
         return 0;
     }
 
@@ -163,7 +163,7 @@ int Input::valid_input() {
     if (count == 1) {
         char *actions = (char*)"gsd";
         if (strchr(actions, action) != NULL) {
-            printf("ID is not submitted\n");
+            cout << "ID is not submitted" << endl;
             return 0;
         }
     }
@@ -174,7 +174,7 @@ int Input::valid_input() {
 
         char *one_args = (char*)"alicq";
         if (strchr(one_args, action) != NULL) {
-            printf("Too much arguments for this action\n");
+            cout << "Too much arguments for this action" << endl;
             return 0;
         }
 
@@ -183,7 +183,7 @@ int Input::valid_input() {
         // id being equal to 0 in condition
         // below also validates from char input
         if (id <= 0) {
-            printf("ID should be a positive integer.\n");
+            cout << "ID should be a positive integer." << endl;
             return 0;
         }
     }
@@ -506,7 +506,7 @@ void Database::database_set(int id, Address* addr) {
     this->rows[i] = addr;
     this->size += 1;
 
-    printf("Successfully saved, ID = %d\n", id);
+    cout << "Successfully saved, ID = " << id << endl;
 }
 
 
@@ -521,7 +521,7 @@ void Database::database_get(int id) {
             } 
         }
     }
-    printf("ID is not set\n");
+    cout << "ID is not set" << endl;
 }
 
 
@@ -530,7 +530,7 @@ void Database::database_list(int reverse) {
     this->print_heading();
 
     if (this->size == 0) {
-        printf("No entries.\n");
+        cout << "No entries." << endl;
         return;
     }
 
@@ -559,7 +559,7 @@ void Database::database_list_filtered(int reverse) {
     this->print_heading();
 
     if (this->size == 0) {
-        printf("No entries.\n");
+        cout << "No entries." << endl;
         return;
     }
 
@@ -589,19 +589,19 @@ void Database::database_delete(int id) {
                 addr->id = 0;
                 this->rows[i] = new Address();
                 this->size--;
-                printf("Successfully deleted\n");
+                cout << "Successfully deleted" << endl;
                 return;
             }
         }
     }
-    printf("No such entry in database\n");
+    cout << "No such entry in database" << endl;
 }
 
 
 void Database::database_clear() {
 
     if (!this->size) {
-        printf("Database has no entries. Nothing to clear.\n");
+        cout << "Database has no entries. Nothing to clear." << endl;
         return;
     }
 
@@ -612,7 +612,7 @@ void Database::database_clear() {
         for (int i = 0; i < this->capacity; i++) {
             delete this->rows[i];
         }
-        printf("Database has been successfully cleared.\n");
+        cout << "Database has been successfully cleared." << endl;
 
     }
 }
@@ -1258,15 +1258,18 @@ int main(int argc, char *argv[]) {
     conn->filename = argv[1];
     conn->database_open();
 
-    char* about = (char*)"This is a car database program, where one can perform get, list, create, edit and delete "
+    //char* about = (char*)"This is a car database program, where one can perform get, list, create, edit and delete "
+            //"operations. The database is loaded from and saved to the binary file. Version: v.0";
+
+    string about = "This is a car database program, where one can perform get, list, create, edit and delete "
             "operations. The database is loaded from and saved to the binary file. Version: v.0";
 
-    char* info = (char*)"Usage: in the main shell, input the Action[1] and ID[2].\n\n[1] Action - g=get, l=list, "
+    string info = "Usage: in the main shell, input the Action[1] and ID[2].\n\n[1] Action - g=get, l=list, "
         "s=set, d=delete, c=clear database, q=quit, i=info.\n[2] ID - a positive integer. Only get, "
         "set and delete operations require ID parameter.\nExamples: (1) get 1 (get 1st element) (2) l (list elements) "
         "(3) set 2 (set 2nd element)";
 
-    char* separator = (char*)"---------------------------------------------------";
+    string separator = "---------------------------------------------------";
 
     // shows whether the were command line arguments to a program
     int cmd = 0;
@@ -1281,10 +1284,9 @@ int main(int argc, char *argv[]) {
     input->count = 0;
     input->valid = 0;
 
-    // print info about the program
-    printf("%s\n\n", about);
-    printf("%s\n", separator);
-    printf("%s\n\n", info);
+    cout << about << "\n\n";
+    cout << separator << endl;
+    cout << info << "\n\n";
 
     // process input from argv
     if (argc > 2) {
@@ -1298,14 +1300,14 @@ int main(int argc, char *argv[]) {
         }
         
         if (argc > 4) {
-            printf("Too many arguments\n");
+            cout << "Too many arguments" << endl;
             cmd = 0;
         }
     }
 
     // main control loop
     while (1) {
-        printf("%s\n", separator);
+        cout << separator << endl;
 
         // in case of argv input
         if (cmd) {
@@ -1335,12 +1337,23 @@ int main(int argc, char *argv[]) {
 
         switch (action) {
             case 'a': {
-                printf("What action would you like to perform? (enter a number)\n");
-                printf("(1) Filter\n");
-                printf("(2) Sort\n");
+                cout << "What action would you like to perform? (enter a number)" << endl 
+                     << "(1) Filter" << endl
+                     << "(2) Sort" << endl;
 
                 Database *db = conn->db;
-                action = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 2);
+
+                while(1) {
+                    cout << "(Enter a number) > ";
+                    cin >> action;
+
+                    if (action < 1 || action > 2) {
+                        cout << "Such option does not exist" << endl;
+                        continue;
+                    }
+                    break;
+                }
+
                 db->perform_action(action);
                 break;
             }
@@ -1353,7 +1366,7 @@ int main(int argc, char *argv[]) {
 
 				for (int i = 0; i < conn->db->capacity; i++) {
                     if (conn->db->rows[i]->id == id) {
-                        printf("Such entry already exists:\n");
+                        cout << "Such entry already exists:" << endl;
                         conn->db->database_get(id);
                         if (choice("Would you like to change it?")) {
                             conn->db->database_delete(id);
@@ -1401,8 +1414,8 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'i': {
-                printf("\n%s\n", separator);
-                printf("%s\n\n", info);
+                cout << separator << endl;
+                cout << info << "\n\n";
                 break;
             } 
             // TODO rm debug printing
@@ -1415,7 +1428,7 @@ int main(int argc, char *argv[]) {
                 return 0;
             }
             default: {
-                printf("Invalid action, only: g=get, s=set, d=delete, l=list, q=quit, i=info\n");
+                cout << "Invalid action, only: g=get, s=set, d=delete, l=list, q=quit, i=info" << endl;
             }
         }
 
@@ -1430,7 +1443,7 @@ void exiting() {
     logfile << "Time spent: " << time_spent << " seconds" << endl
             << string(20, '-') << endl;
     logfile.close();
-    printf("Goodbye!\n");
+    cout << "Goodbye!" << endl;
 }
 
 
