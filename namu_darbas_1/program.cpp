@@ -48,6 +48,7 @@
 #include <sstream>
 #include <vector>
 #include <cstdlib>
+#include <ctime>
 
 #include "dbg.h"
 #include "helpers.h"
@@ -622,23 +623,41 @@ void Database::perform_action(int action) {
 
     switch(action) {
         case 1: {
-            printf("By which field would you like to filter? (enter a number)\n");
-            printf("(1) Make\n");
-            printf("(2) Model\n");
-            printf("(3) Year\n");
-            printf("(4) Price\n");
+            cout << "By which field would you like to filter? (enter a number)" << endl
+                 << "(1) Make" << endl
+                 << "(2) Model" << endl
+                 << "(3) Year" << endl
+                 << "(4) Price" << endl;
 
-            field = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 4);
+            while(1) {
+                cout << "(Enter a number) > ";
+                cin >> field;
 
-            printf("How would you like to filter?\n");
-            printf("(1) Entry is equal to the given value\n");
-            printf("(2) Entry contains the given value\n");
-            printf("(3) Entry is not equal to the given value\n");
-            printf("(4) Entry does not contain the given value\n");
+                if (field < 1 || field > 4) {
+                    cout << "Such option does not exist" << endl;
+                    continue;
+                }
+                break;
+            }
 
-            type = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 4);
+            cout << "How would you like to filter?" << endl
+                 << "(1) Entry is equal to the given value" << endl
+                 << "(2) Entry contains the given value" << endl
+                 << "(3) Entry is not equal to the given value" << endl
+                 << "(4) Entry does not contain the given value" << endl;
 
-            printf("Please enter a value to be filtered by\n");
+            while(1) {
+                cout << "(Enter a number) > ";
+                cin >> type;
+
+                if (type < 1 || type > 4) {
+                    cout << "Such option does not exist" << endl;
+                    continue;
+                }
+                break;
+            }
+
+            cout << "Please enter a value to be filtered by" << endl;
 
             string value;
             // TODO add validation as in "get text" function
@@ -665,19 +684,37 @@ void Database::perform_action(int action) {
         }
 
         case 2: {
-            printf("By which field would you like to sort? (enter a number)\n");
-            printf("(1) Make\n");
-            printf("(2) Model\n");
-            printf("(3) Year\n");
-            printf("(4) Price\n");
+            cout << "By which field would you like to sort? (enter a number)" << endl
+                 << "(1) Make" << endl
+                 << "(2) Model" << endl
+                 << "(3) Year" << endl
+                 << "(4) Price" << endl;
 
-            field = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 4);
+            while(1) {
+                cout << "(Enter a number) > ";
+                cin >> field;
 
-            printf("How would you like to sort?\n");
-            printf("(1) Ascending order\n");
-            printf("(2) Descending order\n");
+                if (field < 1 || field > 4) {
+                    cout << "Such option does not exist" << endl;
+                    continue;
+                }
+                break;
+            }
 
-            type = get_num_interval((char*)"(Enter a number) > ", (char*)"Such option does not exist", 1, 2);
+            cout << "How would you like to sort?" << endl
+                 << "(1) Ascending order" << endl
+                 << "(2) Descending order" << endl;
+
+            while(1) {
+                cout << "(Enter a number) > ";
+                cin >> type;
+
+                if (type < 1 || type > 2) {
+                    cout << "Such option does not exist" << endl;
+                    continue;
+                }
+                break;
+            }
 
             int reverse = (type == 1) ? 0 : 1;
 
@@ -699,9 +736,7 @@ void Database::perform_action(int action) {
             break;
         }
     }
-
 }
-
 
 
 void Database::reset_filter() {
@@ -1140,7 +1175,6 @@ void Connection::database_create() {
 
     this->db->capacity = CHUNK_SIZE;
     this->db->size = 0;
-    debug("create");
 
     //this->db->rows = new Address*[this->db->capacity];
 
@@ -1173,7 +1207,7 @@ void Connection::database_close() {
     //if (this->file) fclose(this->file);
 
     for (int i = 0; i < this->db->capacity; i++) {
-        free(this->db->rows[i]);
+        delete this->db->rows[i];
     }
     // TODO free connection
     //free(conn->db->rows);
@@ -1197,24 +1231,24 @@ clock_t finish;
 double clocks;
 double time_spent;
 
-static FILE* logfile;
+static ofstream logfile;
 
 
 int main(int argc, char *argv[]) {
 
     if (argc < 2) die ((char*)"USAGE: test <dbfile> <action> [action params]");
 
-    logfile = fopen(LOGFILE, "ab+");
+    //logfile = fopen(LOGFILE, "ab+");
+    logfile.open(LOGFILE, std::ofstream::out | std::ofstream::app);
 
-    time_t current_time;
-    char* c_time_string;
+    // current date/time based on current system
+    time_t now = time(0);
 
-    current_time = time(NULL);
+    // convert now to string form
+    char* current_time = ctime(&now);
 
-    /* Convert to local time format. */
-    c_time_string = ctime(&current_time);
+    logfile << "Starting program @" << current_time;
 
-    fprintf(logfile, "Starting program @%s", c_time_string);
     start = clock();
 
     /* register the termination function */
@@ -1369,12 +1403,15 @@ int main(int argc, char *argv[]) {
             case 'i': {
                 printf("\n%s\n", separator);
                 printf("%s\n\n", info);
-                // TODO rm debug printing
+                break;
+            } 
+            // TODO rm debug printing
+            case 'o': {
                 conn->db->debugTable();
                 break;
             }
             case 'q': {
-                //conn->database_close();
+                conn->database_close();
                 return 0;
             }
             default: {
@@ -1390,9 +1427,9 @@ void exiting() {
 
     clocks = (double)(finish - start);
     time_spent = clocks / CLOCKS_PER_SEC;
-    fprintf(logfile, "Time spent: %lf seconds\n", time_spent);
-    fputs("-----------------------\n", logfile);
-    fclose(logfile);
+    logfile << "Time spent: " << time_spent << " seconds" << endl
+            << string(20, '-') << endl;
+    logfile.close();
     printf("Goodbye!\n");
 }
 
