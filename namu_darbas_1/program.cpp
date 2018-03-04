@@ -432,9 +432,20 @@ class Database {
 
 
 void Database::print_heading() {
-    cout << "__________________________________________________________________________________________" << endl;
-    cout << "| ID |            Make              |            Model             |   Year   |   Price  |" << endl;
-    cout << "|_ __|______________________________|______________________________|__________|__________|" << endl;
+
+    cout << string(90, '_') << endl
+
+         << "| " << "ID" << " |" 
+         << setw(13) << " " << "Make" << setw(13) << " " << "|"
+         << setw(12) << " " << "Model" << setw(13) << " " << "|"
+         << setw(3) << " " << "Year" << setw(3) << " " << "|"
+         << setw(2) << " " << "Price" << setw(3) << " " << "|" << endl
+
+         << "|" << string(4, '_') << "|" 
+         << string(30, '_') << "|" 
+         << string(30, '_') << "|" 
+         << string(10, '_') << "|" 
+         << string(10, '_') << "|" << endl;
 }
 
 void Database::address_print(Address *addr) {
@@ -452,7 +463,6 @@ void Database::address_print(Address *addr) {
          << string(10, '_') << "|" 
          << string(10, '_') << "|" 
          << endl;
-
 }
 
 
@@ -476,10 +486,12 @@ void Database::database_set(int id, Address* addr) {
         this->capacity += CHUNK_SIZE;
         //this->rows = (Address**) realloc(this->rows, this->capacity * sizeof(Address*));
         for (int i = this->size; i < this->capacity; i++) {
-            this->rows[i] = (Address*) calloc(1, sizeof(Address));
+            this->rows.push_back(new Address());
+            //this->rows[i] = (Address*) calloc(1, sizeof(Address));
         }
     }
    
+    // FIXME is it needed with vector?
     int i;
     for (i = 0; i < this->capacity; i++) {
         if (this->rows[i]->id == 0) {
@@ -574,7 +586,7 @@ void Database::database_delete(int id) {
         if (addr->id == id) {
             if (choice("Do you really want to delete this entry?")) {
                 addr->id = 0;
-                this->rows[i] = (Address*) calloc(1, sizeof(Address));
+                this->rows[i] = new Address();
                 this->size--;
                 printf("Successfully deleted\n");
                 return;
@@ -587,7 +599,7 @@ void Database::database_delete(int id) {
 
 void Database::database_clear() {
 
-    if (this->size) {
+    if (!this->size) {
         printf("Database has no entries. Nothing to clear.\n");
         return;
     }
@@ -597,7 +609,7 @@ void Database::database_clear() {
         this->size = 0;
 
         for (int i = 0; i < this->capacity; i++) {
-            free(this->rows[i]);
+            delete this->rows[i];
         }
         printf("Database has been successfully cleared.\n");
 
