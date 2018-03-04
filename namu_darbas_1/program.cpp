@@ -44,6 +44,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
 #include <cstdlib>
 
@@ -68,8 +69,10 @@ class Input {
         int count;
         int valid;
 
-        //vector<string> params;
-        string params[MAX_PARAMS];
+        // add additional space for one extra parameter in
+        // order for the validation to work
+        // (ie error "too many parameters" is displayed)
+        string params[MAX_PARAMS + 1];
         //char** params;
 
         // ::params: input - input structure is modified
@@ -87,28 +90,24 @@ class Input {
 };
 
 
-
 void Input::get_input() {
 
-    char *pch;
-
-    char line[MAX_LINE];
+    //char line[MAX_LINE];
+    string line;
 
     while (1) {
         printf("[enter \"i\" for info] main shell > ");
 
-        fgets(line, sizeof(line), stdin);
+        // FIXME choose smaller read size
+        //cin.getline(line, MAX_LINE);
+        getline(cin, line);
 
-        pch = strtok(line, " \n");
-        while (pch != NULL) {
+        string buf; // Have a buffer string
+        stringstream ss(line); // Insert the string into a stream
 
-            if (this->count < MAX_PARAMS + 1) {
-                // malloc() is used in strdup;
-                this->params[this->count] = pch ? strdup(pch) : pch;
-                if (!pch) die((char*)"Memory error");
-            }
-
-            pch = strtok(NULL, " \n");
+        while (ss >> buf && this->count <= MAX_PARAMS+1) {
+            //tokens.push_back(buf);
+            this->params[this->count] = buf;
             this->count++;
         }
 
@@ -155,13 +154,6 @@ int Input::valid_input() {
 
     char action = this->params[0][0];
 
-    char *actions = (char*)"agsdlciq";
-    if (strchr(actions, action) == NULL) {
-        printf("Such action does not exist\n");
-        return 0;
-    }
-
-
     if (count == 1) {
         char *actions = (char*)"gsd";
         if (strchr(actions, action) != NULL) {
@@ -169,7 +161,6 @@ int Input::valid_input() {
             return 0;
         }
     }
-
 
     // Validate id
     
@@ -198,6 +189,7 @@ int Input::valid_input() {
 void Input::clear_input() {
     for (int i = 0; i < MAX_PARAMS; ++i) {
         //this->params[i] = NULL;
+        // FIXME more effective free
         this->params[i] = "";
     }
     this->valid = 0;
@@ -981,7 +973,7 @@ class Connection {
         std::ofstream output;
         std::ifstream input;
         string filename;
-        FILE *file;
+        //FILE *file;
         Database *db;
 
         // ::return: connection struct
@@ -1093,7 +1085,7 @@ void Connection::database_write() {
 
 
 void Connection::database_close() {
-    if (this->file) fclose(this->file);
+    //if (this->file) fclose(this->file);
 
     for (int i = 0; i < this->db->capacity; i++) {
         free(this->db->rows[i]);
