@@ -67,8 +67,10 @@ class Input {
     public:
         int count;
         int valid;
+
         //vector<string> params;
-        char** params;
+        string params[MAX_PARAMS];
+        //char** params;
 
         // ::params: input - input structure is modified
         void get_input();
@@ -140,8 +142,12 @@ int Input::valid_input() {
 
     // Validate action
     
-    char *all_actions = (char*)"a,g,s,d,l,c,i,q,action,get,set,delete,list,clear,info,quit";
-    if (strstr(all_actions, this->params[0]) == NULL) {
+    //char *all_actions = (char*)"a,g,s,d,l,c,i,q,action,get,set,delete,list,clear,info,quit";
+    string all_actions = "a,g,s,d,l,c,i,q,action,get,set,delete,list,clear,info,quit";
+    
+    // FIXME is it right
+    if (all_actions.find(this->params[0]) == std::string::npos) {
+    //if (strstr(all_actions, this->params[0]) == NULL) {
         printf("Such action does not exist\n");
         return 0;
     }
@@ -175,7 +181,7 @@ int Input::valid_input() {
             return 0;
         }
 
-        int id = atoi(this->params[1]);
+        int id = stoi(this->params[1]);
 
         // id being equal to 0 in condition
         // below also validates from char input
@@ -191,7 +197,8 @@ int Input::valid_input() {
 
 void Input::clear_input() {
     for (int i = 0; i < MAX_PARAMS; ++i) {
-        this->params[i] = NULL;
+        //this->params[i] = NULL;
+        this->params[i] = "";
     }
     this->valid = 0;
     this->count = 0;
@@ -1159,7 +1166,7 @@ int main(int argc, char *argv[]) {
     /* initialize input variable*/
     //Input* input = (Input*) malloc(sizeof(Input));
     Input* input = new Input;
-    input->params = (char**)malloc(MAX_PARAMS * sizeof(char *));
+    //input->params = (char**)malloc(MAX_PARAMS * sizeof(char *));
     input->count = 0;
     input->valid = 0;
 
@@ -1206,8 +1213,9 @@ int main(int argc, char *argv[]) {
         char action = (input->params)[0][0];
 
         // setting id from input
-        if (input->params[1] != NULL) {
-            id = atoi(input->params[1]);
+        if (input->params[1] != "") {
+            //id = atoi(input->params[1]);
+            id = stoi(input->params[1]);
         }
 
         // TODO free input
