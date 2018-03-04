@@ -1,3 +1,9 @@
 Starting program @Sun Mar  4 20:15:12 2018
 Time spent: 0.000244 seconds
 --------------------
+Starting program @Sun Mar  4 20:54:01 2018
+Time spent: 0.001501 seconds
+--------------------
+Starting program @Sun Mar  4 20:54:10 2018
+Time spent: 0.000515 seconds
+--------------------

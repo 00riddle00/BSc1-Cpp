@@ -47,11 +47,8 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <cstdlib>
 #include <ctime>
 
-#include "dbg.h"
-#include "helpers.h"
 #include "load_from_binary_file.h"
 #include "write_to_binary_file.h"
 
@@ -67,6 +64,7 @@
 
 using namespace std;
 
+int choice(const char* message);
 
 class Input {
     public:
@@ -161,8 +159,8 @@ int Input::valid_input() {
     char action = this->params[0][0];
 
     if (count == 1) {
-        char *actions = (char*)"gsd";
-        if (strchr(actions, action) != NULL) {
+        string actions = "gsd";
+        if (actions.find(action) != std::string::npos) {
             cout << "ID is not submitted" << endl;
             return 0;
         }
@@ -172,8 +170,9 @@ int Input::valid_input() {
     
     if (count > 1) {
 
-        char *one_args = (char*)"alicq";
-        if (strchr(one_args, action) != NULL) {
+        string one_args = "alicq";
+
+        if (one_args.find(action) != std::string::npos) {
             cout << "Too much arguments for this action" << endl;
             return 0;
         }
@@ -471,8 +470,8 @@ void Database::address_print(Address *addr) {
 void Database::debugTable() {
     int i = 0;
 
-    debug("db size: %d", this->size);
-    debug("db capacity: %d", this->capacity);
+    cout << "db size: " << this->size << endl;
+    cout << "db capacity: " << this->capacity << endl;
 
     this->print_heading();
 
@@ -1217,6 +1216,36 @@ void Connection::database_close() {
 
 
 
+int choice(const char* message)
+{
+
+    while (1) {
+        printf("%s", message);
+        printf(" [Y/n] ");
+        char decision;
+
+        if (scanf("%c", &decision) == 1 && getchar() == '\n') {
+
+            switch (decision) {
+            case 'y':
+            case 'Y':
+                return 1;
+            case 'n':
+            case 'N':
+                return 0;
+            default:
+                printf("Invalid action, only: Y=yes, N=no\n");
+            }
+
+        } else {
+            while (getchar() != '\n')
+                ;
+            printf("Invalid action, only: Y=yes, N=no\n");
+        }
+    }
+}
+
+
 // this function gets called with atexit()
 // writes logging info to a log file and 
 // displays goodbye message
@@ -1236,9 +1265,11 @@ static ofstream logfile;
 
 int main(int argc, char *argv[]) {
 
-    if (argc < 2) die ((char*)"USAGE: test <dbfile> <action> [action params]");
+    if (argc < 2) {
+        cout << "USAGE: test <dbfile> <action> [action params]" << endl;
+        exit(1);
+    }
 
-    //logfile = fopen(LOGFILE, "ab+");
     logfile.open(LOGFILE, std::ofstream::out | std::ofstream::app);
 
     // current date/time based on current system
@@ -1258,9 +1289,6 @@ int main(int argc, char *argv[]) {
     conn->filename = argv[1];
     conn->database_open();
 
-    //char* about = (char*)"This is a car database program, where one can perform get, list, create, edit and delete "
-            //"operations. The database is loaded from and saved to the binary file. Version: v.0";
-
     string about = "This is a car database program, where one can perform get, list, create, edit and delete "
             "operations. The database is loaded from and saved to the binary file. Version: v.0";
 
@@ -1278,9 +1306,7 @@ int main(int argc, char *argv[]) {
     int id;
 
     /* initialize input variable*/
-    //Input* input = (Input*) malloc(sizeof(Input));
     Input* input = new Input;
-    //input->params = (char**)malloc(MAX_PARAMS * sizeof(char *));
     input->count = 0;
     input->valid = 0;
 
