@@ -114,12 +114,6 @@ int main(int argc, char *argv[]) {
 
     string separator = "---------------------------------------------------";
 
-    // shows whether the were command line arguments to a program
-    bool cmd = false;
-
-    // id for database entries
-    int id;
-
     /* initialize input variable*/
     Input* input = new Input;
 
@@ -129,16 +123,15 @@ int main(int argc, char *argv[]) {
 
     // process input from argv
     if (argc > 2) {
-        cmd = true;
-        input->setParam(0, argv[2]);
+        input->setCMD();
+        input->add(argv[2]);
 
         if (argc > 3) {
-            input->setParam(1, argv[3]);
+            input->add(argv[3]);
         }
         
         if (argc > 4) {
             cout << "Too many arguments" << endl;
-            cmd = false;
             input->clear_input();
         }
     }
@@ -146,11 +139,12 @@ int main(int argc, char *argv[]) {
     // main control loop
     while (1) {
         cout << separator << endl;
-
+        
+        // FIXME what if input is valid?
         // in case of argv input
-        if (cmd) {
-            cmd = false;
-            if (!input->validate_input()) {
+        if (input->isCMD()) {
+            input->unsetCMD();
+            if (!input->isValid()) {
                 input->clear_input();
                 continue;
             }
@@ -158,25 +152,20 @@ int main(int argc, char *argv[]) {
         } else {
             input->clear_input();
             input->get_input();
+            if (!input->isValid()) {
+                input->clear_input();
+                continue;
+            }
         }
 
-        // setting action from input
-        char action = (input->params)[0][0];
-
-        // setting id from input
-        if (input->params[1] != "") {
-            //id = atoi(input->params[1]);
-            id = stoi(input->params[1]);
-        }
-
-
-        switch (action) {
+        switch (input->getAction()) {
             case 'a': {
                 cout << "What action would you like to perform? (enter a number)" << endl 
                      << "(1) Filter" << endl
                      << "(2) Sort" << endl;
 
                 Database *db = conn->db;
+                int action;
 
                 while(1) {
                     cout << "(Enter a number) > ";
@@ -193,11 +182,12 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'g': {
-                conn->db->database_get(id);
+                conn->db->database_get(input->getID());
                 break;
             }
             case 's':; { // An empty statement before a label
                 int no_change = 0;
+                int id = input->getID();
 
 				for (int i = 0; i < conn->db->capacity; i++) {
                     if (conn->db->rows[i]->id == id) {
@@ -229,7 +219,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'd': {
-                conn->db->database_delete(id);
+                conn->db->database_delete(input->getID());
                 conn->database_write();
                 break;
             }

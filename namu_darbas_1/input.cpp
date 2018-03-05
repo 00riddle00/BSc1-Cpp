@@ -6,71 +6,71 @@ using namespace std;
 
 Input::Input() {
     this->count = 0;
-    this->valid = 0;
     this->cmd = false;
 }
 
-void Input::setParam(int index, const string& param) {
-    this->params[index] = param;
+Input::~Input() {
+    cout << "Input is being cleared" << endl;
+}
+
+
+void Input::add(const string& param) {
+    if (this->count == MAX_PARAMS) {
+        throw std::invalid_argument("Too many arguments");
+    }
+
+    this->params[this->count] = param;
     this->count++;
+
 }
 
 void Input::setCMD() {
     this->cmd = true;
 }
 
+void Input::unsetCMD() {
+    this->cmd = false;
+}
+
 bool Input::isCMD() {
     return this->cmd;
 }
 
-int Input::getCount() {
-    return this->count;
+char Input::getAction() {
+    return this->params[0][0];
 }
 
-bool Input::isValid() {
-    return this->valid;
+int Input::getID() {
+    return stoi(this->params[1]);
 }
 
 void Input::get_input() {
 
     string line;
 
-    while (1) {
-        cout << "[enter \"i\" for info] main shell > ";
+    cout << "[enter \"i\" for info] main shell > ";
 
-        getline(cin, line);
+    getline(cin, line);
 
-        string buf; // Have a buffer string
-        stringstream ss(line); // Insert the string into a stream
+    string buf; // Have a buffer string
+    stringstream ss(line); // Insert the string into a stream
 
-        while (ss >> buf && this->count <= MAX_PARAMS+1) {
-            //tokens.push_back(buf);
-            this->params[this->count] = buf;
-            this->count++;
-        }
-
-        // break if input is valid
-        if (this->validate_input()) {
-            this->valid = true;
+    while (ss >> buf) {
+        try {
+            this->add(buf);
+        } catch (const std::invalid_argument& e) {
+            cout << e.what() << endl;
             break;
-        // else clear input and repeat
-        } else {
-            this->clear_input();
         }
     }
 }
 
-bool Input::validate_input() {
+bool Input::isValid() {
 
     // Validate argument count
    
     if (this->count == 0) {
         cout << "The input is empty." << endl;
-        return false;
-    }
-
-    if (this->count > MAX_PARAMS) {
-        cout << "Too many arguments" << endl;
         return false;
     }
 
@@ -114,7 +114,6 @@ bool Input::validate_input() {
         }
     }
 
-    this->valid = true;
     return true;
 }
 
@@ -123,7 +122,6 @@ void Input::clear_input() {
     for (int i = 0; i < MAX_PARAMS; ++i) {
         this->params[i] = "";
     }
-    this->valid = false;
     this->count = 0;
     this->cmd = false;
 }
