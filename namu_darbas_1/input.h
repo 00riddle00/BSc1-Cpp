@@ -6,6 +6,7 @@
 class Input {
     int count;
     bool valid;
+    bool cmd;
 
     public:
         // add additional space for one extra parameter in
@@ -13,9 +14,17 @@ class Input {
         // (ie error "too many parameters" is displayed)
         std::string params[MAX_PARAMS + 1];
 
+        // shows whether the input is gathered from a command line
+        // at the time of starting the program (true), or it is
+        // entered during the program runtime by the user (false)
+
         Input();
 
         void setParam(int, const std::string&);
+
+        void setCMD();
+
+        bool isCMD();
 
         int getCount();
 

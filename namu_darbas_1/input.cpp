@@ -7,11 +7,20 @@ using namespace std;
 Input::Input() {
     this->count = 0;
     this->valid = 0;
+    this->cmd = false;
 }
 
 void Input::setParam(int index, const string& param) {
     this->params[index] = param;
     this->count++;
+}
+
+void Input::setCMD() {
+    this->cmd = true;
+}
+
+bool Input::isCMD() {
+    return this->cmd;
 }
 
 int Input::getCount() {
@@ -24,7 +33,6 @@ bool Input::isValid() {
 
 void Input::get_input() {
 
-    //char line[MAX_LINE];
     string line;
 
     while (1) {
@@ -115,7 +123,8 @@ void Input::clear_input() {
     for (int i = 0; i < MAX_PARAMS; ++i) {
         this->params[i] = "";
     }
-    this->valid = 0;
+    this->valid = false;
     this->count = 0;
+    this->cmd = false;
 }
 
