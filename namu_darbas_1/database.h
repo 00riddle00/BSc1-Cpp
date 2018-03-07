@@ -10,7 +10,6 @@ class Database {
     int capacity;
 
     public: 
-        //Address** rows;
         std::vector<Address*> rows;
 
         Database();
@@ -57,26 +56,13 @@ class Database {
         // ::params: db - Database
         // ::params: reverse - whether to print in 
         // reverse order (used in sorting)
-        void database_list(int reverse);
-
-        // get entries from database, if they pass the filter
-        // (check if address->filter is true)
-        //
-        // ::params: db - Database
-        // ::params: reverse - whether to print in 
-        // reverse order (used in sorting)
-        void database_list_filtered(int reverse);
+        void database_list(int reverse = 0, int filtered = 0);
 
         // delete address from database
         //
         // ::params: conn - Connection struct
         // ::params: id - entry id (user input)
         void database_delete(int id);
-
-        // clear database
-        // 
-        // ::params: conn - Connection struct
-        void database_clear();
 
         // perform action on a database
         // (filtering or sorting)

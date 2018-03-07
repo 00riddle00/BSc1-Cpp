@@ -4,15 +4,18 @@
 #include "database.h"
 
 class Connection {
+    std::ofstream output;
+    std::ifstream input;
+    std::string filename;
+
     public:
-        std::ofstream output;
-        std::ifstream input;
-        std::string filename;
-        //FILE *file;
+        explicit Connection(const std::string& filename);
+        ~Connection();
+
         Database *db;
 
         // ::return: connection struct
-        void database_open();
+        void database_load();
 
         // write current state of database to a file
         //

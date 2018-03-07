@@ -8,7 +8,21 @@
 
 using namespace std;
 
-void Connection::database_open() {
+Connection::Connection(const string& filename) {
+    this->filename = filename;
+}
+
+Connection::~Connection() {
+    if (this->input.is_open()) {
+        this->input.close();
+    }
+
+    if (this->output.is_open()) {
+        this->output.close();
+    }
+}
+
+void Connection::database_load() {
 
     this->input.open(this->filename, ios::in | ios::binary);
 

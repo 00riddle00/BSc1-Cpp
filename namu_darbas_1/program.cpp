@@ -100,9 +100,8 @@ int main(int argc, char *argv[]) {
     /* register the termination function */
     atexit(exiting);
 
-    Connection* conn = new Connection;
-    conn->filename = argv[1];
-    conn->database_open();
+    Connection* conn = new Connection(argv[1]);
+    conn->database_load();
 
     string about = "This is a car database program, where one can perform get, list, create, edit and delete "
             "operations. The database is loaded from and saved to the binary file. Version: v.0";
@@ -253,6 +252,7 @@ int main(int argc, char *argv[]) {
             }
             case 'q': {
                 delete conn->db;
+                delete conn;
                 return 0;
             }
             default: {

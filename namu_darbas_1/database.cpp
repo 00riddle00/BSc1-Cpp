@@ -140,7 +140,7 @@ void Database::database_get(int id) {
 }
 
 
-void Database::database_list(int reverse) {
+void Database::database_list(int reverse /* = 0*/, int filtered /* = 0*/) {
 
     this->print_heading();
 
@@ -149,51 +149,35 @@ void Database::database_list(int reverse) {
         return;
     }
 
-    int i = 0;
-
-    if (!reverse) {
-        for (i = 0; i < this->capacity; i++) {
-            if (this->rows[i]->id) {
-                this->address_print(this->rows[i]);
+    if (!filtered) {
+        if (!reverse) {
+            for (int i = 0; i < this->capacity; i++) {
+                if (this->rows[i]->id) {
+                    this->address_print(this->rows[i]);
+                }
+            }
+        } else {
+            for (int i = this->capacity - 1; i >= 0; i--) {
+                if (this->rows[i]->id) {
+                    this->address_print(this->rows[i]);
+                }
             }
         }
     } else {
-        for (i = this->capacity - 1; i >= 0; i--) {
-            if (this->rows[i]->id) {
-                this->address_print(this->rows[i]);
+        if (!reverse) {
+            for (int i = 0; i < this->capacity; i++) {
+                if (this->rows[i]->filter) {
+                    this->address_print(this->rows[i]);
+                }
+            }
+        } else {
+            for (int i = this->capacity - 1; i >= 0; i--) {
+                if (this->rows[i]->filter) {
+                    this->address_print(this->rows[i]);
+                }
             }
         }
     }
-
-}
-
-
-
-void Database::database_list_filtered(int reverse) {
-
-    this->print_heading();
-
-    if (this->size == 0) {
-        cout << "No entries." << endl;
-        return;
-    }
-
-    int i = 0;
-
-    if (!reverse) {
-        for (i = 0; i < this->capacity; i++) {
-            if (this->rows[i]->filter) {
-                this->address_print(this->rows[i]);
-            }
-        }
-    } else {
-        for (i = this->capacity - 1; i >= 0; i--) {
-            if (this->rows[i]->filter) {
-                this->address_print(this->rows[i]);
-            }
-        }
-    }
-
 }
 
 void Database::database_delete(int id) {
@@ -273,7 +257,7 @@ void Database::perform_action(int action) {
                     this->filter_by_price(type, value);
                     break;
             }
-            this->database_list_filtered(0);
+            this->database_list(0, 1);
             this->reset_filter();
             break;
         }
