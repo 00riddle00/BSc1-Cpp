@@ -189,7 +189,7 @@ int main(int argc, char *argv[]) {
                 int no_change = 0;
                 int id = input->getID();
 
-				for (int i = 0; i < conn->db->capacity; i++) {
+				for (int i = 0; i < conn->db->getCapacity(); i++) {
                     if (conn->db->rows[i]->id == id) {
                         cout << "Such entry already exists:" << endl;
                         conn->db->database_get(id);
@@ -224,13 +224,21 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'l': {
-                conn->db->sort_by_id(0, conn->db->size - 1);
+                conn->db->sort_by_id(0, conn->db->getSize() - 1);
 				conn->db->database_list(0);
                 break;
             }
             case 'c': {
-                conn->db->database_clear();
-                conn->database_create();
+                if (!conn->db->getSize()) {
+                    cout << "Database has no entries. Nothing to clear." << endl;
+                    break;
+                }
+                //if (Helpers::choice("Do you really want to clear the entire database?")) {
+                    delete conn->db;
+                //} else {
+                    //break;
+                //}
+                conn->db = new Database;
                 conn->database_write();
                 break;
             }
@@ -244,7 +252,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'q': {
-                conn->database_close();
+                delete conn->db;
                 return 0;
             }
             default: {

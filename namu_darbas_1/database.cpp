@@ -8,6 +8,46 @@
 
 using namespace std;
 
+Database::Database() {
+    this->size = 0;
+    this->capacity = CHUNK_SIZE;
+
+    for (int i = 0; i < this->capacity; i++) {
+        this->rows.push_back(new Address());
+    }
+}
+
+Database::Database(int size, int capacity) {
+    this->size = size;
+    this->capacity = capacity;
+
+    for (int i = 0; i < this->capacity; i++) {
+        this->rows.push_back(new Address());
+    }
+}
+
+Database::~Database() {
+
+    for (int i = 0; i < this->capacity; i++) {
+        delete this->rows[i];
+    }
+}
+
+void Database::setSize(int size) {
+    this->size = size;
+}
+
+void Database::setCapacity(int capacity) {
+    this->capacity = capacity;
+}
+
+int Database::getSize() {
+    return this->size;
+}
+int Database::getCapacity() {
+    return this->capacity;
+}
+
 void Database::print_heading() {
 
     cout << string(90, '_') << endl
@@ -172,25 +212,6 @@ void Database::database_delete(int id) {
     cout << "No such entry in database" << endl;
 }
 
-
-void Database::database_clear() {
-
-    if (!this->size) {
-        cout << "Database has no entries. Nothing to clear." << endl;
-        return;
-    }
-
-    //if (Helpers::choice("Do you really want to clear the entire database?")) {
-
-        this->size = 0;
-
-        for (int i = 0; i < this->capacity; i++) {
-            delete this->rows[i];
-        }
-        cout << "Database has been successfully cleared." << endl;
-
-    //}
-}
 
 void Database::perform_action(int action) {
     int field; 

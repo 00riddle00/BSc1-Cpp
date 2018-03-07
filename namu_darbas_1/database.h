@@ -6,11 +6,22 @@
 #include "address.h"
 
 class Database {
+    int size;
+    int capacity;
+
     public: 
         //Address** rows;
         std::vector<Address*> rows;
-        int size;
-        int capacity;
+
+        Database();
+        Database(int size, int capacity);
+        ~Database();
+
+        void setSize(int);
+        void setCapacity(int);
+
+        int getSize();
+        int getCapacity();
 
         // print the heading of the table
         void print_heading();

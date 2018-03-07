@@ -9,10 +9,7 @@ Input::Input() {
     this->cmd = false;
 }
 
-Input::~Input() {
-    cout << "Input is being cleared" << endl;
-}
-
+Input::~Input() { }
 
 void Input::add(const string& param) {
     if (this->count == MAX_PARAMS) {

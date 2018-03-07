@@ -4,94 +4,115 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-Address	program.cpp	/^class Address {$/;"	c	file:
+Address	address.h	/^class Address {$/;"	c
 CC	Makefile	/^CC=g++$/;"	m
 CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -g -lm -std=c++11$/;"	m
-CHUNK_SIZE	program.cpp	62;"	d	file:
-Connection	program.cpp	/^class Connection {$/;"	c	file:
-Database	program.cpp	/^class Database {$/;"	c	file:
-EARLIEST_YEAR	program.cpp	60;"	d	file:
-Input	program.cpp	/^class Input {$/;"	c	file:
-LATEST_YEAR	program.cpp	59;"	d	file:
-LOGFILE	program.cpp	63;"	d	file:
+CHUNK_SIZE	database.h	4;"	d
+Connection	connection.h	/^class Connection {$/;"	c
+Database	database.cpp	/^Database::Database() {$/;"	f	class:Database
+Database	database.h	/^class Database {$/;"	c
+EARLIEST_YEAR	address.h	6;"	d
+Helpers	Helpers.cpp	/^namespace Helpers {$/;"	n	file:
+Helpers	Helpers.h	/^namespace Helpers {$/;"	n
+Input	input.cpp	/^Input::Input() {$/;"	f	class:Input
+Input	input.h	/^class Input {$/;"	c
+LATEST_YEAR	address.h	5;"	d
+LOGFILE	program.cpp	60;"	d	file:
 LoadFromBinaryFile	load_from_binary_file.cpp	/^LoadFromBinaryFile::LoadFromBinaryFile(const string& filename) {$/;"	f	class:LoadFromBinaryFile
 LoadFromBinaryFile	load_from_binary_file.h	/^class LoadFromBinaryFile {$/;"	c
-MAX_ENTRY_SIZE	program.cpp	55;"	d	file:
-MAX_LINE	program.cpp	56;"	d	file:
-MAX_PARAMS	program.cpp	58;"	d	file:
-MAX_PRICE	program.cpp	61;"	d	file:
-MAX_TEXT_LENGTH	program.cpp	57;"	d	file:
+MAX_ENTRY_SIZE	address.h	4;"	d
+MAX_PARAMS	input.h	4;"	d
+MAX_PRICE	address.h	7;"	d
 WriteToBinaryFile	write_to_binary_file.cpp	/^WriteToBinaryFile::WriteToBinaryFile(const string& filename) {$/;"	f	class:WriteToBinaryFile
 WriteToBinaryFile	write_to_binary_file.h	/^class WriteToBinaryFile {$/;"	c
+__ADDRESS_H_	address.h	2;"	d
+__CONNECTION_H_	connection.h	2;"	d
+__DATABASE_H_	database.h	2;"	d
+__INPUT_H_	input.h	2;"	d
 __LOAD_FROM_BINARY_FILE_H_	load_from_binary_file.h	2;"	d
 __WRITE_TO_BINARY_FILE_H_	write_to_binary_file.h	2;"	d
-address_print	program.cpp	/^void Database::address_print(Address *addr) {$/;"	f	class:Database
-capacity	program.cpp	/^        int capacity;$/;"	m	class:Database	file:
-car_make	program.cpp	/^        string car_make;$/;"	m	class:Address	file:
-car_model	program.cpp	/^        string car_model;$/;"	m	class:Address	file:
-car_price	program.cpp	/^        int car_price;$/;"	m	class:Address	file:
-car_year	program.cpp	/^        int car_year;$/;"	m	class:Address	file:
-choice	program.cpp	/^int choice(const char* message)$/;"	f
-clear_input	program.cpp	/^void Input::clear_input() {$/;"	f	class:Input
+add	input.cpp	/^void Input::add(const string& param) {$/;"	f	class:Input
+address_print	database.cpp	/^void Database::address_print(Address *addr) {$/;"	f	class:Database
+capacity	database.h	/^    int capacity;$/;"	m	class:Database
+car_make	address.h	/^    std::string car_make;$/;"	m	class:Address
+car_model	address.h	/^    std::string car_model;$/;"	m	class:Address
+car_price	address.h	/^    int car_price;$/;"	m	class:Address
+car_year	address.h	/^    int car_year;$/;"	m	class:Address
+choice	Helpers.cpp	/^    int choice(const string& message) {$/;"	f	namespace:Helpers
+clear_input	input.cpp	/^void Input::clear_input() {$/;"	f	class:Input
 clocks	program.cpp	/^double clocks;$/;"	v
 close	load_from_binary_file.cpp	/^void LoadFromBinaryFile::close() {$/;"	f	class:LoadFromBinaryFile
 close	write_to_binary_file.cpp	/^void WriteToBinaryFile::close() {$/;"	f	class:WriteToBinaryFile
-count	program.cpp	/^        int count;$/;"	m	class:Input	file:
-database_clear	program.cpp	/^void Database::database_clear() {$/;"	f	class:Database
-database_close	program.cpp	/^void Connection::database_close() {$/;"	f	class:Connection
-database_create	program.cpp	/^void Connection::database_create() {$/;"	f	class:Connection
-database_delete	program.cpp	/^void Database::database_delete(int id) {$/;"	f	class:Database
-database_get	program.cpp	/^void Database::database_get(int id) {$/;"	f	class:Database
-database_list	program.cpp	/^void Database::database_list(int reverse) {$/;"	f	class:Database
-database_list_filtered	program.cpp	/^void Database::database_list_filtered(int reverse) {$/;"	f	class:Database
-database_open	program.cpp	/^void Connection::database_open() {$/;"	f	class:Connection
-database_set	program.cpp	/^void Database::database_set(int id, Address* addr) { $/;"	f	class:Database
-database_write	program.cpp	/^void Connection::database_write() {$/;"	f	class:Connection
-db	program.cpp	/^        Database *db;$/;"	m	class:Connection	file:
-debugTable	program.cpp	/^void Database::debugTable() {$/;"	f	class:Database
+cmd	input.h	/^    bool cmd;$/;"	m	class:Input
+count	input.h	/^    int count;$/;"	m	class:Input
+database_clear	database.cpp	/^void Database::database_clear() {$/;"	f	class:Database
+database_close	connection.cpp	/^void Connection::database_close() {$/;"	f	class:Connection
+database_create	connection.cpp	/^void Connection::database_create() {$/;"	f	class:Connection
+database_delete	database.cpp	/^void Database::database_delete(int id) {$/;"	f	class:Database
+database_get	database.cpp	/^void Database::database_get(int id) {$/;"	f	class:Database
+database_list	database.cpp	/^void Database::database_list(int reverse) {$/;"	f	class:Database
+database_list_filtered	database.cpp	/^void Database::database_list_filtered(int reverse) {$/;"	f	class:Database
+database_open	connection.cpp	/^void Connection::database_open() {$/;"	f	class:Connection
+database_set	database.cpp	/^void Database::database_set(int id, Address* addr) { $/;"	f	class:Database
+database_write	connection.cpp	/^void Connection::database_write() {$/;"	f	class:Connection
+db	connection.h	/^        Database *db;$/;"	m	class:Connection
+debugTable	database.cpp	/^void Database::debugTable() {$/;"	f	class:Database
 exiting	program.cpp	/^void exiting() {$/;"	f
+filename	connection.h	/^        std::string filename;$/;"	m	class:Connection
 filename	load_from_binary_file.h	/^    std::string filename;$/;"	m	class:LoadFromBinaryFile
-filename	program.cpp	/^        string filename;$/;"	m	class:Connection	file:
 filename	write_to_binary_file.h	/^    std::string filename;$/;"	m	class:WriteToBinaryFile
-filter	program.cpp	/^        int filter;$/;"	m	class:Address	file:
-filter_by_make	program.cpp	/^void Database::filter_by_make(int type, const string& value) {$/;"	f	class:Database
-filter_by_model	program.cpp	/^void Database::filter_by_model(int type, const string& value) {$/;"	f	class:Database
-filter_by_price	program.cpp	/^void Database::filter_by_price(int type, const string& value) {$/;"	f	class:Database
-filter_by_year	program.cpp	/^void Database::filter_by_year(int type, const string& value) {$/;"	f	class:Database
+filter	address.h	/^        int filter;$/;"	m	class:Address
+filter_by_make	database.cpp	/^void Database::filter_by_make(int type, const string& value) {$/;"	f	class:Database
+filter_by_model	database.cpp	/^void Database::filter_by_model(int type, const string& value) {$/;"	f	class:Database
+filter_by_price	database.cpp	/^void Database::filter_by_price(int type, const string& value) {$/;"	f	class:Database
+filter_by_year	database.cpp	/^void Database::filter_by_year(int type, const string& value) {$/;"	f	class:Database
 finish	program.cpp	/^clock_t finish;$/;"	v
-getAddress	program.cpp	/^void Address::getAddress() {$/;"	f	class:Address
-get_input	program.cpp	/^void Input::get_input() {$/;"	f	class:Input
-id	program.cpp	/^        int id;$/;"	m	class:Address	file:
-input	program.cpp	/^        std::ifstream input;$/;"	m	class:Connection	file:
+getAction	input.cpp	/^char Input::getAction() {$/;"	f	class:Input
+getAddress	address.cpp	/^void Address::getAddress() {$/;"	f	class:Address
+getCapacity	database.cpp	/^int Database::getCapacity() {$/;"	f	class:Database
+getCarMake	address.cpp	/^const string& Address::getCarMake() {$/;"	f	class:Address
+getCarModel	address.cpp	/^const string& Address::getCarModel() {$/;"	f	class:Address
+getCarPrice	address.cpp	/^int Address::getCarPrice() {$/;"	f	class:Address
+getCarYear	address.cpp	/^int Address::getCarYear() {$/;"	f	class:Address
+getID	input.cpp	/^int Input::getID() {$/;"	f	class:Input
+getSize	database.cpp	/^int Database::getSize() {$/;"	f	class:Database
+get_input	input.cpp	/^void Input::get_input() {$/;"	f	class:Input
+id	address.h	/^        int id;$/;"	m	class:Address
+input	connection.h	/^        std::ifstream input;$/;"	m	class:Connection
+isCMD	input.cpp	/^bool Input::isCMD() {$/;"	f	class:Input
+isValid	input.cpp	/^bool Input::isValid() {$/;"	f	class:Input
 itf	load_from_binary_file.h	/^    std::ifstream itf;$/;"	m	class:LoadFromBinaryFile
 logfile	program.cpp	/^static ofstream logfile;$/;"	v	file:
 main	program.cpp	/^int main(int argc, char *argv[]) {$/;"	f
 otf	write_to_binary_file.h	/^    std::ofstream otf;$/;"	m	class:WriteToBinaryFile
-output	program.cpp	/^        std::ofstream output;$/;"	m	class:Connection	file:
-params	program.cpp	/^        string params[MAX_PARAMS + 1];$/;"	m	class:Input	file:
-perform_action	program.cpp	/^void Database::perform_action(int action) {$/;"	f	class:Database
-print_heading	program.cpp	/^void Database::print_heading() {$/;"	f	class:Database
+output	connection.h	/^        std::ofstream output;$/;"	m	class:Connection
+params	input.h	/^    std::string params[MAX_PARAMS];$/;"	m	class:Input
+perform_action	database.cpp	/^void Database::perform_action(int action) {$/;"	f	class:Database
+print_heading	database.cpp	/^void Database::print_heading() {$/;"	f	class:Database
 readFloat	load_from_binary_file.cpp	/^float LoadFromBinaryFile::readFloat() {$/;"	f	class:LoadFromBinaryFile
 readInt	load_from_binary_file.cpp	/^int LoadFromBinaryFile::readInt() {$/;"	f	class:LoadFromBinaryFile
 readString	load_from_binary_file.cpp	/^string LoadFromBinaryFile::readString(int len) {$/;"	f	class:LoadFromBinaryFile
-reset_filter	program.cpp	/^void Database::reset_filter() {$/;"	f	class:Database
-rows	program.cpp	/^        vector<Address*> rows;$/;"	m	class:Database	file:
-setCarMake	program.cpp	/^void Address::setCarMake(const string& car_make) {$/;"	f	class:Address
-setCarModel	program.cpp	/^void Address::setCarModel(const string& car_model) {$/;"	f	class:Address
-setCarPrice	program.cpp	/^void Address::setCarPrice(int car_price) {$/;"	f	class:Address
-setCarYear	program.cpp	/^void Address::setCarYear(int car_year) {$/;"	f	class:Address
-size	program.cpp	/^        int size;$/;"	m	class:Database	file:
-sort_by_id	program.cpp	/^void Database::sort_by_id(int first, int last)$/;"	f	class:Database
-sort_by_price	program.cpp	/^void Database::sort_by_price(int first, int last) {$/;"	f	class:Database
-sort_by_year	program.cpp	/^void Database::sort_by_year(int first, int last) {$/;"	f	class:Database
-sort_lex_by_make	program.cpp	/^void Database::sort_lex_by_make(int first, int last) {$/;"	f	class:Database
-sort_lex_by_model	program.cpp	/^void Database::sort_lex_by_model(int first, int last) {$/;"	f	class:Database
+reset_filter	database.cpp	/^void Database::reset_filter() {$/;"	f	class:Database
+rows	database.h	/^        std::vector<Address*> rows;$/;"	m	class:Database
+setCMD	input.cpp	/^void Input::setCMD() {$/;"	f	class:Input
+setCapacity	database.cpp	/^void Database::setCapacity(int capacity) {$/;"	f	class:Database
+setCarMake	address.cpp	/^void Address::setCarMake(const string& car_make) {$/;"	f	class:Address
+setCarModel	address.cpp	/^void Address::setCarModel(const string& car_model) {$/;"	f	class:Address
+setCarPrice	address.cpp	/^void Address::setCarPrice(int car_price) {$/;"	f	class:Address
+setCarYear	address.cpp	/^void Address::setCarYear(int car_year) {$/;"	f	class:Address
+setSize	database.cpp	/^void Database::setSize(int size) {$/;"	f	class:Database
+size	database.h	/^    int size;$/;"	m	class:Database
+sort_by_id	database.cpp	/^void Database::sort_by_id(int first, int last)$/;"	f	class:Database
+sort_by_price	database.cpp	/^void Database::sort_by_price(int first, int last) {$/;"	f	class:Database
+sort_by_year	database.cpp	/^void Database::sort_by_year(int first, int last) {$/;"	f	class:Database
+sort_lex_by_make	database.cpp	/^void Database::sort_lex_by_make(int first, int last) {$/;"	f	class:Database
+sort_lex_by_model	database.cpp	/^void Database::sort_lex_by_model(int first, int last) {$/;"	f	class:Database
 start	program.cpp	/^clock_t start;$/;"	v
 time_spent	program.cpp	/^double time_spent;$/;"	v
-valid	program.cpp	/^        int valid;$/;"	m	class:Input	file:
-valid_input	program.cpp	/^int Input::valid_input() {$/;"	f	class:Input
+unsetCMD	input.cpp	/^void Input::unsetCMD() {$/;"	f	class:Input
 write	write_to_binary_file.cpp	/^void WriteToBinaryFile::write(const string& line, int size) {$/;"	f	class:WriteToBinaryFile
 write	write_to_binary_file.cpp	/^void WriteToBinaryFile::write(float number) {$/;"	f	class:WriteToBinaryFile
 write	write_to_binary_file.cpp	/^void WriteToBinaryFile::write(int number) {$/;"	f	class:WriteToBinaryFile
+~Input	input.cpp	/^Input::~Input() { }$/;"	f	class:Input
 ~LoadFromBinaryFile	load_from_binary_file.cpp	/^LoadFromBinaryFile::~LoadFromBinaryFile() {$/;"	f	class:LoadFromBinaryFile
 ~WriteToBinaryFile	write_to_binary_file.cpp	/^WriteToBinaryFile::~WriteToBinaryFile() {$/;"	f	class:WriteToBinaryFile
