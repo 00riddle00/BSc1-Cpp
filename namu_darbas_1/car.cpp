@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "car.h"
 
 using namespace std;
@@ -164,5 +165,22 @@ void Car::getCar(int id) {
     // FIXME is this the way
     cin.get();
 };
+
+void Car::print() {
+
+    cout << "|" << setw(4) << this->id << "|"
+         << setw(30) << this->car_make << "|"
+         << setw(30) << this->car_model << "|"
+         << setw(10) << this->car_year << "|"
+         << setw(10) << this->car_price << "|"
+         << endl;
+
+    cout << "|" << string(4, '_') << "|" 
+         << string(30, '_') << "|" 
+         << string(30, '_') << "|" 
+         << string(10, '_') << "|" 
+         << string(10, '_') << "|" 
+         << endl;
+}
 
 

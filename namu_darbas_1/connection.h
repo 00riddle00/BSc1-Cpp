@@ -2,8 +2,9 @@
 #define __CONNECTION_H_
 
 #include <fstream>
+#include <vector>
 
-class Database;
+class Car;
 
 class Connection {
     std::ofstream output;
@@ -14,9 +15,9 @@ class Connection {
         explicit Connection(const std::string& filename);
         ~Connection();
 
-        Database* database_load();
+        void database_load(std::vector<Car*>* rows);
 
-        void database_write(Database* db);
+        void database_write(std::vector<Car*> rows);
 };
 
 #endif

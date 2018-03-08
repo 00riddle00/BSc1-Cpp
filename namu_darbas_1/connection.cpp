@@ -23,9 +23,7 @@ Connection::~Connection() {
     }
 }
 
-Database* Connection::database_load() {
-
-    Database* db;
+void Connection::database_load(vector<Car*>* rows) {
 
     this->input.open(this->filename, ios::in | ios::binary);
 
@@ -33,47 +31,49 @@ Database* Connection::database_load() {
     if (this->input.tellg() == 0)
     {
         std::cout << "File is empty" << std::endl;
-        db = new Database;
-        this->database_write(db);
-        this->input.close();
-        return db;
+        return;
     }
 
     LoadFromBinaryFile lb(this->filename);
 
     if(this->input.good()) {
-        db = new Database(lb.readInt(), lb.readInt());
 
-        for (int i = 0; i < db->getCapacity(); i++) {
+        int size = lb.readInt();
 
-            db->rows[i] = new Car(
+        cout << "Size: " << size << endl;
+
+        for (int i = 0; i < size; i++) {
+
+            rows->push_back(
+                new Car(
                     lb.readInt(),
                     lb.readInt(), 
                     lb.readString(MAX_ENTRY_SIZE), 
                     lb.readString(MAX_ENTRY_SIZE),
                     lb.readInt(),
                     lb.readInt()
+                )
             );
+
         }
 
         lb.close();
     } 
-    return db;
 }
 
-void Connection::database_write(Database* db) {
+void Connection::database_write(vector<Car*> rows) {
 
     WriteToBinaryFile wb(this->filename);
-    wb.write(db->getSize());
-    wb.write(db->getCapacity());
+    int size = rows.size();
+    wb.write(size);
 
-    for (int i = 0; i < db->getCapacity(); i++) {
-        wb.write(db->rows[i]->getID());
-        wb.write(db->rows[i]->getFilter());
-        wb.write(db->rows[i]->getCarMake(), MAX_ENTRY_SIZE);
-        wb.write(db->rows[i]->getCarModel(), MAX_ENTRY_SIZE);
-        wb.write(db->rows[i]->getCarYear());
-        wb.write(db->rows[i]->getCarPrice());
+    for (int i = 0; i < rows.size(); i++) {
+        wb.write(rows[i]->getID());
+        wb.write(rows[i]->getFilter());
+        wb.write(rows[i]->getCarMake(), MAX_ENTRY_SIZE);
+        wb.write(rows[i]->getCarModel(), MAX_ENTRY_SIZE);
+        wb.write(rows[i]->getCarYear());
+        wb.write(rows[i]->getCarPrice());
     }
 
     wb.close();
