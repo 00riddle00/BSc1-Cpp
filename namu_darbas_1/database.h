@@ -3,7 +3,7 @@
 
 const int CHUNK_SIZE = 2;
 
-#include "address.h"
+#include "car.h"
 #include "connection.h"
 
 #include <vector>
@@ -14,7 +14,7 @@ class Database {
     int capacity;
 
     public: 
-        std::vector<Address*> rows;
+        std::vector<Car*> rows;
 
         Database();
         Database(int size, int capacity);
@@ -32,7 +32,7 @@ class Database {
         // print address from database
         //
         // ::params: addr - Address
-        void address_print(Address *addr);
+        void car_print(Car *car);
 
         // function for debugging
         // print the table including empty spaces
@@ -47,7 +47,7 @@ class Database {
         // ::params: db - Database
         // ::params: id - entry id (user input)
         // ::params: car - car struct
-        void database_set(int id, Address *address);
+        void database_set(int id, Car *car);
 
         // get address from database
         //
@@ -111,7 +111,5 @@ class Database {
         // sort numerically by car price
         void sort_by_price(int first, int last);
 }; 
-
-
 
 #endif

@@ -53,7 +53,7 @@
 #include "write_to_binary_file.h"
 #include "Helpers.h"
 #include "input.h"
-#include "address.h"
+#include "car.h"
 #include "database.h"
 #include "connection.h"
 
@@ -185,19 +185,18 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 's':; { // An empty statement before a label
-                int no_change = 0;
+                bool no_change = false;
                 int id = input->getID();
 
 				for (int i = 0; i < conn->db->getCapacity(); i++) {
-                    if (conn->db->rows[i]->id == id) {
+                    if (conn->db->rows[i]->getID() == id) {
                         cout << "Such entry already exists:" << endl;
                         conn->db->database_get(id);
-                        //if (choice("Would you like to change it?")) {
-                        if (1) {
+                        if (Helpers::choice("Would you like to change it?")) {
                             conn->db->database_delete(id);
                             conn->database_write();
                         } else {
-                            no_change = 1;
+                            no_change = true;
                             break;
                         }
                     }
@@ -208,14 +207,14 @@ int main(int argc, char *argv[]) {
                 //Car *car = (Car*) malloc(sizeof(Car));
                 //if (car == NULL) die((char*)"Memory error");
                 //
-                Address* addr = new Address;
-                addr->getAddress();
+                Car* car = new Car;
+                car->getCar(id);
 
-                //if (choice("Would you like to save?")) {
-                    conn->db->database_set(id, addr);
+                if (Helpers::choice("Would you like to save?")) {
+                    conn->db->database_set(id, car);
 					conn->database_write();
-                //}
-                delete addr;
+                }
+                //delete car;
                 break;
             }
             case 'd': {

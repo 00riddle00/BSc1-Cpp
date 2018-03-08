@@ -44,15 +44,9 @@ void Connection::database_load() {
 
         for (int i = 0; i < this->db->getCapacity(); i++) {
 
+            // Accessing private members via friend method
             this->db->rows[i]->id = lb.readInt();
             this->db->rows[i]->filter = lb.readInt();
-
-  /*           //TODO[> add valitaion exception catching<]*/
-            //this->db->rows[i]->setCarMake(lb.readString(MAX_ENTRY_SIZE));
-            //this->db->rows[i]->setCarModel(lb.readString(MAX_ENTRY_SIZE));
-            //this->db->rows[i]->setCarYear(lb.readInt());
-            //this->db->rows[i]->setCarPrice(lb.readInt());
-
             this->db->rows[i]->car_make = lb.readString(MAX_ENTRY_SIZE);
             this->db->rows[i]->car_model = lb.readString(MAX_ENTRY_SIZE);
             this->db->rows[i]->car_year = lb.readInt();
@@ -71,8 +65,8 @@ void Connection::database_write() {
     wb.write(this->db->getCapacity());
 
     for (int i = 0; i < this->db->getCapacity(); i++) {
-        wb.write(this->db->rows[i]->id);
-        wb.write(this->db->rows[i]->filter);
+        wb.write(this->db->rows[i]->getID());
+        wb.write(this->db->rows[i]->getFilter());
         wb.write(this->db->rows[i]->getCarMake(), MAX_ENTRY_SIZE);
         wb.write(this->db->rows[i]->getCarModel(), MAX_ENTRY_SIZE);
         wb.write(this->db->rows[i]->getCarYear());

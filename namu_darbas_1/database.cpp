@@ -2,7 +2,7 @@
 #include <iomanip>
 #include <vector>
 
-#include "address.h"
+#include "car.h"
 #include "database.h"
 #include "Helpers.h"
 
@@ -13,7 +13,7 @@ Database::Database() {
     this->capacity = CHUNK_SIZE;
 
     for (int i = 0; i < this->capacity; i++) {
-        this->rows.push_back(new Address());
+        this->rows.push_back(new Car());
     }
 }
 
@@ -22,7 +22,7 @@ Database::Database(int size, int capacity) {
     this->capacity = capacity;
 
     for (int i = 0; i < this->capacity; i++) {
-        this->rows.push_back(new Address());
+        this->rows.push_back(new Car());
     }
 }
 
@@ -65,13 +65,13 @@ void Database::print_heading() {
          << string(10, '_') << "|" << endl;
 }
 
-void Database::address_print(Address *addr) {
+void Database::car_print(Car *car) {
 
-    cout << "|" << setw(4) << addr->id << "|"
-         << setw(30) << addr->getCarMake()<< "|"
-         << setw(30) << addr->getCarModel() << "|"
-         << setw(10) << addr->getCarYear() << "|"
-         << setw(10) << addr->getCarPrice() << "|"
+    cout << "|" << setw(4) << car->getID() << "|"
+         << setw(30) << car->getCarMake()<< "|"
+         << setw(30) << car->getCarModel() << "|"
+         << setw(10) << car->getCarYear() << "|"
+         << setw(10) << car->getCarPrice() << "|"
          << endl;
 
     cout << "|" << string(4, '_') << "|" 
@@ -93,32 +93,29 @@ void Database::debugTable() {
     this->print_heading();
 
     for (i = 0; i < this->capacity; i++) {
-        this->address_print(this->rows[i]);
+        this->car_print(this->rows[i]);
     }
 }
 
 
-void Database::database_set(int id, Address* addr) { 
+void Database::database_set(int id, Car* car) { 
     if (this->size == this->capacity) {
         this->capacity += CHUNK_SIZE;
-        //this->rows = (Address**) realloc(this->rows, this->capacity * sizeof(Address*));
         for (int i = this->size; i < this->capacity; i++) {
-            this->rows.push_back(new Address());
-            //this->rows[i] = (Address*) calloc(1, sizeof(Address));
+            this->rows.push_back(new Car());
         }
     }
    
     int i;
     for (i = 0; i < this->capacity; i++) {
-        if (this->rows[i]->id == 0) {
+        if (this->rows[i]->getID() == 0) {
             break;
         }
     }
 
-    addr->id = id;
-    addr->filter = 1;
-
-    this->rows[i] = addr;
+    // TODO gal prideti vector.erase ?
+    this->rows[i] = car;
+    cout << "ID: " << this->rows[i]->getID() << endl;
     this->size += 1;
 
     cout << "Successfully saved, ID = " << id << endl;
@@ -127,11 +124,11 @@ void Database::database_set(int id, Address* addr) {
 
 void Database::database_get(int id) {
     for (int i = 0; i < this->size; i++) {
-        Address *addr = this->rows[i];
-        if (addr->id == id) {
-            if (addr) {
+        Car *car = this->rows[i];
+        if (car->getID() == id) {
+            if (car) {
                 this->print_heading();
-                this->address_print(addr);
+                this->car_print(car);
                 return;
             } 
         }
@@ -152,28 +149,29 @@ void Database::database_list(int reverse /*= 0*/, int filtered /*= 0*/) {
     if (!filtered) {
         if (!reverse) {
             for (int i = 0; i < this->capacity; i++) {
-                if (this->rows[i]->id) {
-                    this->address_print(this->rows[i]);
+                if (this->rows[i]->getID()) {
+                    this->car_print(this->rows[i]);
                 }
             }
         } else {
             for (int i = this->capacity - 1; i >= 0; i--) {
-                if (this->rows[i]->id) {
-                    this->address_print(this->rows[i]);
+                if (this->rows[i]->getID()) {
+                    this->car_print(this->rows[i]);
                 }
             }
         }
     } else {
         if (!reverse) {
+            // TODO niekur neklausia ar ID egzistuoja
             for (int i = 0; i < this->capacity; i++) {
-                if (this->rows[i]->filter) {
-                    this->address_print(this->rows[i]);
+                if (this->rows[i]->getID() && this->rows[i]->getFilter()) {
+                    this->car_print(this->rows[i]);
                 }
             }
         } else {
             for (int i = this->capacity - 1; i >= 0; i--) {
-                if (this->rows[i]->filter) {
-                    this->address_print(this->rows[i]);
+                if (this->rows[i]->getID() && this->rows[i]->getFilter()) {
+                    this->car_print(this->rows[i]);
                 }
             }
         }
@@ -182,15 +180,14 @@ void Database::database_list(int reverse /*= 0*/, int filtered /*= 0*/) {
 
 void Database::database_delete(int id) {
     for (int i = 0; i < this->capacity; i++) {
-        Address *addr = this->rows[i];
-        if (addr->id == id) {
-            //if (Helpers::choice("Do you really want to delete this entry?")) {
-                addr->id = 0;
-                this->rows[i] = new Address();
+        Car *car = this->rows[i];
+        if (car->getID() == id) {
+            if (Helpers::choice("Do you really want to delete this entry?")) {
+                this->rows[i] = new Car();
                 this->size--;
                 cout << "Successfully deleted" << endl;
                 return;
-            //}
+            }
         }
     }
     cout << "No such entry in database" << endl;
@@ -242,6 +239,7 @@ void Database::perform_action(int action) {
             string value;
             cout << "(Enter a value) > ";
             cin >> value;
+            cin.get();
 
             switch(field) {
                 case 1:
@@ -321,9 +319,9 @@ void Database::perform_action(int action) {
 void Database::reset_filter() {
 
     for (int i = 0; i < this->size; i++) {
-        Address *cur = this->rows[i];
+        Car *cur = this->rows[i];
         if (cur) {
-            cur->filter = 1;
+            cur->setFilter(true);
         }
     }
 }
@@ -333,40 +331,40 @@ void Database::filter_by_make(int type, const string& value) {
     switch(type) {
         case 1:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     if (cur->getCarMake() != value) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
             break;
         case 2:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     if (cur->getCarMake().find(value) == std::string::npos) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     }
                 }
             }
             break;
         case 3:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     if (cur->getCarMake() == value) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
             break;
         case 4:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     if (cur->getCarMake().find(value) != std::string::npos) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
@@ -379,40 +377,40 @@ void Database::filter_by_model(int type, const string& value) {
     switch(type) {
         case 1:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     if (cur->getCarModel() != value) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
             break;
         case 2:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     if (cur->getCarModel().find(value) == std::string::npos) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
             break;
         case 3:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     if (cur->getCarModel() == value) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
             break;
         case 4:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     if (cur->getCarModel().find(value) != std::string::npos) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
@@ -427,44 +425,44 @@ void Database::filter_by_year(int type, const string& value) {
     switch(type) {
         case 1:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     string car_year = to_string(cur->getCarYear());
                     if (car_year != value) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
             break;
         case 2:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     string car_year = to_string(cur->getCarYear());
                     if (car_year.find(value) == std::string::npos) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
             break;
         case 3:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     string car_year = to_string(cur->getCarYear());
                     if (car_year == value) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
             break;
         case 4:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     string car_year = to_string(cur->getCarYear());
                     if (car_year.find(value) != std::string::npos) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
@@ -479,44 +477,44 @@ void Database::filter_by_price(int type, const string& value) {
     switch(type) {
         case 1:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     string car_price = to_string(cur->getCarPrice());
                     if (car_price != value) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
             break;
         case 2:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     string car_price = to_string(cur->getCarPrice());
                     if (car_price.find(value) == std::string::npos) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
             break;
         case 3:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     string car_price = to_string(cur->getCarPrice());
                     if (car_price == value) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
             break;
         case 4:
             for (int i = 0; i < this->size; i++) {
-                Address *cur = this->rows[i];
+                Car *cur = this->rows[i];
                 if (cur) {
                     string car_price = to_string(cur->getCarPrice());
                     if (car_price.find(value) != std::string::npos) {
-                        cur->filter = 0;
+                        cur->setFilter(false);
                     } 
                 }
             }
@@ -529,7 +527,7 @@ void Database::filter_by_price(int type, const string& value) {
 void Database::sort_lex_by_make(int first, int last) {
 
     int i, j;
-    Address* temp;
+    Car* temp;
 
     for (i = first; i < last; ++i)
 
@@ -547,7 +545,7 @@ void Database::sort_lex_by_make(int first, int last) {
 void Database::sort_lex_by_model(int first, int last) {
 
     int i, j;
-    Address* temp;
+    Car* temp;
 
     for (i = first; i < last; ++i)
 
@@ -563,7 +561,7 @@ void Database::sort_lex_by_model(int first, int last) {
 
 void Database::sort_by_year(int first, int last) {
 
-    Address* temp;
+    Car* temp;
     int pivot, j, i;
 
     if (first < last) {
@@ -597,7 +595,7 @@ void Database::sort_by_year(int first, int last) {
 
 void Database::sort_by_price(int first, int last) {
 
-    Address* temp;
+    Car* temp;
     int pivot, j, i;
 
     if (first < last) {
@@ -633,7 +631,7 @@ void Database::sort_by_price(int first, int last) {
 void Database::sort_by_id(int first, int last)
 {
 
-    Address* temp;
+    Car* temp;
     int pivot, j, i;
 
     if (first < last) {
@@ -643,10 +641,10 @@ void Database::sort_by_id(int first, int last)
 
         while (i < j) {
             while (
-                this->rows[i]->id <= this->rows[pivot]->id && i < last) {
+                this->rows[i]->getID() <= this->rows[pivot]->getID() && i < last) {
                 i++;
             }
-            while (this->rows[j]->id > this->rows[pivot]->id) {
+            while (this->rows[j]->getID() > this->rows[pivot]->getID()) {
                 j--;
             }
             if (i < j) {
