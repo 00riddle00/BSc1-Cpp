@@ -4,25 +4,28 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
+Address	address.cpp	/^Address::Address() {$/;"	f	class:Address
 Address	address.h	/^class Address {$/;"	c
 CC	Makefile	/^CC=g++$/;"	m
 CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -g -lm -std=c++11$/;"	m
-CHUNK_SIZE	database.h	4;"	d
+CHUNK_SIZE	database.h	/^const int CHUNK_SIZE = 2;$/;"	v
+Connection	connection.cpp	/^Connection::Connection(const string& filename) {$/;"	f	class:Connection
 Connection	connection.h	/^class Connection {$/;"	c
 Database	database.cpp	/^Database::Database() {$/;"	f	class:Database
+Database	database.cpp	/^Database::Database(int size, int capacity) {$/;"	f	class:Database
 Database	database.h	/^class Database {$/;"	c
-EARLIEST_YEAR	address.h	6;"	d
+EARLIEST_YEAR	address.h	/^const int EARLIEST_YEAR = 1920;$/;"	v
 Helpers	Helpers.cpp	/^namespace Helpers {$/;"	n	file:
 Helpers	Helpers.h	/^namespace Helpers {$/;"	n
 Input	input.cpp	/^Input::Input() {$/;"	f	class:Input
 Input	input.h	/^class Input {$/;"	c
-LATEST_YEAR	address.h	5;"	d
+LATEST_YEAR	address.h	/^const int LATEST_YEAR = 2018;$/;"	v
 LOGFILE	program.cpp	60;"	d	file:
 LoadFromBinaryFile	load_from_binary_file.cpp	/^LoadFromBinaryFile::LoadFromBinaryFile(const string& filename) {$/;"	f	class:LoadFromBinaryFile
 LoadFromBinaryFile	load_from_binary_file.h	/^class LoadFromBinaryFile {$/;"	c
-MAX_ENTRY_SIZE	address.h	4;"	d
-MAX_PARAMS	input.h	4;"	d
-MAX_PRICE	address.h	7;"	d
+MAX_ENTRY_SIZE	address.h	/^const int MAX_ENTRY_SIZE = 30;$/;"	v
+MAX_PARAMS	input.h	/^const int MAX_PARAMS = 2;$/;"	v
+MAX_PRICE	address.h	/^const int MAX_PRICE = 1e9;$/;"	v
 WriteToBinaryFile	write_to_binary_file.cpp	/^WriteToBinaryFile::WriteToBinaryFile(const string& filename) {$/;"	f	class:WriteToBinaryFile
 WriteToBinaryFile	write_to_binary_file.h	/^class WriteToBinaryFile {$/;"	c
 __ADDRESS_H_	address.h	2;"	d
@@ -45,20 +48,16 @@ close	load_from_binary_file.cpp	/^void LoadFromBinaryFile::close() {$/;"	f	class
 close	write_to_binary_file.cpp	/^void WriteToBinaryFile::close() {$/;"	f	class:WriteToBinaryFile
 cmd	input.h	/^    bool cmd;$/;"	m	class:Input
 count	input.h	/^    int count;$/;"	m	class:Input
-database_clear	database.cpp	/^void Database::database_clear() {$/;"	f	class:Database
-database_close	connection.cpp	/^void Connection::database_close() {$/;"	f	class:Connection
-database_create	connection.cpp	/^void Connection::database_create() {$/;"	f	class:Connection
 database_delete	database.cpp	/^void Database::database_delete(int id) {$/;"	f	class:Database
 database_get	database.cpp	/^void Database::database_get(int id) {$/;"	f	class:Database
-database_list	database.cpp	/^void Database::database_list(int reverse) {$/;"	f	class:Database
-database_list_filtered	database.cpp	/^void Database::database_list_filtered(int reverse) {$/;"	f	class:Database
-database_open	connection.cpp	/^void Connection::database_open() {$/;"	f	class:Connection
+database_list	database.cpp	/^void Database::database_list(int reverse \/*= 0*\/, int filtered \/*= 0*\/) {$/;"	f	class:Database
+database_load	connection.cpp	/^void Connection::database_load() {$/;"	f	class:Connection
 database_set	database.cpp	/^void Database::database_set(int id, Address* addr) { $/;"	f	class:Database
 database_write	connection.cpp	/^void Connection::database_write() {$/;"	f	class:Connection
 db	connection.h	/^        Database *db;$/;"	m	class:Connection
 debugTable	database.cpp	/^void Database::debugTable() {$/;"	f	class:Database
 exiting	program.cpp	/^void exiting() {$/;"	f
-filename	connection.h	/^        std::string filename;$/;"	m	class:Connection
+filename	connection.h	/^    std::string filename;$/;"	m	class:Connection
 filename	load_from_binary_file.h	/^    std::string filename;$/;"	m	class:LoadFromBinaryFile
 filename	write_to_binary_file.h	/^    std::string filename;$/;"	m	class:WriteToBinaryFile
 filter	address.h	/^        int filter;$/;"	m	class:Address
@@ -78,14 +77,14 @@ getID	input.cpp	/^int Input::getID() {$/;"	f	class:Input
 getSize	database.cpp	/^int Database::getSize() {$/;"	f	class:Database
 get_input	input.cpp	/^void Input::get_input() {$/;"	f	class:Input
 id	address.h	/^        int id;$/;"	m	class:Address
-input	connection.h	/^        std::ifstream input;$/;"	m	class:Connection
+input	connection.h	/^    std::ifstream input;$/;"	m	class:Connection
 isCMD	input.cpp	/^bool Input::isCMD() {$/;"	f	class:Input
 isValid	input.cpp	/^bool Input::isValid() {$/;"	f	class:Input
 itf	load_from_binary_file.h	/^    std::ifstream itf;$/;"	m	class:LoadFromBinaryFile
 logfile	program.cpp	/^static ofstream logfile;$/;"	v	file:
 main	program.cpp	/^int main(int argc, char *argv[]) {$/;"	f
 otf	write_to_binary_file.h	/^    std::ofstream otf;$/;"	m	class:WriteToBinaryFile
-output	connection.h	/^        std::ofstream output;$/;"	m	class:Connection
+output	connection.h	/^    std::ofstream output;$/;"	m	class:Connection
 params	input.h	/^    std::string params[MAX_PARAMS];$/;"	m	class:Input
 perform_action	database.cpp	/^void Database::perform_action(int action) {$/;"	f	class:Database
 print_heading	database.cpp	/^void Database::print_heading() {$/;"	f	class:Database
@@ -113,6 +112,9 @@ unsetCMD	input.cpp	/^void Input::unsetCMD() {$/;"	f	class:Input
 write	write_to_binary_file.cpp	/^void WriteToBinaryFile::write(const string& line, int size) {$/;"	f	class:WriteToBinaryFile
 write	write_to_binary_file.cpp	/^void WriteToBinaryFile::write(float number) {$/;"	f	class:WriteToBinaryFile
 write	write_to_binary_file.cpp	/^void WriteToBinaryFile::write(int number) {$/;"	f	class:WriteToBinaryFile
+~Address	address.cpp	/^Address::~Address() {} $/;"	f	class:Address
+~Connection	connection.cpp	/^Connection::~Connection() {$/;"	f	class:Connection
+~Database	database.cpp	/^Database::~Database() {$/;"	f	class:Database
 ~Input	input.cpp	/^Input::~Input() { }$/;"	f	class:Input
 ~LoadFromBinaryFile	load_from_binary_file.cpp	/^LoadFromBinaryFile::~LoadFromBinaryFile() {$/;"	f	class:LoadFromBinaryFile
 ~WriteToBinaryFile	write_to_binary_file.cpp	/^WriteToBinaryFile::~WriteToBinaryFile() {$/;"	f	class:WriteToBinaryFile

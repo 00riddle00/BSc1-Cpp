@@ -5,6 +5,7 @@
 #include "load_from_binary_file.h"
 #include "write_to_binary_file.h"
 #include "connection.h"
+#include "database.h"
 
 using namespace std;
 
@@ -46,16 +47,16 @@ void Connection::database_load() {
             this->db->rows[i]->id = lb.readInt();
             this->db->rows[i]->filter = lb.readInt();
 
-             //TODO add valitaion exception catching
-            this->db->rows[i]->setCarMake(lb.readString(MAX_ENTRY_SIZE));
-            this->db->rows[i]->setCarModel(lb.readString(MAX_ENTRY_SIZE));
-            this->db->rows[i]->setCarYear(lb.readInt());
-            this->db->rows[i]->setCarPrice(lb.readInt());
+  /*           //TODO[> add valitaion exception catching<]*/
+            //this->db->rows[i]->setCarMake(lb.readString(MAX_ENTRY_SIZE));
+            //this->db->rows[i]->setCarModel(lb.readString(MAX_ENTRY_SIZE));
+            //this->db->rows[i]->setCarYear(lb.readInt());
+            //this->db->rows[i]->setCarPrice(lb.readInt());
 
-/*            this->db->rows[i]->car_make = lb.readString(MAX_ENTRY_SIZE);*/
-            //this->db->rows[i]->car_model = lb.readString(MAX_ENTRY_SIZE);
-            //this->db->rows[i]->car_year = lb.readInt();
-            //this->db->rows[i]->car_price = lb.readInt();
+            this->db->rows[i]->car_make = lb.readString(MAX_ENTRY_SIZE);
+            this->db->rows[i]->car_model = lb.readString(MAX_ENTRY_SIZE);
+            this->db->rows[i]->car_year = lb.readInt();
+            this->db->rows[i]->car_price = lb.readInt();
 
         }
 

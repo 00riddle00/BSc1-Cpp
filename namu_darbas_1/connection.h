@@ -1,7 +1,9 @@
 #ifndef __CONNECTION_H_
 #define __CONNECTION_H_
 
-#include "database.h"
+//#include "database.h"
+#include <fstream>
+class Database;
 
 class Connection {
     std::ofstream output;

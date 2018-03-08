@@ -3,6 +3,15 @@
 
 using namespace std;
 
+Address::Address() {
+    this->car_make = "";
+    this->car_model = "";
+    this->car_year = 0;
+    this->car_price = 0;
+}
+
+Address::~Address() {} 
+
 void Address::setCarMake(const string& car_make) {
 
     if (std::string::npos != car_make.find_first_of("0123456789")) {
@@ -23,20 +32,15 @@ void Address::setCarModel(const string& car_model) {
 
 
 void Address::setCarYear(int car_year) {
-    // FIXME temporary guard
-    if (car_year != 0) {
-        if (car_year < EARLIEST_YEAR || car_year > LATEST_YEAR) {
-            throw std::invalid_argument("Please make sure that year is in normal format");
-        }
+    if (car_year < EARLIEST_YEAR || car_year > LATEST_YEAR) {
+        throw std::invalid_argument("Please make sure that year is in normal format");
     }
 
     this->car_year = car_year;
 };
 
 void Address::setCarPrice(int car_price) {
-    // FIXME temporary condition
-    //if (car_price <= 0) {
-    if (car_price < 0) {
+    if (car_price <= 0) {
         throw std::invalid_argument("Price cannot be zero or negative!");
     }
     if (car_price > MAX_PRICE) {

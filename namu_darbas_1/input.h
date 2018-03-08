@@ -1,7 +1,7 @@
 #ifndef __INPUT_H_
 #define __INPUT_H_
 
-#define MAX_PARAMS 2
+const int MAX_PARAMS = 2;
 
 class Input {
     int count;

@@ -140,7 +140,7 @@ void Database::database_get(int id) {
 }
 
 
-void Database::database_list(int reverse /* = 0*/, int filtered /* = 0*/) {
+void Database::database_list(int reverse /*= 0*/, int filtered /*= 0*/) {
 
     this->print_heading();
 

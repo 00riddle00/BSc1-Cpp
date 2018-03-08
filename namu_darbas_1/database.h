@@ -1,9 +1,13 @@
 #ifndef __DATABASE_H_
 #define __DATABASE_H_
 
-#define CHUNK_SIZE 2
+const int CHUNK_SIZE = 2;
 
 #include "address.h"
+#include "connection.h"
+
+#include <vector>
+
 
 class Database {
     int size;

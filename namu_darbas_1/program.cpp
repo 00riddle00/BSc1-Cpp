@@ -215,6 +215,7 @@ int main(int argc, char *argv[]) {
                     conn->db->database_set(id, addr);
 					conn->database_write();
                 //}
+                delete addr;
                 break;
             }
             case 'd': {
@@ -232,11 +233,11 @@ int main(int argc, char *argv[]) {
                     cout << "Database has no entries. Nothing to clear." << endl;
                     break;
                 }
-                //if (Helpers::choice("Do you really want to clear the entire database?")) {
+                if (Helpers::choice("Do you really want to clear the entire database?")) {
                     delete conn->db;
-                //} else {
-                    //break;
-                //}
+                } else {
+                    break;
+                }
                 conn->db = new Database;
                 conn->database_write();
                 break;
@@ -251,6 +252,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'q': {
+                delete input;
                 delete conn->db;
                 delete conn;
                 return 0;
