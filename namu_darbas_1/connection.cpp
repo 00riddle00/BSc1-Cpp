@@ -44,13 +44,15 @@ void Connection::database_load() {
 
         for (int i = 0; i < this->db->getCapacity(); i++) {
 
-            // Accessing private members via friend method
-            this->db->rows[i]->id = lb.readInt();
-            this->db->rows[i]->filter = lb.readInt();
-            this->db->rows[i]->car_make = lb.readString(MAX_ENTRY_SIZE);
-            this->db->rows[i]->car_model = lb.readString(MAX_ENTRY_SIZE);
-            this->db->rows[i]->car_year = lb.readInt();
-            this->db->rows[i]->car_price = lb.readInt();
+            this->db->rows[i] = new Car(
+                    lb.readInt(),
+                    lb.readInt(), 
+                    lb.readString(MAX_ENTRY_SIZE), 
+                    lb.readString(MAX_ENTRY_SIZE),
+                    lb.readInt(),
+                    lb.readInt()
+            );
+
 
         }
 

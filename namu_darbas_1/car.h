@@ -19,6 +19,7 @@ class Car {
 
     public:
         Car();
+        Car(int id, bool filter, const std::string& car_make, const std::string& car_model, int car_year, int car_price);
         ~Car();
 
         friend void Connection::database_load();

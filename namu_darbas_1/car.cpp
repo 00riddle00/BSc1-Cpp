@@ -12,6 +12,16 @@ Car::Car() {
     this->car_price = 0;
 }
 
+Car::Car(int id, bool filter, const string& car_make, const string& car_model, int car_year, int car_price) {
+    this->id = id;
+    this->filter = filter;
+    this->car_make = car_make;
+    this->car_model = car_model;
+    this->car_year = car_year;
+    this->car_price = car_price;
+}
+
+
 Car::~Car() {} 
 
 void Car::setID(int id) {
