@@ -2,6 +2,7 @@
 #define __CONNECTION_H_
 
 #include <fstream>
+
 class Database;
 
 class Connection {
@@ -13,15 +14,9 @@ class Connection {
         explicit Connection(const std::string& filename);
         ~Connection();
 
-        Database *db;
+        Database* database_load();
 
-        // ::return: connection struct
-        void database_load();
-
-        // write current state of database to a file
-        //
-        // ::params: conn - Connection struct
-        void database_write();
+        void database_write(Database* db);
 };
 
 #endif

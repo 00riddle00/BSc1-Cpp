@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
     atexit(exiting);
 
     Connection* conn = new Connection(argv[1]);
-    conn->database_load();
+    Database* db = conn->database_load();
 
     string about = "This is a car database program, where one can perform get, list, create, edit and delete "
             "operations. The database is loaded from and saved to the binary file. Version: v.0";
@@ -163,7 +163,6 @@ int main(int argc, char *argv[]) {
                      << "(1) Filter" << endl
                      << "(2) Sort" << endl;
 
-                Database *db = conn->db;
                 int action;
 
                 while(1) {
@@ -181,20 +180,20 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'g': {
-                conn->db->database_get(input->getID());
+                db->database_get(input->getID());
                 break;
             }
             case 's':; { // An empty statement before a label
                 bool no_change = false;
                 int id = input->getID();
 
-				for (int i = 0; i < conn->db->getCapacity(); i++) {
-                    if (conn->db->rows[i]->getID() == id) {
+				for (int i = 0; i < db->getCapacity(); i++) {
+                    if (db->rows[i]->getID() == id) {
                         cout << "Such entry already exists:" << endl;
-                        conn->db->database_get(id);
+                        db->database_get(id);
                         if (Helpers::choice("Would you like to change it?")) {
-                            conn->db->database_delete(id);
-                            conn->database_write();
+                            db->database_delete(id);
+                            conn->database_write(db);
                         } else {
                             no_change = true;
                             break;
@@ -211,34 +210,34 @@ int main(int argc, char *argv[]) {
                 car->getCar(id);
 
                 if (Helpers::choice("Would you like to save?")) {
-                    conn->db->database_set(id, car);
-					conn->database_write();
+                    db->database_set(id, car);
+					conn->database_write(db);
                 }
                 //delete car;
                 break;
             }
             case 'd': {
-                conn->db->database_delete(input->getID());
-                conn->database_write();
+                db->database_delete(input->getID());
+                conn->database_write(db);
                 break;
             }
             case 'l': {
-                conn->db->sort_by_id(0, conn->db->getSize() - 1);
-				conn->db->database_list(0);
+                db->sort_by_id(0, db->getSize() - 1);
+				db->database_list(0);
                 break;
             }
             case 'c': {
-                if (!conn->db->getSize()) {
+                if (!db->getSize()) {
                     cout << "Database has no entries. Nothing to clear." << endl;
                     break;
                 }
                 if (Helpers::choice("Do you really want to clear the entire database?")) {
-                    delete conn->db;
+                    delete db;
                 } else {
                     break;
                 }
-                conn->db = new Database;
-                conn->database_write();
+                db = new Database;
+                conn->database_write(db);
                 break;
             }
             case 'i': {
@@ -247,12 +246,12 @@ int main(int argc, char *argv[]) {
                 break;
             } 
             case 'o': {
-                conn->db->debugTable();
+                db->debugTable();
                 break;
             }
             case 'q': {
                 delete input;
-                delete conn->db;
+                delete db;
                 delete conn;
                 return 0;
             }
