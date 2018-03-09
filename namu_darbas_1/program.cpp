@@ -142,7 +142,7 @@ void list_data(Table table, vector<Car*> rows, int reverse = 0, int filtered = 0
 }
 
 
-void perform_action(Table table, vector<Car*> rows) {
+void perform_action(Table table, vector<Car*>* rows) {
 
     cout << "What action would you like to perform? (enter a number)" << endl 
          << "(1) Filter" << endl
@@ -218,7 +218,7 @@ void perform_action(Table table, vector<Car*> rows) {
             filter.setValue(value);
             
             filter.filter(rows);
-            list_data(table, rows, 0, 1);
+            list_data(table, *rows, 0, 1);
             filter.reset_filter(rows);
             break;
         }
@@ -264,8 +264,10 @@ void perform_action(Table table, vector<Car*> rows) {
 
             int reverse = (type == 1) ? 0 : 1;
 
-            sorting.sort(rows, 0, rows.size() - 1);
-            list_data(table, rows, reverse);
+            cout << "BEfore sorting" << endl;
+            sorting.sort(rows, 0, (int)(rows->size() - 1));
+            cout << "After sorting" << endl;
+            list_data(table, *rows, reverse);
             break;
         }
     }
@@ -367,7 +369,7 @@ int main(int argc, char *argv[]) {
 
         switch (input->getAction()) {
             case 'a': {
-                perform_action(table, rows);
+                perform_action(table, &rows);
                 break;
             }
             case 'g':; { // An empty statement before a label
