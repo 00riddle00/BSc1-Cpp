@@ -140,7 +140,25 @@ void list_data(Table table, vector<Car*> rows, int reverse = 0, int filtered = 0
 }
 
 
-void perform_action(Table table, vector<Car*> rows, int action) {
+void perform_action(Table table, vector<Car*> rows) {
+
+    cout << "What action would you like to perform? (enter a number)" << endl 
+         << "(1) Filter" << endl
+         << "(2) Sort" << endl;
+
+    int action;
+
+    while(1) {
+        cout << "(Enter a number) > ";
+        cin >> action;
+
+        if (action < 1 || action > 2) {
+            cout << "Such option does not exist" << endl;
+            continue;
+        }
+        break;
+    }
+
     int field; 
     int type;
 
@@ -357,25 +375,7 @@ int main(int argc, char *argv[]) {
 
         switch (input->getAction()) {
             case 'a': {
-                cout << "What action would you like to perform? (enter a number)" << endl 
-                     << "(1) Filter" << endl
-                     << "(2) Sort" << endl;
-
-                int action;
-
-                while(1) {
-                    cout << "(Enter a number) > ";
-                    cin >> action;
-
-                    if (action < 1 || action > 2) {
-                        cout << "Such option does not exist" << endl;
-                        continue;
-                    }
-                    break;
-                }
-
-                perform_action(table, rows, action);
-                break;
+                perform_action(table, rows);
             }
             case 'g':; { // An empty statement before a label
                 bool id_set = false;

@@ -6,15 +6,11 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 CC	Makefile	/^CC=g++$/;"	m
 CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -g -lm -std=c++11$/;"	m
-CHUNK_SIZE	database.h	/^const int CHUNK_SIZE = 2;$/;"	v
 Car	car.cpp	/^Car::Car() {$/;"	f	class:Car
 Car	car.cpp	/^Car::Car(int id, bool filter, const string& car_make, const string& car_model, int car_year, int car_price) {$/;"	f	class:Car
 Car	car.h	/^class Car {$/;"	c
 Connection	connection.cpp	/^Connection::Connection(const string& filename) {$/;"	f	class:Connection
 Connection	connection.h	/^class Connection {$/;"	c
-Database	database.cpp	/^Database::Database() {$/;"	f	class:Database
-Database	database.cpp	/^Database::Database(int size, int capacity) {$/;"	f	class:Database
-Database	database.h	/^class Database {$/;"	c
 EARLIEST_YEAR	car.h	/^const int EARLIEST_YEAR = 1920;$/;"	v
 Helpers	Helpers.h	/^namespace Helpers {$/;"	n
 Input	input.cpp	/^Input::Input() {$/;"	f	class:Input
@@ -26,20 +22,20 @@ LoadFromBinaryFile	load_from_binary_file.h	/^class LoadFromBinaryFile {$/;"	c
 MAX_ENTRY_SIZE	car.h	/^const int MAX_ENTRY_SIZE = 30;$/;"	v
 MAX_PARAMS	input.h	/^const int MAX_PARAMS = 2;$/;"	v
 MAX_PRICE	car.h	/^const int MAX_PRICE = 1e9;$/;"	v
+Table	table.cpp	/^Table::Table(vector<string> params, vector<int> column_widths) {$/;"	f	class:Table
+Table	table.h	/^class Table {$/;"	c
 WriteToBinaryFile	write_to_binary_file.cpp	/^WriteToBinaryFile::WriteToBinaryFile(const string& filename) {$/;"	f	class:WriteToBinaryFile
 WriteToBinaryFile	write_to_binary_file.h	/^class WriteToBinaryFile {$/;"	c
 __CAR_H_	car.h	2;"	d
 __CONNECTION_H_	connection.h	2;"	d
-__DATABASE_H_	database.h	2;"	d
 __INPUT_H_	input.h	2;"	d
 __LOAD_FROM_BINARY_FILE_H_	load_from_binary_file.h	2;"	d
+__TABLE_H_	table.h	2;"	d
 __WRITE_TO_BINARY_FILE_H_	write_to_binary_file.h	2;"	d
 add	input.cpp	/^void Input::add(const string& param) {$/;"	f	class:Input
-capacity	database.h	/^    int capacity;$/;"	m	class:Database
 car_make	car.h	/^    std::string car_make;$/;"	m	class:Car
 car_model	car.h	/^    std::string car_model;$/;"	m	class:Car
 car_price	car.h	/^    int car_price;$/;"	m	class:Car
-car_print	database.cpp	/^void Database::car_print(Car *car) {$/;"	f	class:Database
 car_year	car.h	/^    int car_year;$/;"	m	class:Car
 choice	Helpers.cpp	/^int Helpers::choice(const string& message) {$/;"	f	class:Helpers
 clear_input	input.cpp	/^void Input::clear_input() {$/;"	f	class:Input
@@ -47,26 +43,17 @@ clocks	program.cpp	/^double clocks;$/;"	v
 close	load_from_binary_file.cpp	/^void LoadFromBinaryFile::close() {$/;"	f	class:LoadFromBinaryFile
 close	write_to_binary_file.cpp	/^void WriteToBinaryFile::close() {$/;"	f	class:WriteToBinaryFile
 cmd	input.h	/^    bool cmd;$/;"	m	class:Input
+column_widths	table.h	/^    std::vector<int> column_widths;$/;"	m	class:Table
 count	input.h	/^    int count;$/;"	m	class:Input
-database_delete	database.cpp	/^void Database::database_delete(int id) {$/;"	f	class:Database
-database_get	database.cpp	/^void Database::database_get(int id) {$/;"	f	class:Database
-database_list	database.cpp	/^void Database::database_list(int reverse \/*= 0*\/, int filtered \/*= 0*\/) {$/;"	f	class:Database
-database_load	connection.cpp	/^Database* Connection::database_load() {$/;"	f	class:Connection
-database_set	database.cpp	/^void Database::database_set(int id, Car* car) { $/;"	f	class:Database
-database_write	connection.cpp	/^void Connection::database_write(Database* db) {$/;"	f	class:Connection
-debugTable	database.cpp	/^void Database::debugTable() {$/;"	f	class:Database
+database_load	connection.cpp	/^void Connection::database_load(vector<Car*>* rows) {$/;"	f	class:Connection
+database_write	connection.cpp	/^void Connection::database_write(vector<Car*> rows) {$/;"	f	class:Connection
 exiting	program.cpp	/^void exiting() {$/;"	f
 filename	connection.h	/^    std::string filename;$/;"	m	class:Connection
 filename	load_from_binary_file.h	/^    std::string filename;$/;"	m	class:LoadFromBinaryFile
 filename	write_to_binary_file.h	/^    std::string filename;$/;"	m	class:WriteToBinaryFile
 filter	car.h	/^    bool filter;$/;"	m	class:Car
-filter_by_make	database.cpp	/^void Database::filter_by_make(int type, const string& value) {$/;"	f	class:Database
-filter_by_model	database.cpp	/^void Database::filter_by_model(int type, const string& value) {$/;"	f	class:Database
-filter_by_price	database.cpp	/^void Database::filter_by_price(int type, const string& value) {$/;"	f	class:Database
-filter_by_year	database.cpp	/^void Database::filter_by_year(int type, const string& value) {$/;"	f	class:Database
 finish	program.cpp	/^clock_t finish;$/;"	v
 getAction	input.cpp	/^char Input::getAction() {$/;"	f	class:Input
-getCapacity	database.cpp	/^int Database::getCapacity() {$/;"	f	class:Database
 getCar	car.cpp	/^void Car::getCar(int id) {$/;"	f	class:Car
 getCarMake	car.cpp	/^const string& Car::getCarMake() {$/;"	f	class:Car
 getCarModel	car.cpp	/^const string& Car::getCarModel() {$/;"	f	class:Car
@@ -75,39 +62,35 @@ getCarYear	car.cpp	/^int Car::getCarYear() {$/;"	f	class:Car
 getFilter	car.cpp	/^bool Car::getFilter() {$/;"	f	class:Car
 getID	car.cpp	/^int Car::getID() {$/;"	f	class:Car
 getID	input.cpp	/^int Input::getID() {$/;"	f	class:Input
-getSize	database.cpp	/^int Database::getSize() {$/;"	f	class:Database
 get_input	input.cpp	/^void Input::get_input() {$/;"	f	class:Input
 id	car.h	/^    int id;$/;"	m	class:Car
 input	connection.h	/^    std::ifstream input;$/;"	m	class:Connection
 isCMD	input.cpp	/^bool Input::isCMD() {$/;"	f	class:Input
 isValid	input.cpp	/^bool Input::isValid() {$/;"	f	class:Input
 itf	load_from_binary_file.h	/^    std::ifstream itf;$/;"	m	class:LoadFromBinaryFile
+list_data	program.cpp	/^void list_data(Table table, vector<Car*> rows, int reverse = 0, int filtered = 0) {$/;"	f
 logfile	program.cpp	/^static ofstream logfile;$/;"	v	file:
 main	program.cpp	/^int main(int argc, char *argv[]) {$/;"	f
 otf	write_to_binary_file.h	/^    std::ofstream otf;$/;"	m	class:WriteToBinaryFile
 output	connection.h	/^    std::ofstream output;$/;"	m	class:Connection
 params	input.h	/^    std::string params[MAX_PARAMS];$/;"	m	class:Input
-perform_action	database.cpp	/^void Database::perform_action(int action) {$/;"	f	class:Database
-print_heading	database.cpp	/^void Database::print_heading() {$/;"	f	class:Database
+params	table.h	/^    std::vector<std::string> params;$/;"	m	class:Table
+perform_action	program.cpp	/^void perform_action(Table table, vector<Car*> rows, int action) {$/;"	f
+print	car.cpp	/^void Car::print() {$/;"	f	class:Car
+printEntry	table.cpp	/^void Table::printEntry(vector<string> args) {$/;"	f	class:Table
+print_heading	table.cpp	/^void Table::print_heading() {$/;"	f	class:Table
 readFloat	load_from_binary_file.cpp	/^float LoadFromBinaryFile::readFloat() {$/;"	f	class:LoadFromBinaryFile
 readInt	load_from_binary_file.cpp	/^int LoadFromBinaryFile::readInt() {$/;"	f	class:LoadFromBinaryFile
 readString	load_from_binary_file.cpp	/^string LoadFromBinaryFile::readString(int len) {$/;"	f	class:LoadFromBinaryFile
-reset_filter	database.cpp	/^void Database::reset_filter() {$/;"	f	class:Database
 setCMD	input.cpp	/^void Input::setCMD() {$/;"	f	class:Input
-setCapacity	database.cpp	/^void Database::setCapacity(int capacity) {$/;"	f	class:Database
 setCarMake	car.cpp	/^void Car::setCarMake(const string& car_make) {$/;"	f	class:Car
 setCarModel	car.cpp	/^void Car::setCarModel(const string& car_model) {$/;"	f	class:Car
 setCarPrice	car.cpp	/^void Car::setCarPrice(int car_price) {$/;"	f	class:Car
 setCarYear	car.cpp	/^void Car::setCarYear(int car_year) {$/;"	f	class:Car
+setColumnWidths	table.cpp	/^void Table::setColumnWidths(vector<int> column_widths) {$/;"	f	class:Table
 setFilter	car.cpp	/^void Car::setFilter(bool filter) {$/;"	f	class:Car
 setID	car.cpp	/^void Car::setID(int id) {$/;"	f	class:Car
-setSize	database.cpp	/^void Database::setSize(int size) {$/;"	f	class:Database
-size	database.h	/^    int size;$/;"	m	class:Database
-sort_by_id	database.cpp	/^void Database::sort_by_id(int first, int last)$/;"	f	class:Database
-sort_by_price	database.cpp	/^void Database::sort_by_price(int first, int last) {$/;"	f	class:Database
-sort_by_year	database.cpp	/^void Database::sort_by_year(int first, int last) {$/;"	f	class:Database
-sort_lex_by_make	database.cpp	/^void Database::sort_lex_by_make(int first, int last) {$/;"	f	class:Database
-sort_lex_by_model	database.cpp	/^void Database::sort_lex_by_model(int first, int last) {$/;"	f	class:Database
+setParams	table.cpp	/^void Table::setParams(vector<string> params) {$/;"	f	class:Table
 start	program.cpp	/^clock_t start;$/;"	v
 time_spent	program.cpp	/^double time_spent;$/;"	v
 unsetCMD	input.cpp	/^void Input::unsetCMD() {$/;"	f	class:Input
@@ -116,7 +99,6 @@ write	write_to_binary_file.cpp	/^void WriteToBinaryFile::write(float number) {$/
 write	write_to_binary_file.cpp	/^void WriteToBinaryFile::write(int number) {$/;"	f	class:WriteToBinaryFile
 ~Car	car.cpp	/^Car::~Car() {} $/;"	f	class:Car
 ~Connection	connection.cpp	/^Connection::~Connection() {$/;"	f	class:Connection
-~Database	database.cpp	/^Database::~Database() {$/;"	f	class:Database
 ~Input	input.cpp	/^Input::~Input() { }$/;"	f	class:Input
 ~LoadFromBinaryFile	load_from_binary_file.cpp	/^LoadFromBinaryFile::~LoadFromBinaryFile() {$/;"	f	class:LoadFromBinaryFile
 ~WriteToBinaryFile	write_to_binary_file.cpp	/^WriteToBinaryFile::~WriteToBinaryFile() {$/;"	f	class:WriteToBinaryFile
