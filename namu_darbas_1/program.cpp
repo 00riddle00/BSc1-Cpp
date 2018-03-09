@@ -54,7 +54,7 @@
 #include "Helpers.h"
 #include "input.h"
 #include "car.h"
-#include "database.h"
+#include "table.h"
 #include "connection.h"
 
 #define LOGFILE "log.txt"
@@ -238,6 +238,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'l': {
+                //Table::list(rows);
                 for (int i = 0; i < rows.size(); i++) {
                     rows[i]->print();
                 }
