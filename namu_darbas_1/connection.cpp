@@ -40,8 +40,6 @@ void Connection::database_load(vector<Car*>* rows) {
 
         int size = lb.readInt();
 
-        cout << "Size: " << size << endl;
-
         for (int i = 0; i < size; i++) {
 
             rows->push_back(

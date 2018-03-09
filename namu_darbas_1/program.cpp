@@ -165,6 +165,8 @@ void perform_action(Table table, vector<Car*> rows) {
 
     switch(action) {
         case 1: {
+            Filter filter;
+
             cout << "By which field would you like to filter? (enter a number)" << endl
                  << "(1) Make" << endl
                  << "(2) Model" << endl
@@ -181,6 +183,8 @@ void perform_action(Table table, vector<Car*> rows) {
                 }
                 break;
             }
+
+            filter.field = static_cast<Filter::Fields>(field);
 
             cout << "How would you like to filter?" << endl
                  << "(1) Entry is equal to the given value" << endl
@@ -199,6 +203,9 @@ void perform_action(Table table, vector<Car*> rows) {
                 break;
             }
 
+            filter.type = static_cast<Filter::Types>(type);
+            cout << "DEBUG filter type" << filter.type << endl;
+
             cout << "Please enter a value to be filtered by" << endl;
 
             string value;
@@ -206,20 +213,20 @@ void perform_action(Table table, vector<Car*> rows) {
             cin >> value;
             cin.get();
 
-            Filter filter;
+            filter.value = value;
 
             switch(field) {
                 case 1:
-                    filter.filter_by_make(rows, type, value);
+                    filter.filter_by_make(rows);
                     break;
                 case 2:
-                    filter.filter_by_model(rows, type, value);
+                    //filter.filter_by_model(rows);
                     break;
                 case 3:
-                    filter.filter_by_year(rows, type, value);
+                    //filter.filter_by_year(rows);
                     break;
                 case 4:
-                    filter.filter_by_price(rows, type, value);
+                    //filter.filter_by_price(rows);
                     break;
             }
             list_data(table, rows, 0, 1);
