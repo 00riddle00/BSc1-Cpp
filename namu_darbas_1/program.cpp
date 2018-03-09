@@ -177,6 +177,7 @@ void perform_action(Table table, vector<Car*> rows) {
                 cout << "(Enter a number) > ";
                 cin >> field;
 
+                // TODO move to field setter
                 if (field < 1 || field > 4) {
                     cout << "Such option does not exist" << endl;
                     continue;
@@ -184,7 +185,7 @@ void perform_action(Table table, vector<Car*> rows) {
                 break;
             }
 
-            filter.field = static_cast<Filter::Fields>(field);
+			filter.setField(field);
 
             cout << "How would you like to filter?" << endl
                  << "(1) Entry is equal to the given value" << endl
@@ -196,6 +197,7 @@ void perform_action(Table table, vector<Car*> rows) {
                 cout << "(Enter a number) > ";
                 cin >> type;
 
+                // TODO move to type setter
                 if (type < 1 || type > 4) {
                     cout << "Such option does not exist" << endl;
                     continue;
@@ -203,8 +205,7 @@ void perform_action(Table table, vector<Car*> rows) {
                 break;
             }
 
-            filter.type = static_cast<Filter::Types>(type);
-            cout << "DEBUG filter type" << filter.type << endl;
+			filter.setType(type);
 
             cout << "Please enter a value to be filtered by" << endl;
 
@@ -213,22 +214,9 @@ void perform_action(Table table, vector<Car*> rows) {
             cin >> value;
             cin.get();
 
-            filter.value = value;
-
-            switch(field) {
-                case 1:
-                    filter.filter_by_make(rows);
-                    break;
-                case 2:
-                    //filter.filter_by_model(rows);
-                    break;
-                case 3:
-                    //filter.filter_by_year(rows);
-                    break;
-                case 4:
-                    //filter.filter_by_price(rows);
-                    break;
-            }
+            filter.setValue(value);
+            
+            filter.filter(rows);
             list_data(table, rows, 0, 1);
             filter.reset_filter(rows);
             break;
