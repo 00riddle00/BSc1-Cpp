@@ -8,14 +8,12 @@ using namespace std;
 LoadFromBinaryFile::LoadFromBinaryFile(const string& filename) {
     this->filename = filename;
     itf.open(filename, ios::in | ios::binary);
-    cout << "LoadFromBinaryFile object is created" << endl;
 }
 
 LoadFromBinaryFile::~LoadFromBinaryFile() {
     if (itf.is_open()) {
         close();
     }
-    cout << "LoadFromBinaryFile object is destroyed" << endl;
 }
 
 string LoadFromBinaryFile::readString(int len) {
@@ -42,5 +40,4 @@ float LoadFromBinaryFile::readFloat() {
 
 void LoadFromBinaryFile::close() {
     itf.close();
-    cout << "closing the file " << filename << endl;
 }

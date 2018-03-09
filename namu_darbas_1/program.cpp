@@ -182,33 +182,45 @@ int main(int argc, char *argv[]) {
                 //db->perform_action(action);
                 break;
             }
-            case 'g': {
+            case 'g':; { // An empty statement before a label
+                bool id_set = false;
+
                 for (int i = 0; i < rows.size(); i++) {
                     if (rows[i]->getID() == input->getID()) {
                         rows[i]->print();
+                        id_set = true;
+                        break;
                     }
+                }
+                if (!id_set) {
+                    cout << "ID is not set" << endl;
                 }
                 break;
             }
             case 's':; { // An empty statement before a label
-                bool exists = false;
                 int id = input->getID();
+				int index = -1;
 
                 for (int i = 0; i < rows.size(); i++) {
                     if (rows[i]->getID() == id) {
                         cout << "Such entry already exists:" << endl;
                         rows[i]->print();
-                        exists = true;
+                        index = i;
                     }
                 }
 
-                if (!exists || exists && Helpers::choice("Would you like to change it?")) {
+                if (index < 0 || (index >= 0 && Helpers::choice("Would you like to change it?"))) {
                     Car* car = new Car;
                     car->getCar(id);
 
                     if (Helpers::choice("Would you like to save?")) {
-                        rows.push_back(car);
+						if (index >= 0) {
+							rows[index] = car;
+						} else {
+							rows.push_back(car);
+						}
                         conn->database_write(rows);
+						cout << "Successfully saved, ID = " << id << endl;
                     }
                 }
                 break;
@@ -216,9 +228,13 @@ int main(int argc, char *argv[]) {
             case 'd': {
                 for (int i = 0; i < rows.size(); i++) {
                     if (rows[i]->getID() == input->getID()) {
-                        rows.erase(rows.begin()+i);
+                        if (Helpers::choice("Do you really want to delete this entry?")) {
+                            rows.erase(rows.begin()+i);
+                            conn->database_write(rows);
+                        }
+                        break;
                     }
-                conn->database_write(rows);
+                }
                 break;
             }
             case 'l': {
@@ -247,10 +263,6 @@ int main(int argc, char *argv[]) {
                 cout << info << "\n\n";
                 break;
             } 
-            case 'o': {
-                //db->debugTable();
-                break;
-            }
             case 'q': {
                 delete input;
                 //delete db;
@@ -263,7 +275,6 @@ int main(int argc, char *argv[]) {
         }
 
     }
-}
 }
 
 void exiting() {

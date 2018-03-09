@@ -9,15 +9,12 @@ using namespace std;
 WriteToBinaryFile::WriteToBinaryFile(const string& filename) {
     this->filename = filename;
     otf.open(filename, ios::out | ios::binary);
-
-    cout << "WriteToBinaryFile object is created" << endl;
 }
 
 WriteToBinaryFile::~WriteToBinaryFile() {
     if (otf.is_open()) {
         this->close();
     }
-    cout << "WriteToBinaryFile object is destroyed" << endl;
 }
 
 void WriteToBinaryFile::write(const string& line, int size) {
@@ -33,7 +30,6 @@ void WriteToBinaryFile::write(int number) {
 }
 
 void WriteToBinaryFile::close() {
-   cout << "closing the file " << filename << endl;
    otf.close();
 }
 
