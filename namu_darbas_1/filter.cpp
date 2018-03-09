@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 void Filter::filter_by_make(vector<Car*> rows) {
 
     switch(this->type) {

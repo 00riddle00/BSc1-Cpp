@@ -57,6 +57,7 @@
 #include "table.h"
 #include "connection.h"
 #include "filter.h"
+#include "sorting.h"
 
 #define LOGFILE "log.txt"
 
@@ -223,6 +224,8 @@ void perform_action(Table table, vector<Car*> rows) {
         }
 
         case 2: {
+            Sorting sorting;
+
             cout << "By which field would you like to sort? (enter a number)" << endl
                  << "(1) Make" << endl
                  << "(2) Model" << endl
@@ -240,6 +243,8 @@ void perform_action(Table table, vector<Car*> rows) {
                 break;
             }
 
+            sorting.setField(field);
+
             cout << "How would you like to sort?" << endl
                  << "(1) Ascending order" << endl
                  << "(2) Descending order" << endl;
@@ -255,22 +260,11 @@ void perform_action(Table table, vector<Car*> rows) {
                 break;
             }
 
+            sorting.setType(type);
+
             int reverse = (type == 1) ? 0 : 1;
 
-            switch(field) {
-                case 1:
-                    //this->sort_lex_by_make(0, this->size - 1);
-                    break;
-                case 2:
-                    //this->sort_lex_by_model(0, this->size - 1);
-                    break;
-                case 3:
-                    //this->sort_by_year(0, this->size - 1);
-                    break;
-                case 4:
-                    //this->sort_by_price(0, this->size - 1);
-                    break;
-            }
+            sorting.sort(rows, 0, rows.size() - 1);
             list_data(table, rows, reverse);
             break;
         }
