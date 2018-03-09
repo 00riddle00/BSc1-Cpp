@@ -56,6 +56,7 @@
 #include "car.h"
 #include "table.h"
 #include "connection.h"
+#include "filter.h"
 
 #define LOGFILE "log.txt"
 
@@ -205,22 +206,24 @@ void perform_action(Table table, vector<Car*> rows) {
             cin >> value;
             cin.get();
 
+            Filter filter;
+
             switch(field) {
                 case 1:
-                    //this->filter_by_make(type, value);
+                    filter.filter_by_make(rows, type, value);
                     break;
                 case 2:
-                    //this->filter_by_model(type, value);
+                    filter.filter_by_model(rows, type, value);
                     break;
                 case 3:
-                    //this->filter_by_year(type, value);
+                    filter.filter_by_year(rows, type, value);
                     break;
                 case 4:
-                    //this->filter_by_price(type, value);
+                    filter.filter_by_price(rows, type, value);
                     break;
             }
             list_data(table, rows, 0, 1);
-            //this->reset_filter();
+            filter.reset_filter(rows);
             break;
         }
 
@@ -376,6 +379,7 @@ int main(int argc, char *argv[]) {
         switch (input->getAction()) {
             case 'a': {
                 perform_action(table, rows);
+                break;
             }
             case 'g':; { // An empty statement before a label
                 bool id_set = false;

@@ -1,43 +1,19 @@
-#ifndef __CAR_H_
-#define __CAR_H_
+#ifndef __FILTER_H_
+#define __FILTER_H_
 
 #include <string>
-#include "connection.h"
+#include <vector>
 
-const int MAX_ENTRY_SIZE = 30;
-const int LATEST_YEAR = 2018;
-const int EARLIEST_YEAR = 1920;
-const int MAX_PRICE = 1e9;
-
-class Car {
-    int id;
-    bool filter;
-    std::string car_make;
-    std::string car_model;
-    int car_year;
-    int car_price;
+class Filter {
 
     public:
-        Car();
-        Car(int id, bool filter, const std::string& car_make, const std::string& car_model, int car_year, int car_price);
-        ~Car();
-
-        void setID(int);
-        void setFilter(bool);
-        void setCarMake(const std::string&);
-        void setCarModel(const std::string&);
-        void setCarYear(int);
-        void setCarPrice(int);
-
-        int getID();
-        bool getFilter();
-        const std::string& getCarMake();
-        const std::string& getCarModel();
-        int getCarYear();
-        int getCarPrice();
-
-        void getCar(int id);
-        void print();
+        void reset_filter(std::vector<Car*> rows);
+        void filter_by_make(std::vector<Car*> rows, int type, const std::string& value);
+        void filter_by_model(std::vector<Car*> rows, int type, const std::string& value);
+        void filter_by_year(std::vector<Car*> rows, int type, const std::string& value);
+        void filter_by_price(std::vector<Car*> rows, int type, const std::string& value);
 };
 
 #endif
+
+

@@ -1,186 +1,165 @@
 #include <iostream>
 #include <iomanip>
 #include "car.h"
+#include "filter.h"
+
+#include <vector>
 
 using namespace std;
 
-Car::Car() {
-    this->id = 0;
-    this->filter = false;
-    this->car_make = "";
-    this->car_model = "";
-    this->car_year = 0;
-    this->car_price = 0;
+void Filter::reset_filter(vector<Car*> rows) {
+
+    for (int i = 0; i < rows.size(); i++) {
+        rows[i]->setFilter(true);
+    }
 }
 
-Car::Car(int id, bool filter, const string& car_make, const string& car_model, int car_year, int car_price) {
-    this->id = id;
-    this->filter = filter;
-    this->car_make = car_make;
-    this->car_model = car_model;
-    this->car_year = car_year;
-    this->car_price = car_price;
+void Filter::filter_by_make(vector<Car*> rows, int type, const string& value) {
+
+
+    switch(type) {
+        case 1:
+            for (int i = 0; i < rows.size(); i++) {
+                if (rows[i]->getCarMake() != value) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+        case 2:
+            for (int i = 0; i < rows.size(); i++) {
+                if (rows[i]->getCarMake().find(value) == std::string::npos) {
+                    rows[i]->setFilter(false);
+                }
+            }
+            break;
+        case 3:
+            for (int i = 0; i < rows.size(); i++) {
+                if (rows[i]->getCarMake() == value) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+        case 4:
+            for (int i = 0; i < rows.size(); i++) {
+                if (rows[i]->getCarMake().find(value) != std::string::npos) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+    }
+}
+
+void Filter::filter_by_model(vector<Car*> rows, int type, const string& value) {
+
+    switch(type) {
+        case 1:
+            for (int i = 0; i < rows.size(); i++) {
+                if (rows[i]->getCarModel() != value) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+        case 2:
+            for (int i = 0; i < rows.size(); i++) {
+                if (rows[i]->getCarModel().find(value) == std::string::npos) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+        case 3:
+            for (int i = 0; i < rows.size(); i++) {
+                if (rows[i]->getCarModel() == value) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+        case 4:
+            for (int i = 0; i < rows.size(); i++) {
+                if (rows[i]->getCarModel().find(value) != std::string::npos) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+    }
 }
 
 
-Car::~Car() {} 
+void Filter::filter_by_year(vector<Car*> rows, int type, const string& value) {
 
-void Car::setID(int id) {
-    if (id <= 0) {
-        throw std::invalid_argument("Please make sure that id is a positive integer");
+    switch(type) {
+        case 1:
+            for (int i = 0; i < rows.size(); i++) {
+                string car_year = to_string(rows[i]->getCarYear());
+                if (car_year != value) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+        case 2:
+            for (int i = 0; i < rows.size(); i++) {
+                string car_year = to_string(rows[i]->getCarYear());
+                if (car_year.find(value) == std::string::npos) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+        case 3:
+            for (int i = 0; i < rows.size(); i++) {
+                string car_year = to_string(rows[i]->getCarYear());
+                if (car_year == value) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+        case 4:
+            for (int i = 0; i < rows.size(); i++) {
+                string car_year = to_string(rows[i]->getCarYear());
+                if (car_year.find(value) != std::string::npos) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
     }
-    this->id = id;
 }
 
-void Car::setFilter(bool filter) {
-    this->filter = filter;
+
+void Filter::filter_by_price(vector<Car*> rows, int type, const string& value) {
+
+    switch(type) {
+        case 1:
+            for (int i = 0; i < rows.size(); i++) {
+                string car_price = to_string(rows[i]->getCarPrice());
+                if (car_price != value) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+        case 2:
+            for (int i = 0; i < rows.size(); i++) {
+                string car_price = to_string(rows[i]->getCarPrice());
+                if (car_price.find(value) == std::string::npos) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+        case 3:
+            for (int i = 0; i < rows.size(); i++) {
+                string car_price = to_string(rows[i]->getCarPrice());
+                if (car_price == value) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+        case 4:
+            for (int i = 0; i < rows.size(); i++) {
+                string car_price = to_string(rows[i]->getCarPrice());
+                if (car_price.find(value) != std::string::npos) {
+                    rows[i]->setFilter(false);
+                } 
+            }
+            break;
+    }
 }
 
-void Car::setCarMake(const string& car_make) {
-
-    if (std::string::npos != car_make.find_first_of("0123456789")) {
-        throw std::invalid_argument("Car make cannot contain numbers!");
-    }
-    if (car_make.length() > MAX_ENTRY_SIZE) {
-        throw std::invalid_argument("Database entry cannot contain more than 30 characters!");
-    }
-    this->car_make = car_make;
-};
-
-void Car::setCarModel(const string& car_model) {
-    if (car_model.length() > MAX_ENTRY_SIZE) {
-        throw std::invalid_argument("Database entry cannot contain more than 30 characters!");
-    }
-    this->car_model = car_model;
-};
-
-
-void Car::setCarYear(int car_year) {
-    if (car_year < EARLIEST_YEAR || car_year > LATEST_YEAR) {
-        throw std::invalid_argument("Please make sure that year is in normal format");
-    }
-
-    this->car_year = car_year;
-};
-
-void Car::setCarPrice(int car_price) {
-    if (car_price <= 0) {
-        throw std::invalid_argument("Price cannot be zero or negative!");
-    }
-    if (car_price > MAX_PRICE) {
-        throw std::invalid_argument("Price has outgone its upper limit!");
-    }
-
-    this->car_price = car_price;
-};
-
-int Car::getID() {
-    return this->id;
-}
-
-bool Car::getFilter() {
-    return this->filter;
-}
-
-const string& Car::getCarMake() {
-    return this->car_make;
-}
-
-const string& Car::getCarModel() {
-    return this->car_model;
-};
-
-
-int Car::getCarYear() {
-    return this->car_year;
-};
-
-int Car::getCarPrice() {
-    return this->car_price;
-};
-
-
-void Car::getCar(int id) {
-
-    this->setID(id);
-    this->setFilter(true);
-
-    while (1) {
-
-        cout << "Enter make > ";
-        string car_make;
-        cin >> car_make;
-        try {
-            this->setCarMake(car_make);
-        } catch (const std::invalid_argument& e) {
-            cout << e.what() << endl;
-            continue;
-        }
-        // FIXME is this the way
-        cin.get();
-        break;
-    }
-
-    while (1) {
-
-        cout << "Enter model > ";
-        string car_model;
-        getline(cin, car_model);
-        try {
-            this->setCarModel(car_model);
-        } catch (const std::invalid_argument& e) {
-            cout << e.what() << endl;
-            continue;
-        }
-        break;
-    }
-
-    while(1) {
-        cout << "Enter year > ";
-        int car_year;
-        cin >> car_year;
-
-        try {
-            this->setCarYear(car_year);
-        } catch (const std::invalid_argument& e) {
-            cout << e.what() << endl;
-            continue;
-        }
-        break;
-    }
-
-    while(1) {
-        cout << "Enter price > ";
-        int car_price;
-        cin >> car_price;
-
-        try {
-            this->setCarPrice(car_price);
-        } catch (const std::invalid_argument& e) {
-            cout << e.what() << endl;
-            continue;
-        }
-        break;
-    }
-    // FIXME is this the way
-    cin.get();
-};
-
-void Car::print() {
-
-    cout << "|" << setw(4) << this->id << "|"
-         << setw(30) << this->car_make << "|"
-         << setw(30) << this->car_model << "|"
-         << setw(10) << this->car_year << "|"
-         << setw(10) << this->car_price << "|"
-         << endl;
-
-    cout << "|" << string(4, '_') << "|" 
-         << string(30, '_') << "|" 
-         << string(30, '_') << "|" 
-         << string(10, '_') << "|" 
-         << string(10, '_') << "|" 
-         << endl;
-}
 
 
