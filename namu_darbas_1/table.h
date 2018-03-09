@@ -1,12 +1,6 @@
 #ifndef __TABLE_H_
 #define __TABLE_H_
 
-#include "car.h"
-#include "connection.h"
-
-#include <vector>
-
-
 class Table {
     std::vector<std::string> params;
     std::vector<int> column_widths;
@@ -23,7 +17,7 @@ class Table {
 
         void printEntry(std::vector<std::string> args);
 
-        void list(std::vector<Car*> rows, int reverse = 0, int filtered = 0);
+        //void list(std::vector<Car*> rows, int reverse = 0, int filtered = 0);
 
         //// set Address struct in database
         ////

@@ -2,9 +2,7 @@
 #include <iomanip>
 #include <vector>
 
-#include "car.h"
 #include "table.h"
-#include "Helpers.h"
 
 using namespace std;
 

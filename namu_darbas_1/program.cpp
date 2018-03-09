@@ -49,8 +49,6 @@
 #include <vector>
 #include <ctime>
 
-#include "load_from_binary_file.h"
-#include "write_to_binary_file.h"
 #include "Helpers.h"
 #include "input.h"
 #include "car.h"
@@ -428,6 +426,10 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'l': {
+                Sorting sorting;
+                sorting.setField(5);
+                sorting.setType(1);
+                sorting.sort(&rows, 0, rows.size() - 1);
                 list_data(table, rows);
                 break;
             }

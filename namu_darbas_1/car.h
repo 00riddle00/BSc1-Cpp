@@ -1,9 +1,6 @@
 #ifndef __CAR_H_
 #define __CAR_H_
 
-#include <string>
-#include "connection.h"
-
 const int MAX_ENTRY_SIZE = 30;
 const int LATEST_YEAR = 2018;
 const int EARLIEST_YEAR = 1920;

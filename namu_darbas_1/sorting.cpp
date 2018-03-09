@@ -16,43 +16,6 @@ void Sorting::setType(int type) {
 }
 
 
-void Sorting::sort_by_id(vector<Car*>* rows, int first, int last)
-{
-
-    Car* temp;
-    int pivot, j, i;
-
-    if (first < last) {
-        pivot = first;
-        i = first;
-        j = last;
-
-        while (i < j) {
-            while (
-                (*rows)[i]->getID() <= (*rows)[pivot]->getID() && i < last) {
-                i++;
-            }
-            while ((*rows)[j]->getID() > (*rows)[pivot]->getID()) {
-                j--;
-            }
-            if (i < j) {
-                temp = (*rows)[i];
-                (*rows)[i] = (*rows)[j];
-                (*rows)[j] = temp;
-            }
-        }
-
-        temp = (*rows)[pivot];
-        (*rows)[pivot] = (*rows)[j];
-        (*rows)[j] = temp;
-
-        sort_by_id(rows, first, j - 1);
-        sort_by_id(rows, j + 1, last);
-    }
-}
-
-
-
 
 void Sorting::sort_lex_by_make(vector<Car*>* rows, int first, int last) {
 
@@ -157,6 +120,45 @@ void Sorting::sort_by_price(vector<Car*>* rows, int first, int last) {
         sort_by_price(rows, j + 1, last);
     }
 }
+
+
+void Sorting::sort_by_id(vector<Car*>* rows, int first, int last)
+{
+
+    Car* temp;
+    int pivot, j, i;
+
+    if (first < last) {
+        pivot = first;
+        i = first;
+        j = last;
+
+        while (i < j) {
+            while (
+                (*rows)[i]->getID() <= (*rows)[pivot]->getID() && i < last) {
+                i++;
+            }
+            while ((*rows)[j]->getID() > (*rows)[pivot]->getID()) {
+                j--;
+            }
+            if (i < j) {
+                temp = (*rows)[i];
+                (*rows)[i] = (*rows)[j];
+                (*rows)[j] = temp;
+            }
+        }
+
+        temp = (*rows)[pivot];
+        (*rows)[pivot] = (*rows)[j];
+        (*rows)[j] = temp;
+
+        sort_by_id(rows, first, j - 1);
+        sort_by_id(rows, j + 1, last);
+    }
+}
+
+
+
 
 void Sorting::sort(vector<Car*>* rows, int first, int last) {
 
