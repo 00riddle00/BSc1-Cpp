@@ -8,180 +8,78 @@
 
 using namespace std;
 
+Table::Table(vector<string> params, vector<int> column_widths) {
+    setParams(params);
+    setColumnWidths(column_widths);
+}
+
+void Table::setParams(vector<string> params) {
+    this->params = params;
+}
+
+void Table::setColumnWidths(vector<int> column_widths) {
+    if (!this->params.size()) {
+        throw 0;
+    }
+
+    if (column_widths.size() != this->params.size()) {
+        throw 0;
+    }
+
+    this->column_widths = column_widths;
+}
+
+
 void Table::print_heading() {
+    int count = this->params.size();
+    int length = 0;
 
-    cout << string(90, '_') << endl
+    for (auto& n : this->column_widths)
+        length += n;
 
-         << "| " << "ID" << " |" 
-         << setw(13) << " " << "Make" << setw(13) << " " << "|"
-         << setw(12) << " " << "Model" << setw(13) << " " << "|"
-         << setw(3) << " " << "Year" << setw(3) << " " << "|"
-         << setw(2) << " " << "Price" << setw(3) << " " << "|" << endl
+    length += count + 1;
 
-         << "|" << string(4, '_') << "|" 
-         << string(30, '_') << "|" 
-         << string(30, '_') << "|" 
-         << string(10, '_') << "|" 
-         << string(10, '_') << "|" << endl;
+    cout << string(length, '_') << endl;
+    cout << "|";
+
+    for (int i = 0; i < count; i++) {
+
+        int diff = this->column_widths[i] - this->params[i].length(); 
+        int odd = diff % 2;
+        int left_space = (diff / 2);
+        int right_space = (diff / 2 + odd);
+    
+        cout << setw(left_space) << " " << this->params[i] << setw(right_space) << " " << "|";
+    }
+    cout << endl;
+
+    cout << "|";
+
+    for (int i = 0; i < count; i++) {
+        cout << string(this->column_widths[i], '_') << "|";
+    }
+    cout << endl;
 }
 
-void Table::list(vector<Car*> rows, int reverse /*= 0*/, int filtered /*= 0*/) {
 
-    this->print_heading();
+void Table::printEntry(vector<string> args) {
+    int count = this->params.size();
 
-    if (rows.size() == 0) {
-        cout << "No entries." << endl;
-        return;
+    cout << "|";
+
+    for (int i = 0; i < count; i++) {
+        cout << setw(this->column_widths[i]) << args[i] << "|";
     }
+    cout << endl;
 
-    if (!filtered) {
-        if (!reverse) {
-            for (int i = 0; i < rows.size(); i++) {
-                rows[i]->print();
-            }
-        } else {
-            for (int i = rows.size() - 1; i >= 0; i--) {
-                rows[i]->print();
-            }
-        }
-    } else {
-        if (!reverse) {
-            for (int i = 0; i < rows.size(); i++) {
-                if (rows[i]->getFilter()) {
-                    rows[i]->print();
-                }
-            }
-        } else {
-            for (int i = rows.size() - 1; i >= 0; i--) {
-                if (rows[i]->getFilter()) {
-                    rows[i]->print();
-                }
-            }
-        }
+    cout << "|";
+
+    for (int i = 0; i < count; i++) {
+        cout << string(this->column_widths[i], '_') << "|";
     }
+    cout << endl;
+
 }
-
-//void Database::perform_action(int action) {
-    //int field; 
-    //int type;
-
-    //switch(action) {
-        //case 1: {
-            //cout << "By which field would you like to filter? (enter a number)" << endl
-                 //<< "(1) Make" << endl
-                 //<< "(2) Model" << endl
-                 //<< "(3) Year" << endl
-                 //<< "(4) Price" << endl;
-
-            //while(1) {
-                //cout << "(Enter a number) > ";
-                //cin >> field;
-
-                //if (field < 1 || field > 4) {
-                    //cout << "Such option does not exist" << endl;
-                    //continue;
-                //}
-                //break;
-            //}
-
-            //cout << "How would you like to filter?" << endl
-                 //<< "(1) Entry is equal to the given value" << endl
-                 //<< "(2) Entry contains the given value" << endl
-                 //<< "(3) Entry is not equal to the given value" << endl
-                 //<< "(4) Entry does not contain the given value" << endl;
-
-            //while(1) {
-                //cout << "(Enter a number) > ";
-                //cin >> type;
-
-                //if (type < 1 || type > 4) {
-                    //cout << "Such option does not exist" << endl;
-                    //continue;
-                //}
-                //break;
-            //}
-
-            //cout << "Please enter a value to be filtered by" << endl;
-
-            //string value;
-            //cout << "(Enter a value) > ";
-            //cin >> value;
-            //cin.get();
-
-            //switch(field) {
-                //case 1:
-                    //this->filter_by_make(type, value);
-                    //break;
-                //case 2:
-                    //this->filter_by_model(type, value);
-                    //break;
-                //case 3:
-                    //this->filter_by_year(type, value);
-                    //break;
-                //case 4:
-                    //this->filter_by_price(type, value);
-                    //break;
-            //}
-            //this->database_list(0, 1);
-            //this->reset_filter();
-            //break;
-        //}
-
-        //case 2: {
-            //cout << "By which field would you like to sort? (enter a number)" << endl
-                 //<< "(1) Make" << endl
-                 //<< "(2) Model" << endl
-                 //<< "(3) Year" << endl
-                 //<< "(4) Price" << endl;
-
-            //while(1) {
-                //cout << "(Enter a number) > ";
-                //cin >> field;
-
-                //if (field < 1 || field > 4) {
-                    //cout << "Such option does not exist" << endl;
-                    //continue;
-                //}
-                //break;
-            //}
-
-            //cout << "How would you like to sort?" << endl
-                 //<< "(1) Ascending order" << endl
-                 //<< "(2) Descending order" << endl;
-
-            //while(1) {
-                //cout << "(Enter a number) > ";
-                //cin >> type;
-
-                //if (type < 1 || type > 2) {
-                    //cout << "Such option does not exist" << endl;
-                    //continue;
-                //}
-                //break;
-            //}
-
-            //int reverse = (type == 1) ? 0 : 1;
-
-            //switch(field) {
-                //case 1:
-                    //this->sort_lex_by_make(0, this->size - 1);
-                    //break;
-                //case 2:
-                    //this->sort_lex_by_model(0, this->size - 1);
-                    //break;
-                //case 3:
-                    //this->sort_by_year(0, this->size - 1);
-                    //break;
-                //case 4:
-                    //this->sort_by_price(0, this->size - 1);
-                    //break;
-            //}
-            //this->database_list(reverse);
-            //break;
-        //}
-    //}
-//}
-
 
 //void Database::reset_filter() {
 

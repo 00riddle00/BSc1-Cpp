@@ -8,10 +8,20 @@
 
 
 class Table {
+    std::vector<std::string> params;
+    std::vector<int> column_widths;
 
     public: 
+        Table(std::vector<std::string> params, std::vector<int> column_widths);
+
+        void setParams(std::vector<std::string>);
+
+        void setColumnWidths(std::vector<int>);
+
         // print the heading of the table
         void print_heading();
+
+        void printEntry(std::vector<std::string> args);
 
         void list(std::vector<Car*> rows, int reverse = 0, int filtered = 0);
 

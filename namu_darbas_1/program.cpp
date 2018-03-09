@@ -78,7 +78,202 @@ double time_spent;
 static ofstream logfile;
 
 
+
+void list_data(Table table, vector<Car*> rows, int reverse = 0, int filtered = 0) {
+
+    table.print_heading();
+
+    if (rows.size() == 0) {
+        cout << "No entries." << endl;
+        return;
+    }
+
+    if (!filtered) {
+        if (!reverse) {
+            for (int i = 0; i < rows.size(); i++) {
+                table.printEntry({
+                        to_string(rows[i]->getID()),
+                        rows[i]->getCarMake(),
+                        rows[i]->getCarModel(),
+                        to_string(rows[i]->getCarYear()),
+                        to_string(rows[i]->getCarPrice())
+                        });
+            }
+        } else {
+            for (int i = rows.size() - 1; i >= 0; i--) {
+                table.printEntry({
+                        to_string(rows[i]->getID()),
+                        rows[i]->getCarMake(),
+                        rows[i]->getCarModel(),
+                        to_string(rows[i]->getCarYear()),
+                        to_string(rows[i]->getCarPrice())
+                        });
+            }
+        }
+    } else {
+        if (!reverse) {
+            for (int i = 0; i < rows.size(); i++) {
+                if (rows[i]->getFilter()) {
+                    table.printEntry({
+                            to_string(rows[i]->getID()),
+                            rows[i]->getCarMake(),
+                            rows[i]->getCarModel(),
+                            to_string(rows[i]->getCarYear()),
+                            to_string(rows[i]->getCarPrice())
+                            });
+                }
+            }
+        } else {
+            for (int i = rows.size() - 1; i >= 0; i--) {
+                if (rows[i]->getFilter()) {
+                    table.printEntry({
+                            to_string(rows[i]->getID()),
+                            rows[i]->getCarMake(),
+                            rows[i]->getCarModel(),
+                            to_string(rows[i]->getCarYear()),
+                            to_string(rows[i]->getCarPrice())
+                            });
+                }
+            }
+        }
+    }
+}
+
+
+void perform_action(Table table, vector<Car*> rows, int action) {
+    int field; 
+    int type;
+
+    switch(action) {
+        case 1: {
+            cout << "By which field would you like to filter? (enter a number)" << endl
+                 << "(1) Make" << endl
+                 << "(2) Model" << endl
+                 << "(3) Year" << endl
+                 << "(4) Price" << endl;
+
+            while(1) {
+                cout << "(Enter a number) > ";
+                cin >> field;
+
+                if (field < 1 || field > 4) {
+                    cout << "Such option does not exist" << endl;
+                    continue;
+                }
+                break;
+            }
+
+            cout << "How would you like to filter?" << endl
+                 << "(1) Entry is equal to the given value" << endl
+                 << "(2) Entry contains the given value" << endl
+                 << "(3) Entry is not equal to the given value" << endl
+                 << "(4) Entry does not contain the given value" << endl;
+
+            while(1) {
+                cout << "(Enter a number) > ";
+                cin >> type;
+
+                if (type < 1 || type > 4) {
+                    cout << "Such option does not exist" << endl;
+                    continue;
+                }
+                break;
+            }
+
+            cout << "Please enter a value to be filtered by" << endl;
+
+            string value;
+            cout << "(Enter a value) > ";
+            cin >> value;
+            cin.get();
+
+            switch(field) {
+                case 1:
+                    //this->filter_by_make(type, value);
+                    break;
+                case 2:
+                    //this->filter_by_model(type, value);
+                    break;
+                case 3:
+                    //this->filter_by_year(type, value);
+                    break;
+                case 4:
+                    //this->filter_by_price(type, value);
+                    break;
+            }
+            list_data(table, rows, 0, 1);
+            //this->reset_filter();
+            break;
+        }
+
+        case 2: {
+            cout << "By which field would you like to sort? (enter a number)" << endl
+                 << "(1) Make" << endl
+                 << "(2) Model" << endl
+                 << "(3) Year" << endl
+                 << "(4) Price" << endl;
+
+            while(1) {
+                cout << "(Enter a number) > ";
+                cin >> field;
+
+                if (field < 1 || field > 4) {
+                    cout << "Such option does not exist" << endl;
+                    continue;
+                }
+                break;
+            }
+
+            cout << "How would you like to sort?" << endl
+                 << "(1) Ascending order" << endl
+                 << "(2) Descending order" << endl;
+
+            while(1) {
+                cout << "(Enter a number) > ";
+                cin >> type;
+
+                if (type < 1 || type > 2) {
+                    cout << "Such option does not exist" << endl;
+                    continue;
+                }
+                break;
+            }
+
+            int reverse = (type == 1) ? 0 : 1;
+
+            switch(field) {
+                case 1:
+                    //this->sort_lex_by_make(0, this->size - 1);
+                    break;
+                case 2:
+                    //this->sort_lex_by_model(0, this->size - 1);
+                    break;
+                case 3:
+                    //this->sort_by_year(0, this->size - 1);
+                    break;
+                case 4:
+                    //this->sort_by_price(0, this->size - 1);
+                    break;
+            }
+            list_data(table, rows, reverse);
+            break;
+        }
+    }
+}
+
+
+
+
+
 int main(int argc, char *argv[]) {
+
+    Table table({"ID", "Make", "Model", "Year", "Price"}, {4, 30, 30, 10, 10});
+
+    //vector<string> params = {"ID", "Make", "Model", "Year", "Price"};
+    //table.setParams(params);
+
+    //vector<int> widths = {4, 30, 40, 10, 10};
+    //table.setColumnWidths(widths);
 
     std::vector<Car*> rows;
 
@@ -179,7 +374,7 @@ int main(int argc, char *argv[]) {
                     break;
                 }
 
-                //db->perform_action(action);
+                perform_action(table, rows, action);
                 break;
             }
             case 'g':; { // An empty statement before a label
@@ -238,12 +433,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'l': {
-                //Table::list(rows);
-                for (int i = 0; i < rows.size(); i++) {
-                    rows[i]->print();
-                }
-                //db->sort_by_id(0, db->getSize() - 1);
-				//db->database_list(0);
+                list_data(table, rows);
                 break;
             }
             case 'c': {
@@ -266,7 +456,6 @@ int main(int argc, char *argv[]) {
             } 
             case 'q': {
                 delete input;
-                //delete db;
                 delete conn;
                 return 0;
             }
