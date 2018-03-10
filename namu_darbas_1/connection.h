@@ -15,9 +15,9 @@ class Connection {
         explicit Connection(const std::string& filename);
         ~Connection();
 
-        void database_load(std::vector<Car*>* rows);
+        void database_load(std::vector<Car*>* cars);
 
-        void database_write(std::vector<Car*> rows);
+        void database_write(std::vector<Car*> cars);
 };
 
 #endif

@@ -79,34 +79,34 @@ static ofstream logfile;
 
 
 
-void list_data(Table table, vector<Car*> rows, bool filtered = false) {
+void list_data(Table table, vector<Car*> cars, bool filtered = false) {
 
     table.print_heading();
 
-    if (rows.size() == 0) {
+    if (cars.size() == 0) {
         cout << "No entries." << endl;
         return;
     }
 
     if (!filtered) {
-        for (int i = 0; i < rows.size(); i++) {
+        for (int i = 0; i < cars.size(); i++) {
             table.printEntry({
-                    to_string(rows[i]->getID()),
-                    rows[i]->getCarMake(),
-                    rows[i]->getCarModel(),
-                    to_string(rows[i]->getCarYear()),
-                    to_string(rows[i]->getCarPrice())
+                    to_string(cars[i]->getID()),
+                    cars[i]->getCarMake(),
+                    cars[i]->getCarModel(),
+                    to_string(cars[i]->getCarYear()),
+                    to_string(cars[i]->getCarPrice())
                     });
         }
     } else {
-        for (int i = 0; i < rows.size(); i++) {
-            if (rows[i]->getFilter()) {
+        for (int i = 0; i < cars.size(); i++) {
+            if (cars[i]->getFilter()) {
                 table.printEntry({
-                        to_string(rows[i]->getID()),
-                        rows[i]->getCarMake(),
-                        rows[i]->getCarModel(),
-                        to_string(rows[i]->getCarYear()),
-                        to_string(rows[i]->getCarPrice())
+                        to_string(cars[i]->getID()),
+                        cars[i]->getCarMake(),
+                        cars[i]->getCarModel(),
+                        to_string(cars[i]->getCarYear()),
+                        to_string(cars[i]->getCarPrice())
                         });
             }
         }
@@ -114,7 +114,7 @@ void list_data(Table table, vector<Car*> rows, bool filtered = false) {
 }
 
 
-void perform_action(Table table, vector<Car*>* rows) {
+void perform_action(Table table, vector<Car*>* cars) {
 
     cout << "What action would you like to perform? (enter a number)" << endl 
          << "(1) Filter" << endl
@@ -189,9 +189,9 @@ void perform_action(Table table, vector<Car*>* rows) {
 
             filter.setValue(value);
             
-            filter.filter(rows);
-            list_data(table, *rows, true);
-            filter.reset_filter(rows);
+            filter.filter(cars);
+            list_data(table, *cars, true);
+            filter.reset_filter(cars);
             break;
         }
 
@@ -237,8 +237,8 @@ void perform_action(Table table, vector<Car*>* rows) {
                 break;
             }
 
-            sorting.sort(rows);
-            list_data(table, *rows);
+            sorting.sort(cars);
+            list_data(table, *cars);
             break;
         }
     }
@@ -258,7 +258,7 @@ int main(int argc, char *argv[]) {
     //vector<int> widths = {4, 30, 40, 10, 10};
     //table.setColumnWidths(widths);
 
-    std::vector<Car*> rows;
+    std::vector<Car*> cars;
 
     if (argc < 2) {
         cout << "USAGE: test <dbfile> <action> [action params]" << endl;
@@ -281,7 +281,7 @@ int main(int argc, char *argv[]) {
     atexit(exiting);
 
     Connection* conn = new Connection(argv[1]);
-    conn->database_load(&rows);
+    conn->database_load(&cars);
     //Database* db = conn->database_load();
 
     string about = "This is a car database program, where one can perform get, list, create, edit and delete "
@@ -340,15 +340,15 @@ int main(int argc, char *argv[]) {
 
         switch (input->getAction()) {
             case 'a': {
-                perform_action(table, &rows);
+                perform_action(table, &cars);
                 break;
             }
             case 'g':; { // An empty statement before a label
                 bool id_set = false;
 
-                for (int i = 0; i < rows.size(); i++) {
-                    if (rows[i]->getID() == input->getID()) {
-                        rows[i]->print();
+                for (int i = 0; i < cars.size(); i++) {
+                    if (cars[i]->getID() == input->getID()) {
+                        cars[i]->print();
                         id_set = true;
                         break;
                     }
@@ -362,10 +362,10 @@ int main(int argc, char *argv[]) {
                 int id = input->getID();
 				int index = -1;
 
-                for (int i = 0; i < rows.size(); i++) {
-                    if (rows[i]->getID() == id) {
+                for (int i = 0; i < cars.size(); i++) {
+                    if (cars[i]->getID() == id) {
                         cout << "Such entry already exists:" << endl;
-                        rows[i]->print();
+                        cars[i]->print();
                         index = i;
                     }
                 }
@@ -376,22 +376,22 @@ int main(int argc, char *argv[]) {
 
                     if (Helpers::choice("Would you like to save?")) {
 						if (index >= 0) {
-							rows[index] = car;
+							cars[index] = car;
 						} else {
-							rows.push_back(car);
+							cars.push_back(car);
 						}
-                        conn->database_write(rows);
+                        conn->database_write(cars);
 						cout << "Successfully saved, ID = " << id << endl;
                     }
                 }
                 break;
             }
             case 'd': {
-                for (int i = 0; i < rows.size(); i++) {
-                    if (rows[i]->getID() == input->getID()) {
+                for (int i = 0; i < cars.size(); i++) {
+                    if (cars[i]->getID() == input->getID()) {
                         if (Helpers::choice("Do you really want to delete this entry?")) {
-                            rows.erase(rows.begin()+i);
-                            conn->database_write(rows);
+                            cars.erase(cars.begin()+i);
+                            conn->database_write(cars);
                         }
                         break;
                     }
@@ -402,21 +402,21 @@ int main(int argc, char *argv[]) {
                 Sorting sorting;
                 sorting.setField(SortingConstants::ID);
                 sorting.setType(SortingConstants::ASCENDING);
-                sorting.sort(&rows);
-                list_data(table, rows);
+                sorting.sort(&cars);
+                list_data(table, cars);
                 break;
             }
             case 'c': {
-                if (!rows.size()) {
+                if (!cars.size()) {
                     cout << "Database has no entries. Nothing to clear." << endl;
                     break;
                 }
                 if (Helpers::choice("Do you really want to clear the entire database?")) {
-                    rows.clear();
+                    cars.clear();
                 } else {
                     break;
                 }
-                conn->database_write(rows);
+                conn->database_write(cars);
                 break;
             }
             case 'i': {
