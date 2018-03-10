@@ -4,25 +4,38 @@
 #include "sorting.h"
 
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 void Sorting::setField(int field) {
-	this->field = static_cast<Sorting::Fields>(field);
+    switch(field) {
+        case SortingConstants::MAKE: case SortingConstants::MODEL: case SortingConstants::YEAR: case SortingConstants::PRICE: case SortingConstants::ID:
+            this->field = static_cast<SortingConstants::Fields>(field);
+            break;
+        default:
+            throw std::invalid_argument("Please make sure that field value is within bounds");
+    }
 }
 
 void Sorting::setType(int type) {
-	this->type = static_cast<Sorting::Types>(type);
+    switch(type) {
+        case SortingConstants::ASCENDING: case SortingConstants::DESCENDING:
+            this->type = static_cast<SortingConstants::Types>(type);
+            break;
+        default:
+            throw std::invalid_argument("Please make sure that field value is within bounds");
+    }
 }
 
 
 
-void Sorting::sort_lex_by_make(vector<Car*>* rows, int first, int last) {
+void Sorting::sort_lex_by_make(vector<Car*>* rows) {
 
     int i, j;
     Car* temp;
 
-    for (i = first; i < last; ++i) {
+    for (i = this->first; i < this->last; ++i) {
 
         for (j = i + 1; j < last + 1; ++j) {
 
@@ -36,12 +49,12 @@ void Sorting::sort_lex_by_make(vector<Car*>* rows, int first, int last) {
 }
 
 
-void Sorting::sort_lex_by_model(vector<Car*>* rows, int first, int last) {
+void Sorting::sort_lex_by_model(vector<Car*>* rows) {
 
     int i, j;
     Car* temp;
 
-    for (i = first; i < last; ++i)
+    for (i = this->first; i < last; ++i)
 
         for (j = i + 1; j < last + 1; ++j) {
 
@@ -159,25 +172,31 @@ void Sorting::sort_by_id(vector<Car*>* rows, int first, int last)
 
 
 
+void Sorting::sort(vector<Car*>* rows) {
 
-void Sorting::sort(vector<Car*>* rows, int first, int last) {
+    this->first = 0;
+    this->last = rows->size() - 1;
 
     switch(this->field) {
-        case MAKE:
-            this->sort_lex_by_make(rows, first, last);
+        case SortingConstants::MAKE:
+            this->sort_lex_by_make(rows);
             break;
-        case MODEL:
-            this->sort_lex_by_model(rows, first, last);
+        case SortingConstants::MODEL:
+            this->sort_lex_by_model(rows);
             break;
-        case YEAR:
-            this->sort_by_year(rows, first, last);
+        case SortingConstants::YEAR:
+            this->sort_by_year(rows, this->first, this->last);
             break;
-        case PRICE:
-            this->sort_by_price(rows, first, last);
+        case SortingConstants::PRICE:
+            this->sort_by_price(rows, this->first, this->last);
             break;
-        case ID:
-            this->sort_by_id(rows, first, last);
+        case SortingConstants::ID:
+            this->sort_by_id(rows, this->first, this->last);
             break;
+    }
+
+    if (this->type == SortingConstants::DESCENDING) {
+        std::reverse(rows->begin(), rows->end());
     }
 }
 

@@ -79,7 +79,7 @@ static ofstream logfile;
 
 
 
-void list_data(Table table, vector<Car*> rows, int reverse = 0, int filtered = 0) {
+void list_data(Table table, vector<Car*> rows, bool filtered = false) {
 
     table.print_heading();
 
@@ -89,51 +89,25 @@ void list_data(Table table, vector<Car*> rows, int reverse = 0, int filtered = 0
     }
 
     if (!filtered) {
-        if (!reverse) {
-            for (int i = 0; i < rows.size(); i++) {
-                table.printEntry({
-                        to_string(rows[i]->getID()),
-                        rows[i]->getCarMake(),
-                        rows[i]->getCarModel(),
-                        to_string(rows[i]->getCarYear()),
-                        to_string(rows[i]->getCarPrice())
-                        });
-            }
-        } else {
-            for (int i = rows.size() - 1; i >= 0; i--) {
-                table.printEntry({
-                        to_string(rows[i]->getID()),
-                        rows[i]->getCarMake(),
-                        rows[i]->getCarModel(),
-                        to_string(rows[i]->getCarYear()),
-                        to_string(rows[i]->getCarPrice())
-                        });
-            }
+        for (int i = 0; i < rows.size(); i++) {
+            table.printEntry({
+                    to_string(rows[i]->getID()),
+                    rows[i]->getCarMake(),
+                    rows[i]->getCarModel(),
+                    to_string(rows[i]->getCarYear()),
+                    to_string(rows[i]->getCarPrice())
+                    });
         }
     } else {
-        if (!reverse) {
-            for (int i = 0; i < rows.size(); i++) {
-                if (rows[i]->getFilter()) {
-                    table.printEntry({
-                            to_string(rows[i]->getID()),
-                            rows[i]->getCarMake(),
-                            rows[i]->getCarModel(),
-                            to_string(rows[i]->getCarYear()),
-                            to_string(rows[i]->getCarPrice())
-                            });
-                }
-            }
-        } else {
-            for (int i = rows.size() - 1; i >= 0; i--) {
-                if (rows[i]->getFilter()) {
-                    table.printEntry({
-                            to_string(rows[i]->getID()),
-                            rows[i]->getCarMake(),
-                            rows[i]->getCarModel(),
-                            to_string(rows[i]->getCarYear()),
-                            to_string(rows[i]->getCarPrice())
-                            });
-                }
+        for (int i = 0; i < rows.size(); i++) {
+            if (rows[i]->getFilter()) {
+                table.printEntry({
+                        to_string(rows[i]->getID()),
+                        rows[i]->getCarMake(),
+                        rows[i]->getCarModel(),
+                        to_string(rows[i]->getCarYear()),
+                        to_string(rows[i]->getCarPrice())
+                        });
             }
         }
     }
@@ -216,7 +190,7 @@ void perform_action(Table table, vector<Car*>* rows) {
             filter.setValue(value);
             
             filter.filter(rows);
-            list_data(table, *rows, 0, 1);
+            list_data(table, *rows, true);
             filter.reset_filter(rows);
             break;
         }
@@ -228,20 +202,22 @@ void perform_action(Table table, vector<Car*>* rows) {
                  << "(1) Make" << endl
                  << "(2) Model" << endl
                  << "(3) Year" << endl
-                 << "(4) Price" << endl;
+                 << "(4) Price" << endl
+                 << "(5) ID" << endl;
 
             while(1) {
                 cout << "(Enter a number) > ";
                 cin >> field;
 
-                if (field < 1 || field > 4) {
-                    cout << "Such option does not exist" << endl;
+                try {
+                    sorting.setField(field);
+                } catch (const std::invalid_argument& e) {
+                    cout << e.what() << endl;
                     continue;
                 }
+                cin.get();
                 break;
             }
-
-            sorting.setField(field);
 
             cout << "How would you like to sort?" << endl
                  << "(1) Ascending order" << endl
@@ -251,21 +227,18 @@ void perform_action(Table table, vector<Car*>* rows) {
                 cout << "(Enter a number) > ";
                 cin >> type;
 
-                if (type < 1 || type > 2) {
-                    cout << "Such option does not exist" << endl;
+                try {
+                    sorting.setType(type);
+                } catch (const std::invalid_argument& e) {
+                    cout << e.what() << endl;
                     continue;
                 }
+                cin.get();
                 break;
             }
 
-            sorting.setType(type);
-
-            int reverse = (type == 1) ? 0 : 1;
-
-            cout << "BEfore sorting" << endl;
-            sorting.sort(rows, 0, (int)(rows->size() - 1));
-            cout << "After sorting" << endl;
-            list_data(table, *rows, reverse);
+            sorting.sort(rows);
+            list_data(table, *rows);
             break;
         }
     }
@@ -427,9 +400,9 @@ int main(int argc, char *argv[]) {
             }
             case 'l': {
                 Sorting sorting;
-                sorting.setField(5);
-                sorting.setType(1);
-                sorting.sort(&rows, 0, rows.size() - 1);
+                sorting.setField(SortingConstants::ID);
+                sorting.setType(SortingConstants::ASCENDING);
+                sorting.sort(&rows);
                 list_data(table, rows);
                 break;
             }
