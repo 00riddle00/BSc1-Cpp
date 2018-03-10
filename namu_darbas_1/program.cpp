@@ -188,9 +188,9 @@ void perform_action(Table table, vector<Car*> &cars) {
 
             filter.setValue(value);
             
-            //filter.filter(cars);
+            filter.filter(cars);
             list_data(table, cars, true);
-            //filter.reset_filter(cars);
+            filter.reset_filter(cars);
             break;
         }
 

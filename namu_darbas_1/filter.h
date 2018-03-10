@@ -16,17 +16,17 @@ class Filter {
     FilterConstants::Types type;
     std::string value;
 
-    void filter_by_make(std::vector<Car*>* cars);
-    void filter_by_model(std::vector<Car*>* cars);
-    void filter_by_year(std::vector<Car*>* cars);
-    void filter_by_price(std::vector<Car*>* cars);
+    void filter_by_make(std::vector<Car*> &cars);
+    void filter_by_model(std::vector<Car*> &cars);
+    void filter_by_year(std::vector<Car*> &cars);
+    void filter_by_price(std::vector<Car*> &cars);
 
     public:
 		void setField(int field);
 		void setType(int type);
         void setValue(const std::string& value);
-        void filter(std::vector<Car*>* cars);
-        void reset_filter(std::vector<Car*>* cars);
+        void filter(std::vector<Car*> &cars);
+        void reset_filter(std::vector<Car*> &cars);
 
 };
 
