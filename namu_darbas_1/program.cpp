@@ -150,15 +150,15 @@ void perform_action(Table table, vector<Car*>* rows) {
                 cout << "(Enter a number) > ";
                 cin >> field;
 
-                // TODO move to field setter
-                if (field < 1 || field > 4) {
-                    cout << "Such option does not exist" << endl;
+                try {
+                    filter.setField(field);
+                } catch (const std::invalid_argument& e) {
+                    cout << e.what() << endl;
                     continue;
                 }
+                cin.get();
                 break;
             }
-
-			filter.setField(field);
 
             cout << "How would you like to filter?" << endl
                  << "(1) Entry is equal to the given value" << endl
@@ -170,15 +170,15 @@ void perform_action(Table table, vector<Car*>* rows) {
                 cout << "(Enter a number) > ";
                 cin >> type;
 
-                // TODO move to type setter
-                if (type < 1 || type > 4) {
-                    cout << "Such option does not exist" << endl;
+                try {
+                    filter.setType(type);
+                } catch (const std::invalid_argument& e) {
+                    cout << e.what() << endl;
                     continue;
                 }
+                cin.get();
                 break;
             }
-
-			filter.setType(type);
 
             cout << "Please enter a value to be filtered by" << endl;
 

@@ -11,28 +11,28 @@ using namespace std;
 void Filter::filter_by_make(vector<Car*>* rows) {
 
     switch(this->type) {
-        case EQUAL:
+        case FilterConstants::EQUAL:
             for (int i = 0; i < rows->size(); i++) {
                 if ((*rows)[i]->getCarMake() != this->value) {
                     (*rows)[i]->setFilter(false);
                 } 
             }
             break;
-        case CONTAINS:
+        case FilterConstants::CONTAINS:
             for (int i = 0; i < rows->size(); i++) {
                 if ((*rows)[i]->getCarMake().find(this->value) == std::string::npos) {
                     (*rows)[i]->setFilter(false);
                 }
             }
             break;
-        case NOT_EQUAL:
+        case FilterConstants::NOT_EQUAL:
             for (int i = 0; i < rows->size(); i++) {
                 if ((*rows)[i]->getCarMake() == this->value) {
                     (*rows)[i]->setFilter(false);
                 } 
             }
             break;
-        case DOES_NOT_CONTAIN:
+        case FilterConstants::DOES_NOT_CONTAIN:
             for (int i = 0; i < rows->size(); i++) {
                 if ((*rows)[i]->getCarMake().find(this->value) != std::string::npos) {
                     (*rows)[i]->setFilter(false);
@@ -157,11 +157,23 @@ void Filter::filter_by_price(vector<Car*>* rows) {
 
 
 void Filter::setField(int field) {
-	this->field = static_cast<Filter::Fields>(field);
+    switch(field) {
+        case FilterConstants::MAKE: case FilterConstants::MODEL: case FilterConstants::YEAR: case FilterConstants::PRICE: 
+            this->field = static_cast<FilterConstants::Fields>(field);
+            break;
+        default:
+            throw std::invalid_argument("Please make sure that field value is within bounds");
+    }
 }
 
 void Filter::setType(int type) {
-	this->type = static_cast<Filter::Types>(type);
+    switch(type) {
+        case FilterConstants::EQUAL: case FilterConstants::CONTAINS: case FilterConstants::NOT_EQUAL: case FilterConstants::DOES_NOT_CONTAIN: 
+            this->type = static_cast<FilterConstants::Types>(type);
+            break;
+        default:
+            throw std::invalid_argument("Please make sure that type value is within bounds");
+    }
 }
 
 void Filter::setValue(const string& value) {
@@ -171,16 +183,16 @@ void Filter::setValue(const string& value) {
 void Filter::filter(vector<Car*>* rows) {
 
     switch(this->field) {
-        case MAKE:
+        case FilterConstants::MAKE:
             this->filter_by_make(rows);
             break;
-        case MODEL:
+        case FilterConstants::MODEL:
             this->filter_by_model(rows);
             break;
-        case YEAR:
+        case FilterConstants::YEAR:
             this->filter_by_year(rows);
             break;
-        case PRICE:
+        case FilterConstants::PRICE:
             this->filter_by_price(rows);
             break;
     }

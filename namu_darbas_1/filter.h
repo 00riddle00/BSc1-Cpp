@@ -4,13 +4,16 @@
 #include <string>
 #include <vector>
 
-
-class Filter {
+namespace FilterConstants {
 	enum Fields { MAKE = 1, MODEL, YEAR, PRICE };
 	enum Types { EQUAL = 1, CONTAINS, NOT_EQUAL, DOES_NOT_CONTAIN };
+}
 
-	Fields field;
-	Types type;
+
+class Filter {
+
+    FilterConstants::Fields field;
+    FilterConstants::Types type;
     std::string value;
 
     void filter_by_make(std::vector<Car*>* rows);

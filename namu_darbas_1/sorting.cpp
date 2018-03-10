@@ -24,7 +24,7 @@ void Sorting::setType(int type) {
             this->type = static_cast<SortingConstants::Types>(type);
             break;
         default:
-            throw std::invalid_argument("Please make sure that field value is within bounds");
+            throw std::invalid_argument("Please make sure that type value is within bounds");
     }
 }
 
