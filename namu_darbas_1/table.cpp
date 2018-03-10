@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Table::Table(vector<string> params, vector<int> column_widths) {
+Table::Table(vector<string> params, vector<size_t> column_widths) {
     setParams(params);
     setColumnWidths(column_widths);
 }
@@ -15,13 +15,20 @@ void Table::setParams(vector<string> params) {
     this->params = params;
 }
 
-void Table::setColumnWidths(vector<int> column_widths) {
+void Table::setColumnWidths(vector<size_t> column_widths) {
     if (!this->params.size()) {
-        throw 0;
+        throw std::invalid_argument("TABLE ERROR: The parameters are not set, hence the width values cannot be set");
     }
 
     if (column_widths.size() != this->params.size()) {
-        throw 0;
+        throw std::invalid_argument("TABLE ERROR: Please make sure that the number of width values correspond to the number of parameters");
+    }
+
+    for (size_t i = 0; i < params.size(); i++) {
+        if (params[i].length() > column_widths[i]) {
+            string error = "TABLE ERROR: parameter's \"" + params[i] + "\" length(" + to_string(params[i].length()) + ") is bigger than its column width(" + to_string(column_widths[i]) + ")!";
+            throw std::invalid_argument(error);
+        }
     }
 
     this->column_widths = column_widths;
@@ -46,8 +53,15 @@ void Table::print_heading() {
         int odd = diff % 2;
         int left_space = (diff / 2);
         int right_space = (diff / 2 + odd);
-    
-        cout << setw(left_space) << " " << this->params[i] << setw(right_space) << " " << "|";
+
+        //cout << "LS " << left_space << endl;
+        //cout << "RS " << right_space << endl;;
+        if (!left_space && !right_space) {
+            cout << this->params[i] << "|";
+        } else {
+            cout << setw(left_space) << " " << this->params[i] << setw(right_space) << " " << "|";
+        }
+        //cout << setw(0) << " " << this->params[i] << setw(0) << " " << "|";
     }
     cout << endl;
 
@@ -66,6 +80,10 @@ void Table::printEntry(vector<string> args) {
     cout << "|";
 
     for (int i = 0; i < count; i++) {
+        if (args[i].length() > this->column_widths[i]) {
+            string error = "TABLE ERROR: argument's \"" + args[i] + "\" length(" + to_string(args[i].length()) + ") is bigger than its column width(" + to_string(this->column_widths[i]) + ")!";
+            throw std::invalid_argument(error);
+        }
         cout << setw(this->column_widths[i]) << args[i] << "|";
     }
     cout << endl;

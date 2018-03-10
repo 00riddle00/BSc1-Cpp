@@ -89,7 +89,7 @@ void list_data(Table table, vector<Car*> cars, bool filtered = false) {
     }
 
     if (!filtered) {
-        for (int i = 0; i < cars.size(); i++) {
+        for (size_t i = 0; i < cars.size(); i++) {
             table.printEntry({
                     to_string(cars[i]->getID()),
                     cars[i]->getCarMake(),
@@ -99,7 +99,7 @@ void list_data(Table table, vector<Car*> cars, bool filtered = false) {
                     });
         }
     } else {
-        for (int i = 0; i < cars.size(); i++) {
+        for (size_t i = 0; i < cars.size(); i++) {
             if (cars[i]->getFilter()) {
                 table.printEntry({
                         to_string(cars[i]->getID()),
@@ -245,18 +245,9 @@ void perform_action(Table table, vector<Car*>* cars) {
 }
 
 
-
-
-
 int main(int argc, char *argv[]) {
 
     Table table({"ID", "Make", "Model", "Year", "Price"}, {4, 30, 30, 10, 10});
-
-    //vector<string> params = {"ID", "Make", "Model", "Year", "Price"};
-    //table.setParams(params);
-
-    //vector<int> widths = {4, 30, 40, 10, 10};
-    //table.setColumnWidths(widths);
 
     std::vector<Car*> cars;
 
@@ -281,8 +272,7 @@ int main(int argc, char *argv[]) {
     atexit(exiting);
 
     Connection* conn = new Connection(argv[1]);
-    conn->database_load(&cars);
-    //Database* db = conn->database_load();
+    conn->load_from_file(&cars);
 
     string about = "This is a car database program, where one can perform get, list, create, edit and delete "
             "operations. The database is loaded from and saved to the binary file. Version: v.0";
@@ -346,9 +336,10 @@ int main(int argc, char *argv[]) {
             case 'g':; { // An empty statement before a label
                 bool id_set = false;
 
-                for (int i = 0; i < cars.size(); i++) {
+                for (size_t i = 0; i < cars.size(); i++) {
                     if (cars[i]->getID() == input->getID()) {
-                        cars[i]->print();
+                        vector<Car*> car = {cars[i]};
+                        list_data(table, car);
                         id_set = true;
                         break;
                     }
@@ -362,10 +353,11 @@ int main(int argc, char *argv[]) {
                 int id = input->getID();
 				int index = -1;
 
-                for (int i = 0; i < cars.size(); i++) {
+                for (size_t i = 0; i < cars.size(); i++) {
                     if (cars[i]->getID() == id) {
                         cout << "Such entry already exists:" << endl;
-                        cars[i]->print();
+                        vector<Car*> car = {cars[i]};
+                        list_data(table, car);
                         index = i;
                     }
                 }
@@ -380,21 +372,26 @@ int main(int argc, char *argv[]) {
 						} else {
 							cars.push_back(car);
 						}
-                        conn->database_write(cars);
+                        conn->write_to_file(&cars);
 						cout << "Successfully saved, ID = " << id << endl;
                     }
                 }
                 break;
             }
             case 'd': {
-                for (int i = 0; i < cars.size(); i++) {
+                bool id_set = false;
+                for (size_t i = 0; i < cars.size(); i++) {
                     if (cars[i]->getID() == input->getID()) {
                         if (Helpers::choice("Do you really want to delete this entry?")) {
                             cars.erase(cars.begin()+i);
-                            conn->database_write(cars);
+                            conn->write_to_file(&cars);
+                            id_set = true;
                         }
                         break;
                     }
+                }
+                if (!id_set) {
+                    cout << "There is no such entry with this ID" << endl;
                 }
                 break;
             }
@@ -416,7 +413,7 @@ int main(int argc, char *argv[]) {
                 } else {
                     break;
                 }
-                conn->database_write(cars);
+                conn->write_to_file(&cars);
                 break;
             }
             case 'i': {

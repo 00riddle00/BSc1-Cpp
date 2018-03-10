@@ -12,28 +12,28 @@ void Filter::filter_by_make(vector<Car*>* cars) {
 
     switch(this->type) {
         case FilterConstants::EQUAL:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 if ((*cars)[i]->getCarMake() != this->value) {
                     (*cars)[i]->setFilter(false);
                 } 
             }
             break;
         case FilterConstants::CONTAINS:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 if ((*cars)[i]->getCarMake().find(this->value) == std::string::npos) {
                     (*cars)[i]->setFilter(false);
                 }
             }
             break;
         case FilterConstants::NOT_EQUAL:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 if ((*cars)[i]->getCarMake() == this->value) {
                     (*cars)[i]->setFilter(false);
                 } 
             }
             break;
         case FilterConstants::DOES_NOT_CONTAIN:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 if ((*cars)[i]->getCarMake().find(this->value) != std::string::npos) {
                     (*cars)[i]->setFilter(false);
                 } 
@@ -46,28 +46,28 @@ void Filter::filter_by_model(vector<Car*>* cars) {
 
     switch(this->type) {
         case 1:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 if ((*cars)[i]->getCarModel() != this->value) {
                     (*cars)[i]->setFilter(false);
                 } 
             }
             break;
         case 2:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 if ((*cars)[i]->getCarModel().find(this->value) == std::string::npos) {
                     (*cars)[i]->setFilter(false);
                 } 
             }
             break;
         case 3:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 if ((*cars)[i]->getCarModel() == this->value) {
                     (*cars)[i]->setFilter(false);
                 } 
             }
             break;
         case 4:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 if ((*cars)[i]->getCarModel().find(this->value) != std::string::npos) {
                     (*cars)[i]->setFilter(false);
                 } 
@@ -81,7 +81,7 @@ void Filter::filter_by_year(vector<Car*>* cars) {
 
     switch(this->type) {
         case 1:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 string car_year = to_string((*cars)[i]->getCarYear());
                 if (car_year != this->value) {
                     (*cars)[i]->setFilter(false);
@@ -89,7 +89,7 @@ void Filter::filter_by_year(vector<Car*>* cars) {
             }
             break;
         case 2:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 string car_year = to_string((*cars)[i]->getCarYear());
                 if (car_year.find(this->value) == std::string::npos) {
                     (*cars)[i]->setFilter(false);
@@ -97,7 +97,7 @@ void Filter::filter_by_year(vector<Car*>* cars) {
             }
             break;
         case 3:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 string car_year = to_string((*cars)[i]->getCarYear());
                 if (car_year == this->value) {
                     (*cars)[i]->setFilter(false);
@@ -105,7 +105,7 @@ void Filter::filter_by_year(vector<Car*>* cars) {
             }
             break;
         case 4:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 string car_year = to_string((*cars)[i]->getCarYear());
                 if (car_year.find(this->value) != std::string::npos) {
                     (*cars)[i]->setFilter(false);
@@ -120,7 +120,7 @@ void Filter::filter_by_price(vector<Car*>* cars) {
 
     switch(this->type) {
         case 1:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 string car_price = to_string((*cars)[i]->getCarPrice());
                 if (car_price != this->value) {
                     (*cars)[i]->setFilter(false);
@@ -128,7 +128,7 @@ void Filter::filter_by_price(vector<Car*>* cars) {
             }
             break;
         case 2:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 string car_price = to_string((*cars)[i]->getCarPrice());
                 if (car_price.find(this->value) == std::string::npos) {
                     (*cars)[i]->setFilter(false);
@@ -136,7 +136,7 @@ void Filter::filter_by_price(vector<Car*>* cars) {
             }
             break;
         case 3:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 string car_price = to_string((*cars)[i]->getCarPrice());
                 if (car_price == this->value) {
                     (*cars)[i]->setFilter(false);
@@ -144,7 +144,7 @@ void Filter::filter_by_price(vector<Car*>* cars) {
             }
             break;
         case 4:
-            for (int i = 0; i < cars->size(); i++) {
+            for (size_t i = 0; i < cars->size(); i++) {
                 string car_price = to_string((*cars)[i]->getCarPrice());
                 if (car_price.find(this->value) != std::string::npos) {
                     (*cars)[i]->setFilter(false);
@@ -200,7 +200,7 @@ void Filter::filter(vector<Car*>* cars) {
 
 void Filter::reset_filter(vector<Car*>* cars) {
 
-    for (int i = 0; i < cars->size(); i++) {
+    for (size_t i = 0; i < cars->size(); i++) {
         (*cars)[i]->setFilter(true);
     }
 }

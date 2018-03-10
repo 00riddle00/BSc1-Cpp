@@ -34,7 +34,6 @@ class Car {
         int getCarPrice();
 
         void getCar(int id);
-        void print();
 };
 
 #endif
