@@ -15,9 +15,9 @@ class Connection {
         explicit Connection(const std::string& filename);
         ~Connection();
 
-        void load_from_file(std::vector<Car*>* cars);
+        void load_from_file(std::vector<Car*> &cars);
 
-        void write_to_file(std::vector<Car*>* cars);
+        void write_to_file(std::vector<Car*> &cars);
 };
 
 #endif

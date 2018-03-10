@@ -23,7 +23,7 @@ Connection::~Connection() {
     }
 }
 
-void Connection::load_from_file(vector<Car*>* cars) {
+void Connection::load_from_file(vector<Car*> &cars) {
 
     this->input.open(this->filename, ios::in | ios::binary);
 
@@ -42,7 +42,7 @@ void Connection::load_from_file(vector<Car*>* cars) {
 
         for (int i = 0; i < size; i++) {
 
-            cars->push_back(
+            cars.push_back(
                 new Car(
                     lb.readInt(),
                     lb.readInt(), 
@@ -59,19 +59,19 @@ void Connection::load_from_file(vector<Car*>* cars) {
     } 
 }
 
-void Connection::write_to_file(vector<Car*>* cars) {
+void Connection::write_to_file(vector<Car*> &cars) {
 
     WriteToBinaryFile wb(this->filename);
-    int size = cars->size();
+    int size = cars.size();
     wb.write(size);
 
-    for (size_t i = 0; i < cars->size(); i++) {
-        wb.write((*cars)[i]->getID());
-        wb.write((*cars)[i]->getFilter());
-        wb.write((*cars)[i]->getCarMake(), MAX_ENTRY_SIZE);
-        wb.write((*cars)[i]->getCarModel(), MAX_ENTRY_SIZE);
-        wb.write((*cars)[i]->getCarYear());
-        wb.write((*cars)[i]->getCarPrice());
+    for (size_t i = 0; i < cars.size(); i++) {
+        wb.write(cars[i]->getID());
+        wb.write(cars[i]->getFilter());
+        wb.write(cars[i]->getCarMake(), MAX_ENTRY_SIZE);
+        wb.write(cars[i]->getCarModel(), MAX_ENTRY_SIZE);
+        wb.write(cars[i]->getCarYear());
+        wb.write(cars[i]->getCarPrice());
     }
 
     wb.close();
