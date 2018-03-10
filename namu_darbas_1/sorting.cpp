@@ -30,7 +30,7 @@ void Sorting::setType(int type) {
 
 
 
-void Sorting::sort_lex_by_make(vector<Car*>* cars) {
+void Sorting::sort_lex_by_make(vector<Car*> &cars) {
 
     int i, j;
     Car* temp;
@@ -39,17 +39,17 @@ void Sorting::sort_lex_by_make(vector<Car*>* cars) {
 
         for (j = i + 1; j < last + 1; ++j) {
 
-            if ((*cars)[i]->getCarMake() > (*cars)[j]->getCarMake()) {
-                temp = (*cars)[i];
-                (*cars)[i] = (*cars)[j];
-                (*cars)[j] = temp;
+            if (cars[i]->getCarMake() > cars[j]->getCarMake()) {
+                temp = cars[i];
+                cars[i] = cars[j];
+                cars[j] = temp;
             }
         }
     }
 }
 
 
-void Sorting::sort_lex_by_model(vector<Car*>* cars) {
+void Sorting::sort_lex_by_model(vector<Car*> &cars) {
 
     int i, j;
     Car* temp;
@@ -58,15 +58,15 @@ void Sorting::sort_lex_by_model(vector<Car*>* cars) {
 
         for (j = i + 1; j < last + 1; ++j) {
 
-            if ((*cars)[i]->getCarModel() > (*cars)[j]->getCarModel()) {
-                temp = (*cars)[i];
-                (*cars)[i] = (*cars)[j];
-                (*cars)[j] = temp;
+            if (cars[i]->getCarModel() > cars[j]->getCarModel()) {
+                temp = cars[i];
+                cars[i] = cars[j];
+                cars[j] = temp;
             }
         }
 }
 
-void Sorting::sort_by_year(vector<Car*>* cars, int first, int last) {
+void Sorting::sort_by_year(vector<Car*> &cars, int first, int last) {
 
     Car* temp;
     int pivot, j, i;
@@ -78,29 +78,29 @@ void Sorting::sort_by_year(vector<Car*>* cars, int first, int last) {
 
         while (i < j) {
             while (
-                (*cars)[i]->getCarYear() <= (*cars)[pivot]->getCarYear() && i < last) {
+                cars[i]->getCarYear() <= cars[pivot]->getCarYear() && i < last) {
                 i++;
             }
-            while ((*cars)[j]->getCarYear() > (*cars)[pivot]->getCarYear()) {
+            while (cars[j]->getCarYear() > cars[pivot]->getCarYear()) {
                 j--;
             }
             if (i < j) {
-                temp = (*cars)[i];
-                (*cars)[i] = (*cars)[j];
-                (*cars)[j] = temp;
+                temp = cars[i];
+                cars[i] = cars[j];
+                cars[j] = temp;
             }
         }
 
-        temp = (*cars)[pivot];
-        (*cars)[pivot] = (*cars)[j];
-        (*cars)[j] = temp;
+        temp = cars[pivot];
+        cars[pivot] = cars[j];
+        cars[j] = temp;
 
         sort_by_year(cars, first, j - 1);
         sort_by_year(cars, j + 1, last);
     }
 }
 
-void Sorting::sort_by_price(vector<Car*>* cars, int first, int last) {
+void Sorting::sort_by_price(vector<Car*> &cars, int first, int last) {
 
     Car* temp;
     int pivot, j, i;
@@ -112,22 +112,22 @@ void Sorting::sort_by_price(vector<Car*>* cars, int first, int last) {
 
         while (i < j) {
             while (
-                (*cars)[i]->getCarPrice() <= (*cars)[pivot]->getCarPrice() && i < last) {
+                cars[i]->getCarPrice() <= cars[pivot]->getCarPrice() && i < last) {
                 i++;
             }
-            while ((*cars)[j]->getCarPrice() > (*cars)[pivot]->getCarPrice()) {
+            while (cars[j]->getCarPrice() > cars[pivot]->getCarPrice()) {
                 j--;
             }
             if (i < j) {
-                temp = (*cars)[i];
-                (*cars)[i] = (*cars)[j];
-                (*cars)[j] = temp;
+                temp = cars[i];
+                cars[i] = cars[j];
+                cars[j] = temp;
             }
         }
 
-        temp = (*cars)[pivot];
-        (*cars)[pivot] = (*cars)[j];
-        (*cars)[j] = temp;
+        temp = cars[pivot];
+        cars[pivot] = cars[j];
+        cars[j] = temp;
 
         sort_by_price(cars, first, j - 1);
         sort_by_price(cars, j + 1, last);
@@ -135,7 +135,7 @@ void Sorting::sort_by_price(vector<Car*>* cars, int first, int last) {
 }
 
 
-void Sorting::sort_by_id(vector<Car*>* cars, int first, int last)
+void Sorting::sort_by_id(vector<Car*> &cars, int first, int last)
 {
 
     Car* temp;
@@ -148,22 +148,22 @@ void Sorting::sort_by_id(vector<Car*>* cars, int first, int last)
 
         while (i < j) {
             while (
-                (*cars)[i]->getID() <= (*cars)[pivot]->getID() && i < last) {
+                cars[i]->getID() <= cars[pivot]->getID() && i < last) {
                 i++;
             }
-            while ((*cars)[j]->getID() > (*cars)[pivot]->getID()) {
+            while (cars[j]->getID() > cars[pivot]->getID()) {
                 j--;
             }
             if (i < j) {
-                temp = (*cars)[i];
-                (*cars)[i] = (*cars)[j];
-                (*cars)[j] = temp;
+                temp = cars[i];
+                cars[i] = cars[j];
+                cars[j] = temp;
             }
         }
 
-        temp = (*cars)[pivot];
-        (*cars)[pivot] = (*cars)[j];
-        (*cars)[j] = temp;
+        temp = cars[pivot];
+        cars[pivot] = cars[j];
+        cars[j] = temp;
 
         sort_by_id(cars, first, j - 1);
         sort_by_id(cars, j + 1, last);
@@ -172,10 +172,10 @@ void Sorting::sort_by_id(vector<Car*>* cars, int first, int last)
 
 
 
-void Sorting::sort(vector<Car*>* cars) {
+void Sorting::sort(vector<Car*> &cars) {
 
     this->first = 0;
-    this->last = cars->size() - 1;
+    this->last = cars.size() - 1;
 
     switch(this->field) {
         case SortingConstants::MAKE:
@@ -196,7 +196,7 @@ void Sorting::sort(vector<Car*>* cars) {
     }
 
     if (this->type == SortingConstants::DESCENDING) {
-        std::reverse(cars->begin(), cars->end());
+        std::reverse(cars.begin(), cars.end());
     }
 }
 

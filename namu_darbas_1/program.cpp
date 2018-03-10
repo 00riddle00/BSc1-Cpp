@@ -78,8 +78,7 @@ double time_spent;
 static ofstream logfile;
 
 
-
-void list_data(Table table, vector<Car*> cars, bool filtered = false) {
+void list_data(Table table, vector<Car*> &cars, bool filtered = false) {
 
     table.print_heading();
 
@@ -114,7 +113,7 @@ void list_data(Table table, vector<Car*> cars, bool filtered = false) {
 }
 
 
-void perform_action(Table table, vector<Car*>* cars) {
+void perform_action(Table table, vector<Car*> &cars) {
 
     cout << "What action would you like to perform? (enter a number)" << endl 
          << "(1) Filter" << endl
@@ -189,9 +188,9 @@ void perform_action(Table table, vector<Car*>* cars) {
 
             filter.setValue(value);
             
-            filter.filter(cars);
-            list_data(table, *cars, true);
-            filter.reset_filter(cars);
+            //filter.filter(cars);
+            list_data(table, cars, true);
+            //filter.reset_filter(cars);
             break;
         }
 
@@ -238,7 +237,7 @@ void perform_action(Table table, vector<Car*>* cars) {
             }
 
             sorting.sort(cars);
-            list_data(table, *cars);
+            list_data(table, cars);
             break;
         }
     }
@@ -330,7 +329,7 @@ int main(int argc, char *argv[]) {
 
         switch (input->getAction()) {
             case 'a': {
-                perform_action(table, &cars);
+                perform_action(table, cars);
                 break;
             }
             case 'g':; { // An empty statement before a label
@@ -399,7 +398,7 @@ int main(int argc, char *argv[]) {
                 Sorting sorting;
                 sorting.setField(SortingConstants::ID);
                 sorting.setType(SortingConstants::ASCENDING);
-                sorting.sort(&cars);
+                sorting.sort(cars);
                 list_data(table, cars);
                 break;
             }
