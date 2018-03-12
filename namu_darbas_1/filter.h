@@ -22,6 +22,9 @@ class Filter {
     void filter_by_price(std::vector<Car*> &cars);
 
     public:
+        Filter();
+        Filter(int field, int type, const std::string& value);
+        ~Filter();
 		void setField(int field);
 		void setType(int type);
         void setValue(const std::string& value);

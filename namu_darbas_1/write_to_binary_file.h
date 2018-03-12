@@ -6,7 +6,7 @@ class WriteToBinaryFile {
     std::string filename;
 
     public:
-        WriteToBinaryFile(const std::string&);
+        explicit WriteToBinaryFile(const std::string&);
         ~WriteToBinaryFile();
 
        void write(const std::string&, int);

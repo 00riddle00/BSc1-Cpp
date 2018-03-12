@@ -62,7 +62,7 @@
 using namespace std;
 
 
-void list_data(Table &table, vector<Car*> &cars, bool filtered = false);
+void list_data(Table &table, vector<Car*> &cars, bool sortedByID = true, bool filtered = false);
 
 void perform_action(Table &table, vector<Car*> &cars);
 
@@ -232,10 +232,6 @@ int main(int argc, char *argv[]) {
                 break;
             }
             case 'l': {
-                Sorting sorting;
-                sorting.setField(SortingConstants::ID);
-                sorting.setType(SortingConstants::ASCENDING);
-                sorting.sort(cars);
                 list_data(table, cars);
                 break;
             }
@@ -273,7 +269,14 @@ int main(int argc, char *argv[]) {
 
 
 
-void list_data(Table &table, vector<Car*> &cars, bool filtered /*= false*/) {
+void list_data(Table &table, vector<Car*> &cars, bool sortedByID /*=true*/, bool filtered /*= false*/) {
+
+    if (sortedByID) {
+        Sorting sorting;
+        sorting.setField(SortingConstants::ID);
+        sorting.setType(SortingConstants::ASCENDING);
+        sorting.sort(cars);
+    }
 
     table.print_heading();
 
@@ -384,7 +387,8 @@ void perform_action(Table &table, vector<Car*> &cars) {
             filter.setValue(value);
             
             filter.filter(cars);
-            list_data(table, cars, true);
+
+            list_data(table, cars, true, true);
             filter.reset_filter(cars);
             break;
         }
@@ -432,7 +436,7 @@ void perform_action(Table &table, vector<Car*> &cars) {
             }
 
             sorting.sort(cars);
-            list_data(table, cars);
+            list_data(table, cars, false);
             break;
         }
     }

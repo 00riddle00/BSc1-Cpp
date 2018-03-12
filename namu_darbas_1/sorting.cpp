@@ -8,6 +8,26 @@
 
 using namespace std;
 
+Sorting::Sorting() {
+#ifndef NDEBUG
+    cout << "[CONSTRUCTOR] Sorting object is created" << endl;
+#endif
+}
+
+Sorting::Sorting(int field, int type) {
+    this->setField(field);
+    this->setType(type);
+#ifndef NDEBUG
+    cout << "[CONSTRUCTOR] Sorting object is created with parameters" << endl;
+#endif
+}
+
+Sorting::~Sorting() {
+#ifndef NDEBUG
+    cout << "[DESTRUCTOR] Sorting object is destroyed" << endl;
+#endif
+}
+
 void Sorting::setField(int field) {
     switch(field) {
         case SortingConstants::MAKE: case SortingConstants::MODEL: case SortingConstants::YEAR: case SortingConstants::PRICE: case SortingConstants::ID:

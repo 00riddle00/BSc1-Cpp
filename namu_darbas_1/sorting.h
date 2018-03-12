@@ -24,6 +24,9 @@ class Sorting {
     void sort_by_id(std::vector<Car*> &cars, int first, int last);
 
     public:
+        Sorting();
+        Sorting(int field, int type);
+        ~Sorting();
 		void setField(int field);
 		void setType(int type);
         void sort(std::vector<Car*> &cars);

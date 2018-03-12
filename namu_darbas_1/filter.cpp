@@ -7,6 +7,26 @@
 
 using namespace std;
 
+Filter::Filter() {
+#ifndef NDEBUG
+    cout << "[CONSTRUCTOR] Filter object is created" << endl;
+#endif
+}
+
+Filter::Filter(int field, int type, const string& value) {
+    this->setField(field);
+    this->setType(type);
+    this->setValue(value);
+#ifndef NDEBUG
+    cout << "[CONSTRUCTOR] Filter object is created with parameters" << endl;
+#endif
+}
+
+Filter::~Filter() {
+#ifndef NDEBUG
+    cout << "[DESTRUCTOR] Filter object is destroyed" << endl;
+#endif
+}
 
 void Filter::filter_by_make(vector<Car*> &cars) {
 

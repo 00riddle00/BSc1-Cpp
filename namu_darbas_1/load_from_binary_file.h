@@ -6,7 +6,7 @@ class LoadFromBinaryFile {
     std::string filename;
 
     public:
-        LoadFromBinaryFile(const std::string&);
+        explicit LoadFromBinaryFile(const std::string&);
         ~LoadFromBinaryFile();
 
         std::string readString(int);

@@ -6,7 +6,7 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 ASCENDING	sorting.h	/^    enum Types { ASCENDING = 1, DESCENDING };$/;"	e	enum:SortingConstants::Types
 CC	Makefile	/^CC=g++$/;"	m
-CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -g -lm -std=c++11$/;"	m
+CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -g -lm -std=c++11 -DNDEBUG$/;"	m
 CONTAINS	filter.h	/^	enum Types { EQUAL = 1, CONTAINS, NOT_EQUAL, DOES_NOT_CONTAIN };$/;"	e	enum:FilterConstants::Types
 Car	car.cpp	/^Car::Car() {$/;"	f	class:Car
 Car	car.cpp	/^Car::Car(int id, bool filter, const string& car_make, const string& car_model, int car_year, int car_price) {$/;"	f	class:Car
@@ -19,6 +19,8 @@ EARLIEST_YEAR	car.h	/^const int EARLIEST_YEAR = 1920;$/;"	v
 EQUAL	filter.h	/^	enum Types { EQUAL = 1, CONTAINS, NOT_EQUAL, DOES_NOT_CONTAIN };$/;"	e	enum:FilterConstants::Types
 Fields	filter.h	/^	enum Fields { MAKE = 1, MODEL, YEAR, PRICE };$/;"	g	namespace:FilterConstants
 Fields	sorting.h	/^    enum Fields { MAKE = 1, MODEL, YEAR, PRICE, ID };$/;"	g	namespace:SortingConstants
+Filter	filter.cpp	/^Filter::Filter() {$/;"	f	class:Filter
+Filter	filter.cpp	/^Filter::Filter(int field, int type, const string& value) {$/;"	f	class:Filter
 Filter	filter.h	/^class Filter {$/;"	c
 FilterConstants	filter.h	/^namespace FilterConstants {$/;"	n
 Helpers	Helpers.h	/^namespace Helpers {$/;"	n
@@ -39,6 +41,8 @@ MODEL	sorting.h	/^    enum Fields { MAKE = 1, MODEL, YEAR, PRICE, ID };$/;"	e	en
 NOT_EQUAL	filter.h	/^	enum Types { EQUAL = 1, CONTAINS, NOT_EQUAL, DOES_NOT_CONTAIN };$/;"	e	enum:FilterConstants::Types
 PRICE	filter.h	/^	enum Fields { MAKE = 1, MODEL, YEAR, PRICE };$/;"	e	enum:FilterConstants::Fields
 PRICE	sorting.h	/^    enum Fields { MAKE = 1, MODEL, YEAR, PRICE, ID };$/;"	e	enum:SortingConstants::Fields
+Sorting	sorting.cpp	/^Sorting::Sorting() {$/;"	f	class:Sorting
+Sorting	sorting.cpp	/^Sorting::Sorting(int field, int type) {$/;"	f	class:Sorting
 Sorting	sorting.h	/^class Sorting {$/;"	c
 SortingConstants	sorting.h	/^namespace SortingConstants {$/;"	n
 Table	table.cpp	/^Table::Table(vector<string> params, vector<size_t> column_widths) {$/;"	f	class:Table
@@ -100,7 +104,7 @@ isCMD	input.cpp	/^bool Input::isCMD() {$/;"	f	class:Input
 isValid	input.cpp	/^bool Input::isValid() {$/;"	f	class:Input
 itf	load_from_binary_file.h	/^    std::ifstream itf;$/;"	m	class:LoadFromBinaryFile
 last	sorting.h	/^    int last;$/;"	m	class:Sorting
-list_data	program.cpp	/^void list_data(Table table, vector<Car*> &cars, bool filtered \/*= false*\/) {$/;"	f
+list_data	program.cpp	/^void list_data(Table &table, vector<Car*> &cars, bool filtered \/*= false*\/) {$/;"	f
 load_from_file	connection.cpp	/^void Connection::load_from_file(vector<Car*> &cars) {$/;"	f	class:Connection
 logfile	program.cpp	/^static ofstream logfile;$/;"	v	file:
 main	program.cpp	/^int main(int argc, char *argv[]) {$/;"	f
@@ -147,6 +151,8 @@ write	write_to_binary_file.cpp	/^void WriteToBinaryFile::write(int number) {$/;"
 write_to_file	connection.cpp	/^void Connection::write_to_file(vector<Car*> &cars) {$/;"	f	class:Connection
 ~Car	car.cpp	/^Car::~Car() {} $/;"	f	class:Car
 ~Connection	connection.cpp	/^Connection::~Connection() {$/;"	f	class:Connection
+~Filter	filter.cpp	/^Filter::~Filter() {$/;"	f	class:Filter
 ~Input	input.cpp	/^Input::~Input() { }$/;"	f	class:Input
 ~LoadFromBinaryFile	load_from_binary_file.cpp	/^LoadFromBinaryFile::~LoadFromBinaryFile() {$/;"	f	class:LoadFromBinaryFile
+~Sorting	sorting.cpp	/^Sorting::~Sorting() {$/;"	f	class:Sorting
 ~WriteToBinaryFile	write_to_binary_file.cpp	/^WriteToBinaryFile::~WriteToBinaryFile() {$/;"	f	class:WriteToBinaryFile
