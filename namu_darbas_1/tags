@@ -104,7 +104,7 @@ isCMD	input.cpp	/^bool Input::isCMD() {$/;"	f	class:Input
 isValid	input.cpp	/^bool Input::isValid() {$/;"	f	class:Input
 itf	load_from_binary_file.h	/^    std::ifstream itf;$/;"	m	class:LoadFromBinaryFile
 last	sorting.h	/^    int last;$/;"	m	class:Sorting
-list_data	program.cpp	/^void list_data(Table &table, vector<Car*> &cars, bool filtered \/*= false*\/) {$/;"	f
+list_data	program.cpp	/^void list_data(Table &table, vector<Car*> &cars, bool sortedByID \/*=true*\/, bool filtered \/*= false*\/) {$/;"	f
 load_from_file	connection.cpp	/^void Connection::load_from_file(vector<Car*> &cars) {$/;"	f	class:Connection
 logfile	program.cpp	/^static ofstream logfile;$/;"	v	file:
 main	program.cpp	/^int main(int argc, char *argv[]) {$/;"	f

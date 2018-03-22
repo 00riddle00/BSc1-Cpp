@@ -78,6 +78,9 @@ clock_t finish;
 double clocks;
 double time_spent;
 
+// TODO ir be static globalus
+// static paslepia rysiu redagavima i vidini (jei dar globalus
+// butu logfile, nesipjautu jie) (matomas tik to failo failo ribose)
 static ofstream logfile;
 
 
