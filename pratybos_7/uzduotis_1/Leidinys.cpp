@@ -72,5 +72,9 @@ int main() {
     for (size_t i = 0; i < size_leidiniai; i++) {
         leidiniai[i]->spausdinti();
     }
+    delete[] leidiniai;
     cout << "---------------------------" << endl;
+    //for (size_t i = 0; i < size_leidiniai; i++) {
+        //delete leidiniai[i];
+    //}
 }
