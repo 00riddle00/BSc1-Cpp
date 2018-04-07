@@ -13,7 +13,7 @@ class Leidinys {
             cout << "Leidinys object is created" << endl;
         }
 
-        ~Leidinys() {
+        virtual ~Leidinys() {
             cout << "Leidinys object is destroyed" << endl;
         }
 
@@ -35,17 +35,17 @@ class Leidinys {
             }
         }
 
-        bool is_paskolintas() {
+        virtual bool is_paskolintas() {
             return paskolintas;
         }
 
-        void paskolinti() {
+        virtual void paskolinti() {
             if (skolinamas) {
                 paskolintas = true;
             }
         }
 
-        void grazinti() {
+        virtual void grazinti() {
             if (paskolintas) {
                 paskolintas = false;
             }
@@ -134,10 +134,6 @@ class AudioIrasas: public Leidinys {
 
 
 class RetaKnyga: public Knyga {
-    void change_skolinamas(bool);
-    void paskolinti();
-    void grazinti();
-    void paskolintas();
 
     public:
         RetaKnyga(string aut = "NA", string pav = "NA", size_t metai=0) : Knyga(aut, pav, metai, false) {
@@ -152,6 +148,21 @@ class RetaKnyga: public Knyga {
             cout <<"RetaKnyga yra neskolinama" << endl;
         }
 
+        void change_skolinamas(bool) {
+            cout << "DEMESIO! Reta knyga nera skolinama" << endl;
+        }
+
+        void paskolinti() {
+            cout << "DEMESIO! Reta knyga nera skolinama" << endl;
+        }
+
+        void grazinti() {
+            cout << "DEMESIO! Reta knyga nera skolinama" << endl;
+        }
+
+        void paskolintas() {
+            cout << "DEMESIO! Reta knyga nera skolinama" << endl;
+        }
 };
 
 int main() {
@@ -184,4 +195,20 @@ int main() {
     leidiniai[0]->print_info();
 
     cout << "---------------------------" << endl;
+    for (size_t i = 0; i < size_leidiniai; i++) {
+        leidiniai[i]->paskolinti();
+        cout << "---------------------------" << endl;
+    }
+    cout << "---------------------------" << endl;
+
+    cout << "---------------------------" << endl;
+    for (size_t i = 0; i < size_leidiniai; i++) {
+        leidiniai[i]->print_info();
+        cout << "---------------------------" << endl;
+    }
+    cout << "---------------------------" << endl;
+
+    for (size_t i = 0; i < size_leidiniai; i++) {
+        delete leidiniai[i];
+    }
 }

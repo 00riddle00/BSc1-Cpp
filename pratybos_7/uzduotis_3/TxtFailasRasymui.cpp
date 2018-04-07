@@ -4,12 +4,13 @@
 #include <streambuf>
 using namespace std;
 
-class TxtFailasRasymui : public std::basic_ofstream {
+class TxtFailasRasymui : public ofstream {
     string fileName;
     ios_base::openmode mode;
 
-    TxtFailasRasymui(const string& file, ios_base::openmode mode = ios_base::out) {
+    TxtFailasRasymui(const string& file, ios_base::openmode mode = ios_base::out) : ofstream(file.c_str()) {
         fileName = file;
+        // FIXME nebutina
         mode = mode;
     }
 

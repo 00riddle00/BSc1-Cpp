@@ -7,7 +7,7 @@ class Leidinys {
             cout << "Leidinys object is created" << endl;
         }
 
-        ~Leidinys() {
+        virtual ~Leidinys() {
             cout << "Leidinys object is destroyed" << endl;
         }
 
@@ -65,16 +65,18 @@ class AudioIrasas: public Leidinys {
 
 int main() {
 
+
     size_t size_leidiniai = 3;
-    Leidinys* leidiniai[size_leidiniai] = {new Knyga, new Zurnalas, new Leidinys};
+    Leidinys* leidiniai[size_leidiniai] = {new Knyga, new Zurnalas, new AudioIrasas};
 
     cout << "---------------------------" << endl;
     for (size_t i = 0; i < size_leidiniai; i++) {
         leidiniai[i]->spausdinti();
     }
-    delete[] leidiniai;
+
     cout << "---------------------------" << endl;
-    //for (size_t i = 0; i < size_leidiniai; i++) {
-        //delete leidiniai[i];
-    //}
+
+    for (size_t i = 0; i < size_leidiniai; i++) {
+        delete leidiniai[i];
+    }
 }
