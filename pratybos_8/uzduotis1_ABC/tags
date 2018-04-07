@@ -1,0 +1,40 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AudioIrasas	Leidinys.cpp	/^        AudioIrasas(string atl = "NA", string pav = "NA", float truk = 60.0) {$/;"	f	class:AudioIrasas
+AudioIrasas	Leidinys.cpp	/^class AudioIrasas: public Leidinys {$/;"	c	file:
+CC	Makefile	/^CC=g++$/;"	m
+CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -g -lm -std=c++11 -DNDEBUG$/;"	m
+Knyga	Leidinys.cpp	/^        Knyga(string aut = "NA", string pav = "NA", size_t metai=0, bool skol=true) {$/;"	f	class:Knyga
+Knyga	Leidinys.cpp	/^class Knyga: public Leidinys {$/;"	c	file:
+Leidinys	Leidinys.cpp	/^        Leidinys(bool skol = true, bool paskol = false) {$/;"	f	class:Leidinys
+Leidinys	Leidinys.cpp	/^class Leidinys {$/;"	c	file:
+RetaKnyga	Leidinys.cpp	/^        RetaKnyga(string aut = "NA", string pav = "NA", size_t metai=0) : Knyga(aut, pav, metai, false) {$/;"	f	class:RetaKnyga
+RetaKnyga	Leidinys.cpp	/^class RetaKnyga: public Knyga {$/;"	c	file:
+atlikejas	Leidinys.cpp	/^    string atlikejas;$/;"	m	class:AudioIrasas	file:
+autorius	Leidinys.cpp	/^    string autorius;$/;"	m	class:Knyga	file:
+change_skolinamas	Leidinys.cpp	/^        void change_skolinamas(bool skol) {$/;"	f	class:Leidinys
+grazinti	Leidinys.cpp	/^        void grazinti() {$/;"	f	class:Leidinys
+is_skolinamas	Leidinys.cpp	/^        bool is_skolinamas() {$/;"	f	class:Leidinys
+is_skolinamas_print	Leidinys.cpp	/^        virtual void is_skolinamas_print() {$/;"	f	class:Leidinys
+is_skolinamas_print	Leidinys.cpp	/^        void is_skolinamas_print() {$/;"	f	class:AudioIrasas
+is_skolinamas_print	Leidinys.cpp	/^        void is_skolinamas_print() {$/;"	f	class:Knyga
+is_skolinamas_print	Leidinys.cpp	/^        void is_skolinamas_print() {$/;"	f	class:RetaKnyga
+leidimo_metai	Leidinys.cpp	/^    size_t leidimo_metai;$/;"	m	class:Knyga	file:
+main	Leidinys.cpp	/^int main() {$/;"	f
+paskolintas	Leidinys.cpp	/^    bool paskolintas;$/;"	m	class:Leidinys	file:
+paskolinti	Leidinys.cpp	/^        void paskolinti() {$/;"	f	class:Leidinys
+pavadinimas	Leidinys.cpp	/^    string pavadinimas;$/;"	m	class:AudioIrasas	file:
+pavadinimas	Leidinys.cpp	/^    string pavadinimas;$/;"	m	class:Knyga	file:
+print_info	Leidinys.cpp	/^        virtual void print_info() {}$/;"	f	class:Leidinys
+print_info	Leidinys.cpp	/^        void print_info() {$/;"	f	class:AudioIrasas
+print_info	Leidinys.cpp	/^        void print_info() {$/;"	f	class:Knyga
+skolinamas	Leidinys.cpp	/^    bool skolinamas;$/;"	m	class:Leidinys	file:
+trukme	Leidinys.cpp	/^    float trukme;$/;"	m	class:AudioIrasas	file:
+~AudioIrasas	Leidinys.cpp	/^        ~AudioIrasas() {$/;"	f	class:AudioIrasas
+~Knyga	Leidinys.cpp	/^        ~Knyga() {$/;"	f	class:Knyga
+~Leidinys	Leidinys.cpp	/^        ~Leidinys() {$/;"	f	class:Leidinys
+~RetaKnyga	Leidinys.cpp	/^        ~RetaKnyga() {$/;"	f	class:RetaKnyga
