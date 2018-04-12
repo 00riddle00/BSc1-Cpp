@@ -1,0 +1,459 @@
+/*==============================================================================
+ |
+ |  Assignment:  Homework #1
+ |
+ |       Author:  Tomas Giedraitis
+ |  Study group:  VU MIF INFO1, 1st group
+ |     Contacts:  tomasgiedraitis@gmail.com
+ |        Class:  Programming Basics
+ |         Date:  March 8th, 2018
+ |
+ |     Language:  C++ (using gcc on Lenovo Y50-70, OS: Arch Linux x86_64)
+ |
+ +-----------------------------------------------------------------------------
+ |
+ |  Description:  A car database program, where one can perform get, list, 
+ |                create, edit, delete and clear operations. There are four fields
+ | 				  for each car entry: (1) Make (2) Model (3) Year (4) Price. The 
+ | 			      database is loaded from and saved to the binary file. The user
+ | 				  can also perform sorting (ascending, descending) actions by each
+ | 			      of the four fields, and also filtering by each field. There are 
+ | 			      four filtering options: (1) Value is equal (2) Value contains 
+ | 				  (3) Value is not equal (4) Value does not contain. After sorting
+ | 			      or filtering, the changed database output is displayed to the 
+ | 			      screen. Each time the program runs, the log entry is created in 
+ |                ./log.txt file, with the info about the beginning of the program 
+ |                 and how much time did it run.
+ |
+ |  Constraints:  
+ |                
+ |	    Input:    Command line input by user
+ |
+ |	    Output:   Prompt messages, validation errors and final results
+ |                are displayed one per line to the standard output.
+ |
+ |  Known bugs:   
+ |                
+ |       TODOS:   (1) Add unit tests
+ |
+ | Version
+ | updates:       Version 1.5
+ |
+ +===========================================================================*/
+
+#include <string>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <ctime>
+
+#include "Helpers.h"
+#include "input.h"
+#include "car.h"
+#include "table.h"
+#include "connection.h"
+#include "filter.h"
+#include "sorting.h"
+
+#define LOGFILE "log.txt"
+
+using namespace std;
+
+
+void list_data(Table &table, vector<Car*> &cars, bool sortedByID = true, bool filtered = false);
+
+void perform_action(Table &table, vector<Car*> &cars);
+
+// this function gets called with atexit()
+// writes logging info to a log file and 
+// displays goodbye message
+void exiting();
+
+
+clock_t start;
+clock_t finish;
+
+double clocks;
+double time_spent;
+
+// TODO ir be static globalus
+// static paslepia rysiu redagavima i vidini (jei dar globalus
+// butu logfile, nesipjautu jie) (matomas tik to failo failo ribose)
+static ofstream logfile;
+
+
+int main(int argc, char *argv[]) {
+
+    Table table({"ID", "Make", "Model", "Year", "Price"}, {4, 30, 30, 10, 10});
+
+    std::vector<Car*> cars;
+
+    if (argc < 2) {
+        cout << "USAGE: test <dbfile> <action> [action params]" << endl;
+        exit(1);
+    }
+
+    logfile.open(LOGFILE, std::ofstream::out | std::ofstream::app);
+
+    // current date/time based on current system
+    time_t now = time(0);
+
+    // convert now to string form
+    char* current_time = ctime(&now);
+
+    logfile << "Starting program @" << current_time;
+
+    start = clock();
+
+    /* register the termination function */
+    atexit(exiting);
+
+    Connection* conn = new Connection(argv[1]);
+    conn->load_from_file(cars);
+
+    string about = "This is a car database program, where one can perform get, list, create, edit and delete "
+            "operations. The database is loaded from and saved to the binary file. Version: v.0";
+
+    string info = "Usage: in the main shell, input the Action[1] and ID[2].\n\n[1] Action - g=get, l=list, "
+        "s=set, d=delete, c=clear database, q=quit, i=info.\n[2] ID - a positive integer. Only get, "
+        "set and delete operations require ID parameter.\nExamples: (1) get 1 (get 1st element) (2) l (list elements) "
+        "(3) set 2 (set 2nd element)";
+
+    string separator = "---------------------------------------------------";
+
+    /* initialize input variable*/
+    Input* input = new Input;
+
+    cout << about << "\n\n";
+    cout << separator << endl;
+    cout << info << "\n\n";
+
+    // process input from argv
+    if (argc > 2) {
+        input->setCMD();
+        input->add(argv[2]);
+
+        if (argc > 3) {
+            input->add(argv[3]);
+        }
+        
+        if (argc > 4) {
+            cout << "Too many arguments" << endl;
+            input->clear_input();
+        }
+    }
+
+    // main control loop
+    while (1) {
+        cout << separator << endl;
+        
+        // FIXME what if input is valid?
+        // in case of argv input
+        if (input->isCMD()) {
+            input->unsetCMD();
+            if (!input->isValid()) {
+                input->clear_input();
+                continue;
+            }
+        // else get input from user
+        } else {
+            input->clear_input();
+            input->get_input();
+            if (!input->isValid()) {
+                input->clear_input();
+                continue;
+            }
+        }
+
+        switch (input->getAction()) {
+            case 'a': {
+                perform_action(table, cars);
+                break;
+            }
+            case 'g':; { // An empty statement before a label
+                bool id_set = false;
+
+                for (size_t i = 0; i < cars.size(); i++) {
+                    if (cars[i]->getID() == input->getID()) {
+                        vector<Car*> car = {cars[i]};
+                        list_data(table, car);
+                        id_set = true;
+                        break;
+                    }
+                }
+                if (!id_set) {
+                    cout << "ID is not set" << endl;
+                }
+                break;
+            }
+            case 's':; { // An empty statement before a label
+                int id = input->getID();
+				int index = -1;
+
+                for (size_t i = 0; i < cars.size(); i++) {
+                    if (cars[i]->getID() == id) {
+                        cout << "Such entry already exists:" << endl;
+                        vector<Car*> car = {cars[i]};
+                        list_data(table, car);
+                        index = i;
+                    }
+                }
+
+                if (index < 0 || (index >= 0 && Helpers::choice("Would you like to change it?"))) {
+                    Car* car = new Car;
+                    car->getCar(id);
+
+                    if (Helpers::choice("Would you like to save?")) {
+						if (index >= 0) {
+							cars[index] = car;
+						} else {
+							cars.push_back(car);
+						}
+                        conn->write_to_file(cars);
+						cout << "Successfully saved, ID = " << id << endl;
+                    }
+                }
+                break;
+            }
+            case 'd': {
+                bool id_set = false;
+                for (size_t i = 0; i < cars.size(); i++) {
+                    if (cars[i]->getID() == input->getID()) {
+                        if (Helpers::choice("Do you really want to delete this entry?")) {
+                            cars.erase(cars.begin()+i);
+                            conn->write_to_file(cars);
+                            id_set = true;
+                        }
+                        break;
+                    }
+                }
+                if (!id_set) {
+                    cout << "There is no such entry with this ID" << endl;
+                }
+                break;
+            }
+            case 'l': {
+                list_data(table, cars);
+                break;
+            }
+            case 'c': {
+                if (!cars.size()) {
+                    cout << "Database has no entries. Nothing to clear." << endl;
+                    break;
+                }
+                if (Helpers::choice("Do you really want to clear the entire database?")) {
+                    cars.clear();
+                } else {
+                    break;
+                }
+                conn->write_to_file(cars);
+                break;
+            }
+            case 'i': {
+                cout << separator << endl;
+                cout << info << "\n\n";
+                break;
+            } 
+            case 'q': {
+                delete input;
+                delete conn;
+                return 0;
+            }
+            default: {
+                cout << "Invalid action, only: g=get, s=set, d=delete, l=list, q=quit, i=info" << endl;
+            }
+        }
+
+    }
+}
+
+
+
+
+void list_data(Table &table, vector<Car*> &cars, bool sortedByID /*=true*/, bool filtered /*= false*/) {
+
+    if (sortedByID) {
+        Sorting sorting;
+        sorting.setField(SortingConstants::ID);
+        sorting.setType(SortingConstants::ASCENDING);
+        sorting.sort(cars);
+    }
+
+    table.print_heading();
+
+    if (cars.size() == 0) {
+        cout << "No entries." << endl;
+        return;
+    }
+
+    if (!filtered) {
+        for (size_t i = 0; i < cars.size(); i++) {
+            table.printEntry({
+                    to_string(cars[i]->getID()),
+                    cars[i]->getCarMake(),
+                    cars[i]->getCarModel(),
+                    to_string(cars[i]->getCarYear()),
+                    to_string(cars[i]->getCarPrice())
+                    });
+        }
+    } else {
+        for (size_t i = 0; i < cars.size(); i++) {
+            if (cars[i]->getFilter()) {
+                table.printEntry({
+                        to_string(cars[i]->getID()),
+                        cars[i]->getCarMake(),
+                        cars[i]->getCarModel(),
+                        to_string(cars[i]->getCarYear()),
+                        to_string(cars[i]->getCarPrice())
+                        });
+            }
+        }
+    }
+}
+
+
+void perform_action(Table &table, vector<Car*> &cars) {
+
+    cout << "What action would you like to perform? (enter a number)" << endl 
+         << "(1) Filter" << endl
+         << "(2) Sort" << endl;
+
+    int action;
+
+    while(1) {
+        cout << "(Enter a number) > ";
+        cin >> action;
+
+        if (action < 1 || action > 2) {
+            cout << "Such option does not exist" << endl;
+            continue;
+        }
+        break;
+    }
+
+    int field; 
+    int type;
+
+    switch(action) {
+        case 1: {
+            Filter filter;
+
+            cout << "By which field would you like to filter? (enter a number)" << endl
+                 << "(1) Make" << endl
+                 << "(2) Model" << endl
+                 << "(3) Year" << endl
+                 << "(4) Price" << endl;
+
+            while(1) {
+                cout << "(Enter a number) > ";
+                cin >> field;
+
+                try {
+                    filter.setField(field);
+                } catch (const std::invalid_argument& e) {
+                    cout << e.what() << endl;
+                    continue;
+                }
+                cin.get();
+                break;
+            }
+
+            cout << "How would you like to filter?" << endl
+                 << "(1) Entry is equal to the given value" << endl
+                 << "(2) Entry contains the given value" << endl
+                 << "(3) Entry is not equal to the given value" << endl
+                 << "(4) Entry does not contain the given value" << endl;
+
+            while(1) {
+                cout << "(Enter a number) > ";
+                cin >> type;
+
+                try {
+                    filter.setType(type);
+                } catch (const std::invalid_argument& e) {
+                    cout << e.what() << endl;
+                    continue;
+                }
+                cin.get();
+                break;
+            }
+
+            cout << "Please enter a value to be filtered by" << endl;
+
+            string value;
+            cout << "(Enter a value) > ";
+            cin >> value;
+            cin.get();
+
+            filter.setValue(value);
+            
+            filter.filter(cars);
+
+            list_data(table, cars, true, true);
+            filter.reset_filter(cars);
+            break;
+        }
+
+        case 2: {
+            Sorting sorting;
+
+            cout << "By which field would you like to sort? (enter a number)" << endl
+                 << "(1) Make" << endl
+                 << "(2) Model" << endl
+                 << "(3) Year" << endl
+                 << "(4) Price" << endl
+                 << "(5) ID" << endl;
+
+            while(1) {
+                cout << "(Enter a number) > ";
+                cin >> field;
+
+                try {
+                    sorting.setField(field);
+                } catch (const std::invalid_argument& e) {
+                    cout << e.what() << endl;
+                    continue;
+                }
+                cin.get();
+                break;
+            }
+
+            cout << "How would you like to sort?" << endl
+                 << "(1) Ascending order" << endl
+                 << "(2) Descending order" << endl;
+
+            while(1) {
+                cout << "(Enter a number) > ";
+                cin >> type;
+
+                try {
+                    sorting.setType(type);
+                } catch (const std::invalid_argument& e) {
+                    cout << e.what() << endl;
+                    continue;
+                }
+                cin.get();
+                break;
+            }
+
+            sorting.sort(cars);
+            list_data(table, cars, false);
+            break;
+        }
+    }
+}
+
+void exiting() {
+    finish = clock();
+
+    clocks = (double)(finish - start);
+    time_spent = clocks / CLOCKS_PER_SEC;
+    logfile << "Time spent: " << time_spent << " seconds" << endl
+            << string(20, '-') << endl;
+    logfile.close();
+    cout << "Goodbye!" << endl;
+}
+
+

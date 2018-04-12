@@ -1,0 +1,158 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ASCENDING	sorting.h	/^    enum Types { ASCENDING = 1, DESCENDING };$/;"	e	enum:SortingConstants::Types
+CC	Makefile	/^CC=g++$/;"	m
+CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -g -lm -std=c++11 -DNDEBUG$/;"	m
+CONTAINS	filter.h	/^	enum Types { EQUAL = 1, CONTAINS, NOT_EQUAL, DOES_NOT_CONTAIN };$/;"	e	enum:FilterConstants::Types
+Car	car.cpp	/^Car::Car() {$/;"	f	class:Car
+Car	car.cpp	/^Car::Car(int id, bool filter, const string& car_make, const string& car_model, int car_year, int car_price) {$/;"	f	class:Car
+Car	car.h	/^class Car {$/;"	c
+Connection	connection.cpp	/^Connection::Connection(const string& filename) {$/;"	f	class:Connection
+Connection	connection.h	/^class Connection {$/;"	c
+DESCENDING	sorting.h	/^    enum Types { ASCENDING = 1, DESCENDING };$/;"	e	enum:SortingConstants::Types
+DOES_NOT_CONTAIN	filter.h	/^	enum Types { EQUAL = 1, CONTAINS, NOT_EQUAL, DOES_NOT_CONTAIN };$/;"	e	enum:FilterConstants::Types
+EARLIEST_YEAR	car.h	/^const int EARLIEST_YEAR = 1920;$/;"	v
+EQUAL	filter.h	/^	enum Types { EQUAL = 1, CONTAINS, NOT_EQUAL, DOES_NOT_CONTAIN };$/;"	e	enum:FilterConstants::Types
+Fields	filter.h	/^	enum Fields { MAKE = 1, MODEL, YEAR, PRICE };$/;"	g	namespace:FilterConstants
+Fields	sorting.h	/^    enum Fields { MAKE = 1, MODEL, YEAR, PRICE, ID };$/;"	g	namespace:SortingConstants
+Filter	filter.cpp	/^Filter::Filter() {$/;"	f	class:Filter
+Filter	filter.cpp	/^Filter::Filter(int field, int type, const string& value) {$/;"	f	class:Filter
+Filter	filter.h	/^class Filter {$/;"	c
+FilterConstants	filter.h	/^namespace FilterConstants {$/;"	n
+Helpers	Helpers.h	/^namespace Helpers {$/;"	n
+ID	sorting.h	/^    enum Fields { MAKE = 1, MODEL, YEAR, PRICE, ID };$/;"	e	enum:SortingConstants::Fields
+Input	input.cpp	/^Input::Input() {$/;"	f	class:Input
+Input	input.h	/^class Input {$/;"	c
+LATEST_YEAR	car.h	/^const int LATEST_YEAR = 2018;$/;"	v
+LOGFILE	program.cpp	60;"	d	file:
+LoadFromBinaryFile	load_from_binary_file.cpp	/^LoadFromBinaryFile::LoadFromBinaryFile(const string& filename) {$/;"	f	class:LoadFromBinaryFile
+LoadFromBinaryFile	load_from_binary_file.h	/^class LoadFromBinaryFile {$/;"	c
+MAKE	filter.h	/^	enum Fields { MAKE = 1, MODEL, YEAR, PRICE };$/;"	e	enum:FilterConstants::Fields
+MAKE	sorting.h	/^    enum Fields { MAKE = 1, MODEL, YEAR, PRICE, ID };$/;"	e	enum:SortingConstants::Fields
+MAX_ENTRY_SIZE	car.h	/^const int MAX_ENTRY_SIZE = 30;$/;"	v
+MAX_PARAMS	input.h	/^const int MAX_PARAMS = 2;$/;"	v
+MAX_PRICE	car.h	/^const int MAX_PRICE = 1e9;$/;"	v
+MODEL	filter.h	/^	enum Fields { MAKE = 1, MODEL, YEAR, PRICE };$/;"	e	enum:FilterConstants::Fields
+MODEL	sorting.h	/^    enum Fields { MAKE = 1, MODEL, YEAR, PRICE, ID };$/;"	e	enum:SortingConstants::Fields
+NOT_EQUAL	filter.h	/^	enum Types { EQUAL = 1, CONTAINS, NOT_EQUAL, DOES_NOT_CONTAIN };$/;"	e	enum:FilterConstants::Types
+PRICE	filter.h	/^	enum Fields { MAKE = 1, MODEL, YEAR, PRICE };$/;"	e	enum:FilterConstants::Fields
+PRICE	sorting.h	/^    enum Fields { MAKE = 1, MODEL, YEAR, PRICE, ID };$/;"	e	enum:SortingConstants::Fields
+Sorting	sorting.cpp	/^Sorting::Sorting() {$/;"	f	class:Sorting
+Sorting	sorting.cpp	/^Sorting::Sorting(int field, int type) {$/;"	f	class:Sorting
+Sorting	sorting.h	/^class Sorting {$/;"	c
+SortingConstants	sorting.h	/^namespace SortingConstants {$/;"	n
+Table	table.cpp	/^Table::Table(vector<string> params, vector<size_t> column_widths) {$/;"	f	class:Table
+Table	table.h	/^class Table {$/;"	c
+Types	filter.h	/^	enum Types { EQUAL = 1, CONTAINS, NOT_EQUAL, DOES_NOT_CONTAIN };$/;"	g	namespace:FilterConstants
+Types	sorting.h	/^    enum Types { ASCENDING = 1, DESCENDING };$/;"	g	namespace:SortingConstants
+WriteToBinaryFile	write_to_binary_file.cpp	/^WriteToBinaryFile::WriteToBinaryFile(const string& filename) {$/;"	f	class:WriteToBinaryFile
+WriteToBinaryFile	write_to_binary_file.h	/^class WriteToBinaryFile {$/;"	c
+YEAR	filter.h	/^	enum Fields { MAKE = 1, MODEL, YEAR, PRICE };$/;"	e	enum:FilterConstants::Fields
+YEAR	sorting.h	/^    enum Fields { MAKE = 1, MODEL, YEAR, PRICE, ID };$/;"	e	enum:SortingConstants::Fields
+__CAR_H_	car.h	2;"	d
+__CONNECTION_H_	connection.h	2;"	d
+__FILTER_H_	filter.h	2;"	d
+__INPUT_H_	input.h	2;"	d
+__LOAD_FROM_BINARY_FILE_H_	load_from_binary_file.h	2;"	d
+__SORTING_H_	sorting.h	2;"	d
+__TABLE_H_	table.h	2;"	d
+__WRITE_TO_BINARY_FILE_H_	write_to_binary_file.h	2;"	d
+add	input.cpp	/^void Input::add(const string& param) {$/;"	f	class:Input
+car_make	car.h	/^    std::string car_make;$/;"	m	class:Car
+car_model	car.h	/^    std::string car_model;$/;"	m	class:Car
+car_price	car.h	/^    int car_price;$/;"	m	class:Car
+car_year	car.h	/^    int car_year;$/;"	m	class:Car
+choice	Helpers.cpp	/^int Helpers::choice(const string& message) {$/;"	f	class:Helpers
+clear_input	input.cpp	/^void Input::clear_input() {$/;"	f	class:Input
+clocks	program.cpp	/^double clocks;$/;"	v
+close	load_from_binary_file.cpp	/^void LoadFromBinaryFile::close() {$/;"	f	class:LoadFromBinaryFile
+close	write_to_binary_file.cpp	/^void WriteToBinaryFile::close() {$/;"	f	class:WriteToBinaryFile
+cmd	input.h	/^    bool cmd;$/;"	m	class:Input
+column_widths	table.h	/^    std::vector<size_t> column_widths;$/;"	m	class:Table
+count	input.h	/^    int count;$/;"	m	class:Input
+exiting	program.cpp	/^void exiting() {$/;"	f
+field	filter.h	/^    FilterConstants::Fields field;$/;"	m	class:Filter
+field	sorting.h	/^    SortingConstants::Fields field;$/;"	m	class:Sorting
+filename	connection.h	/^    std::string filename;$/;"	m	class:Connection
+filename	load_from_binary_file.h	/^    std::string filename;$/;"	m	class:LoadFromBinaryFile
+filename	write_to_binary_file.h	/^    std::string filename;$/;"	m	class:WriteToBinaryFile
+filter	car.h	/^    bool filter;$/;"	m	class:Car
+filter	filter.cpp	/^void Filter::filter(vector<Car*> &cars) {$/;"	f	class:Filter
+filter_by_make	filter.cpp	/^void Filter::filter_by_make(vector<Car*> &cars) {$/;"	f	class:Filter
+filter_by_model	filter.cpp	/^void Filter::filter_by_model(vector<Car*> &cars) {$/;"	f	class:Filter
+filter_by_price	filter.cpp	/^void Filter::filter_by_price(vector<Car*> &cars) {$/;"	f	class:Filter
+filter_by_year	filter.cpp	/^void Filter::filter_by_year(vector<Car*> &cars) {$/;"	f	class:Filter
+finish	program.cpp	/^clock_t finish;$/;"	v
+first	sorting.h	/^    int first;$/;"	m	class:Sorting
+getAction	input.cpp	/^char Input::getAction() {$/;"	f	class:Input
+getCar	car.cpp	/^void Car::getCar(int id) {$/;"	f	class:Car
+getCarMake	car.cpp	/^const string& Car::getCarMake() {$/;"	f	class:Car
+getCarModel	car.cpp	/^const string& Car::getCarModel() {$/;"	f	class:Car
+getCarPrice	car.cpp	/^int Car::getCarPrice() {$/;"	f	class:Car
+getCarYear	car.cpp	/^int Car::getCarYear() {$/;"	f	class:Car
+getFilter	car.cpp	/^bool Car::getFilter() {$/;"	f	class:Car
+getID	car.cpp	/^int Car::getID() {$/;"	f	class:Car
+getID	input.cpp	/^int Input::getID() {$/;"	f	class:Input
+get_input	input.cpp	/^void Input::get_input() {$/;"	f	class:Input
+id	car.h	/^    int id;$/;"	m	class:Car
+input	connection.h	/^    std::ifstream input;$/;"	m	class:Connection
+isCMD	input.cpp	/^bool Input::isCMD() {$/;"	f	class:Input
+isValid	input.cpp	/^bool Input::isValid() {$/;"	f	class:Input
+itf	load_from_binary_file.h	/^    std::ifstream itf;$/;"	m	class:LoadFromBinaryFile
+last	sorting.h	/^    int last;$/;"	m	class:Sorting
+list_data	program.cpp	/^void list_data(Table &table, vector<Car*> &cars, bool sortedByID \/*=true*\/, bool filtered \/*= false*\/) {$/;"	f
+load_from_file	connection.cpp	/^void Connection::load_from_file(vector<Car*> &cars) {$/;"	f	class:Connection
+logfile	program.cpp	/^static ofstream logfile;$/;"	v	file:
+main	program.cpp	/^int main(int argc, char *argv[]) {$/;"	f
+otf	write_to_binary_file.h	/^    std::ofstream otf;$/;"	m	class:WriteToBinaryFile
+output	connection.h	/^    std::ofstream output;$/;"	m	class:Connection
+params	input.h	/^    std::string params[MAX_PARAMS];$/;"	m	class:Input
+params	table.h	/^    std::vector<std::string> params;$/;"	m	class:Table
+perform_action	program.cpp	/^void perform_action(Table &table, vector<Car*> &cars) {$/;"	f
+printEntry	table.cpp	/^void Table::printEntry(vector<string> args) {$/;"	f	class:Table
+print_heading	table.cpp	/^void Table::print_heading() {$/;"	f	class:Table
+readFloat	load_from_binary_file.cpp	/^float LoadFromBinaryFile::readFloat() {$/;"	f	class:LoadFromBinaryFile
+readInt	load_from_binary_file.cpp	/^int LoadFromBinaryFile::readInt() {$/;"	f	class:LoadFromBinaryFile
+readString	load_from_binary_file.cpp	/^string LoadFromBinaryFile::readString(int len) {$/;"	f	class:LoadFromBinaryFile
+reset_filter	filter.cpp	/^void Filter::reset_filter(vector<Car*> &cars) {$/;"	f	class:Filter
+setCMD	input.cpp	/^void Input::setCMD() {$/;"	f	class:Input
+setCarMake	car.cpp	/^void Car::setCarMake(const string& car_make) {$/;"	f	class:Car
+setCarModel	car.cpp	/^void Car::setCarModel(const string& car_model) {$/;"	f	class:Car
+setCarPrice	car.cpp	/^void Car::setCarPrice(int car_price) {$/;"	f	class:Car
+setCarYear	car.cpp	/^void Car::setCarYear(int car_year) {$/;"	f	class:Car
+setColumnWidths	table.cpp	/^void Table::setColumnWidths(vector<size_t> column_widths) {$/;"	f	class:Table
+setField	filter.cpp	/^void Filter::setField(int field) {$/;"	f	class:Filter
+setField	sorting.cpp	/^void Sorting::setField(int field) {$/;"	f	class:Sorting
+setFilter	car.cpp	/^void Car::setFilter(bool filter) {$/;"	f	class:Car
+setID	car.cpp	/^void Car::setID(int id) {$/;"	f	class:Car
+setParams	table.cpp	/^void Table::setParams(vector<string> params) {$/;"	f	class:Table
+setType	filter.cpp	/^void Filter::setType(int type) {$/;"	f	class:Filter
+setType	sorting.cpp	/^void Sorting::setType(int type) {$/;"	f	class:Sorting
+setValue	filter.cpp	/^void Filter::setValue(const string& value) {$/;"	f	class:Filter
+sort	sorting.cpp	/^void Sorting::sort(vector<Car*> &cars) {$/;"	f	class:Sorting
+sort_by_id	sorting.cpp	/^void Sorting::sort_by_id(vector<Car*> &cars, int first, int last)$/;"	f	class:Sorting
+sort_by_price	sorting.cpp	/^void Sorting::sort_by_price(vector<Car*> &cars, int first, int last) {$/;"	f	class:Sorting
+sort_by_year	sorting.cpp	/^void Sorting::sort_by_year(vector<Car*> &cars, int first, int last) {$/;"	f	class:Sorting
+sort_lex_by_make	sorting.cpp	/^void Sorting::sort_lex_by_make(vector<Car*> &cars) {$/;"	f	class:Sorting
+sort_lex_by_model	sorting.cpp	/^void Sorting::sort_lex_by_model(vector<Car*> &cars) {$/;"	f	class:Sorting
+start	program.cpp	/^clock_t start;$/;"	v
+time_spent	program.cpp	/^double time_spent;$/;"	v
+type	filter.h	/^    FilterConstants::Types type;$/;"	m	class:Filter
+type	sorting.h	/^    SortingConstants::Types type;$/;"	m	class:Sorting
+unsetCMD	input.cpp	/^void Input::unsetCMD() {$/;"	f	class:Input
+value	filter.h	/^    std::string value;$/;"	m	class:Filter
+write	write_to_binary_file.cpp	/^void WriteToBinaryFile::write(const string& line, int size) {$/;"	f	class:WriteToBinaryFile
+write	write_to_binary_file.cpp	/^void WriteToBinaryFile::write(float number) {$/;"	f	class:WriteToBinaryFile
+write	write_to_binary_file.cpp	/^void WriteToBinaryFile::write(int number) {$/;"	f	class:WriteToBinaryFile
+write_to_file	connection.cpp	/^void Connection::write_to_file(vector<Car*> &cars) {$/;"	f	class:Connection
+~Car	car.cpp	/^Car::~Car() {} $/;"	f	class:Car
+~Connection	connection.cpp	/^Connection::~Connection() {$/;"	f	class:Connection
+~Filter	filter.cpp	/^Filter::~Filter() {$/;"	f	class:Filter
+~Input	input.cpp	/^Input::~Input() { }$/;"	f	class:Input
+~LoadFromBinaryFile	load_from_binary_file.cpp	/^LoadFromBinaryFile::~LoadFromBinaryFile() {$/;"	f	class:LoadFromBinaryFile
+~Sorting	sorting.cpp	/^Sorting::~Sorting() {$/;"	f	class:Sorting
+~WriteToBinaryFile	write_to_binary_file.cpp	/^WriteToBinaryFile::~WriteToBinaryFile() {$/;"	f	class:WriteToBinaryFile
