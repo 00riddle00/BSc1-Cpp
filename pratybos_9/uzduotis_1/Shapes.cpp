@@ -1,4 +1,4 @@
-#include<iostream>
+#include <iostream>
 #include <iomanip>
 #include <vector>
 
@@ -9,32 +9,35 @@
 #define M_PI (3.14159265358979323846)
 #endif
 
-#include "object.h"
-#include "mystack.h"
-#include "automobilis.h"
-
-// FIXME rm this temp solution
-//#include "mystack.cpp"
-//#include "object.cpp"
 using namespace std;
+
 // Pure abstract class
-class GeomFigura : public Object {
+class GeomFigura {
+    static size_t kiek;
 
     public:
         GeomFigura() {
+            ++kiek;
             cout << "GeomFigura is created" << endl;
         }
 
         virtual ~GeomFigura() = 0;
 
+        static size_t kiekGeomFiguru();
+
         virtual void printInfo() = 0;
 
         virtual float plotas() const = 0;
-
-        virtual float turis() const = 0;
 };
 
+size_t GeomFigura::kiek = 0;
+
+size_t GeomFigura::kiekGeomFiguru() {
+    return kiek;
+}
+
 GeomFigura::~GeomFigura() {
+    --kiek;
     cout << "GeomFigura is destroyed" << endl;
 }
 
@@ -53,10 +56,6 @@ class Figura2D : public GeomFigura {
         void printCoordinates() {
             cout << "Coordinates: x = " << fixed << setprecision(1) << x_coordinate
                  << ", y = " << y_coordinate << endl;
-        }
-
-        virtual float turis() const override {
-            return 0.0;
         }
 };
 
@@ -81,6 +80,8 @@ class Figura3D : public GeomFigura {
             cout << "Coordinates: x = " << fixed << setprecision(1) << x_coordinate
                  << ", y = " << y_coordinate << ", z = " << z_coordinate << endl;
         }
+
+        virtual float turis() const = 0;
 };
 
 Figura3D::~Figura3D() {
@@ -187,59 +188,39 @@ class Sfera : public Figura3D {
         }
 };
 
-
-int main()
-{
-    AutoStack S;
-
-    S.MyStackPrint();
-
-    Object* auto1 = new Automobilis("Skoda", "Octavia", 2.0, 2010, 4000);
-    Object* auto2 = new Automobilis("Volkswagen", "Golf", 2.0, 2006, 3000);
-
-    Object* kvadr1 = new Kvadratas(2.0, 3.0, 4.0);
-    Object* kvadr2 = new Kvadratas(3.0, 5.0, 8.0);
-
-    if (!S.push(auto1)) {
-        delete auto1;
-    }
-
-    if (!S.push(auto2)) {
-        delete auto2;
-    }
-
-    S.push(kvadr1);
-    S.push(kvadr2);
-   
-    cout << "----------------" << endl;
-    S.MyStackPrint();
-    cout << "----------------" << endl;
-
-    try {
-        auto2 = S.pop();
-    } catch(const char* s) {
-        cout << s << endl;
-    }
-
-    cout << "Popped value is: " << endl;
-
-    //auto2->print();
-
-    cout << "----------------" << endl;
-    S.MyStackPrint();
-    cout << "----------------" << endl;
-
-
-/*    Automobilis* auto3 = new Automobilis("BMW", "520", 2.0, 2010, 4000);*/
-    //Automobilis* auto4 = new Automobilis("Audi", "100", 2.0, 2006, 3000);
-
-    //Automobilis* autos[] = {auto3, auto4};
-    //AutoStack S2(autos, sizeof(autos)/sizeof(autos[0]));
-
-    //cout << "----------------" << endl;
-    //S2.MyStackPrint();
-    //cout << "----------------" << endl;
-
-    /*delete auto2;*/
+void spausdintiPlota(const GeomFigura* f) {
+    cout << "plotas: " << f->plotas() << endl;
 }
 
+int main() {
+
+    vector<GeomFigura*> geomFiguros = {
+        new Kvadratas(1.0, 2.0, 5.0),
+        new Skritulys(3.0, 4.0, 6.0),
+        new Kubas(1.0, 2.0, 3.0, 8.0),
+        new Sfera(3.0, 4.0, 5.0, 2.0)
+    };
+
+    cout << "---------------------------" << endl;
+    for (size_t i = 0; i < geomFiguros.size(); i++) {
+        geomFiguros[i]->printInfo();
+        cout << "Plotas = " << fixed << setprecision(2) << geomFiguros[i]->plotas() << endl;
+        Figura3D *fig3d = dynamic_cast<Figura3D*>(geomFiguros[i]);
+        if (fig3d != nullptr) {
+            cout << "Turis = " << fixed << setprecision(2) << fig3d->turis() << endl;
+        }
+        cout << "TypeInfo.name(): " << typeid(*geomFiguros[i]).name() << endl;
+        cout << "---------------------------" << endl;
+    }
+    cout << "---------------------------" << endl;
+
+    cout << "Funkcija spausdintiPlota:" << endl << endl;
+    for (size_t i = 0; i < geomFiguros.size(); i++) {
+        spausdintiPlota(geomFiguros[i]);
+        cout << "---------------------------" << endl;
+    }
+    cout << "---------------------------" << endl;
+
+    for (size_t i = 0; i < geomFiguros.size(); i++)
+        delete geomFiguros[i];
+}

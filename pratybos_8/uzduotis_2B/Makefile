@@ -8,13 +8,17 @@ tauto: tauto.o automobilis.o
 tauto.o: tauto.cpp automobilis.h
 	$(CC) $(CFLAGS) tauto.cpp -c
 
-tstack: automobilis.o tstack.o 
-	$(CC) $(CFLAGS) automobilis.o tstack.o -o tstack
+tstack: automobilis.o tstack.o object.o mystack.o
+	$(CC) $(CFLAGS) automobilis.o tstack.o object.o mystack.o -o tstack
 
 tstack.o: automobilis.h tstack.cpp 
 	$(CC) $(CFLAGS) tstack.cpp -c
 
-mystack.o: automobilis.o mystack.cpp mystack.h 
+object.o: object.h object.cpp
+	$(CC) $(CFLAGS) object.cpp -c
+
+#mystack.o: automobilis.o mystack.cpp mystack.h 
+mystack.o: mystack.cpp mystack.h object.h
 	$(CC) $(CFLAGS) mystack.cpp -c
 
 automobilis.o: automobilis.cpp automobilis.h

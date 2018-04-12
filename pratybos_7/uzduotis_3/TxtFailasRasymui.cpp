@@ -7,6 +7,22 @@ class TxtFailasRasymui : public ofstream {
     string fileName;
     ios_base::openmode mode;
 
+    int kiekEiluciu() {
+        ifstream in(fileName.c_str());
+
+        int count = 0;
+        string word;
+
+        while (in >> word)
+            count++;
+
+        cout << "word count is: " << count << endl;
+
+        in.close();
+
+        return count;
+    }
+
     public: 
         TxtFailasRasymui(const string& file, ios_base::openmode mode = ios_base::out) : ofstream(file.c_str()), fileName(file), mode(mode) { }
 

@@ -1,0 +1,48 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+CC	Makefile	/^CC=g++$/;"	m
+CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -g -lm -std=c++11 -DNDEBUG$/;"	m
+Figura2D	Shapes.cpp	/^        Figura2D(float x, float y) : x_coordinate(x), y_coordinate(y) {$/;"	f	class:Figura2D
+Figura2D	Shapes.cpp	/^class Figura2D : public GeomFigura {$/;"	c	file:
+Figura3D	Shapes.cpp	/^        Figura3D(float x, float y, float z) : x_coordinate(x), y_coordinate(y), z_coordinate(z) {$/;"	f	class:Figura3D
+Figura3D	Shapes.cpp	/^class Figura3D : public GeomFigura {$/;"	c	file:
+GeomFigura	Shapes.cpp	/^        GeomFigura() {$/;"	f	class:GeomFigura
+GeomFigura	Shapes.cpp	/^class GeomFigura {$/;"	c	file:
+Kubas	Shapes.cpp	/^        Kubas(float x, float y, float z, float k) : Figura3D(x, y, z), krastine(k) {$/;"	f	class:Kubas
+Kubas	Shapes.cpp	/^class Kubas : public Figura3D {$/;"	c	file:
+Kvadratas	Shapes.cpp	/^        Kvadratas(float x, float y, float k) : Figura2D(x, y), krastine(k) {$/;"	f	class:Kvadratas
+Kvadratas	Shapes.cpp	/^class Kvadratas : public Figura2D {$/;"	c	file:
+M_PI	Shapes.cpp	9;"	d	file:
+Sfera	Shapes.cpp	/^        Sfera(float x, float y, float z, float s) : Figura3D(x, y, z), spindulys(s) {$/;"	f	class:Sfera
+Sfera	Shapes.cpp	/^class Sfera : public Figura3D {$/;"	c	file:
+Skritulys	Shapes.cpp	/^        Skritulys(float x, float y, float s) : Figura2D(x, y), spindulys(s) {$/;"	f	class:Skritulys
+Skritulys	Shapes.cpp	/^class Skritulys : public Figura2D {$/;"	c	file:
+_USE_MATH_DEFINES	Shapes.cpp	5;"	d	file:
+krastine	Shapes.cpp	/^    float krastine;$/;"	m	class:Kubas	file:
+krastine	Shapes.cpp	/^    float krastine;$/;"	m	class:Kvadratas	file:
+main	Shapes.cpp	/^int main() {$/;"	f
+plotas	Shapes.cpp	/^        virtual float plotas() const {$/;"	f	class:GeomFigura
+printCoordinates	Shapes.cpp	/^        void printCoordinates() {$/;"	f	class:Figura2D
+printCoordinates	Shapes.cpp	/^        void printCoordinates() {$/;"	f	class:Figura3D
+printInfo	Shapes.cpp	/^        virtual void printInfo() {$/;"	f	class:GeomFigura
+spausdintiPlota	Shapes.cpp	/^void spausdintiPlota(const GeomFigura f) {$/;"	f
+spausdintiPlota2	Shapes.cpp	/^void spausdintiPlota2(const GeomFigura* f) {$/;"	f
+spindulys	Shapes.cpp	/^    float spindulys;$/;"	m	class:Sfera	file:
+spindulys	Shapes.cpp	/^    float spindulys;$/;"	m	class:Skritulys	file:
+turis	Shapes.cpp	/^        virtual float turis() const {$/;"	f	class:GeomFigura
+x_coordinate	Shapes.cpp	/^    float x_coordinate;$/;"	m	class:Figura2D	file:
+x_coordinate	Shapes.cpp	/^    float x_coordinate;$/;"	m	class:Figura3D	file:
+y_coordinate	Shapes.cpp	/^    float y_coordinate;$/;"	m	class:Figura2D	file:
+y_coordinate	Shapes.cpp	/^    float y_coordinate;$/;"	m	class:Figura3D	file:
+z_coordinate	Shapes.cpp	/^    float z_coordinate;$/;"	m	class:Figura3D	file:
+~Figura2D	Shapes.cpp	/^        virtual ~Figura2D() {$/;"	f	class:Figura2D
+~Figura3D	Shapes.cpp	/^        virtual ~Figura3D() {$/;"	f	class:Figura3D
+~GeomFigura	Shapes.cpp	/^        virtual ~GeomFigura() {$/;"	f	class:GeomFigura
+~Kubas	Shapes.cpp	/^        ~Kubas() {$/;"	f	class:Kubas
+~Kvadratas	Shapes.cpp	/^        ~Kvadratas() {$/;"	f	class:Kvadratas
+~Sfera	Shapes.cpp	/^        ~Sfera() {$/;"	f	class:Sfera
+~Skritulys	Shapes.cpp	/^        ~Skritulys() {$/;"	f	class:Skritulys
