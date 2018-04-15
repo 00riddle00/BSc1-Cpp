@@ -1,0 +1,23 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+CC	Makefile	/^CC=g++$/;"	m
+CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -g -lm -std=c++11 -DNDEBUG$/;"	m
+GetCalculations	Math.cpp	/^        static int GetCalculations() {$/;"	f	class:Math
+Math	Math.cpp	/^    Math() {}$/;"	f	class:Math	file:
+Math	Math.cpp	/^class Math {$/;"	c	file:
+PI	Math.cpp	/^    static float PI; $/;"	m	class:Math	file:
+PI	Math.cpp	/^float Math::PI = 3.14159265358979323846;$/;"	m	class:Math	file:
+SetCalcuations	Math.cpp	/^        static void SetCalcuations(int c) {$/;"	f	class:Math
+calculations	Math.cpp	/^    static int calculations;$/;"	m	class:Math	file:
+calculations	Math.cpp	/^int Math::calculations;$/;"	m	class:Math	file:
+factorial	Math.cpp	/^        static int factorial(int n) {$/;"	f	class:Math
+fibonacci	Math.cpp	/^        static int fibonacci(int n) {$/;"	f	class:Math
+getPI	Math.cpp	/^        static float getPI() {$/;"	f	class:Math
+main	Math.cpp	/^int main() {$/;"	f
+value	Math.cpp	/^    static int value;$/;"	m	class:Math	file:
+value	Math.cpp	/^int Math::value;$/;"	m	class:Math	file:
+~Math	Math.cpp	/^    ~Math() {}$/;"	f	class:Math	file:
