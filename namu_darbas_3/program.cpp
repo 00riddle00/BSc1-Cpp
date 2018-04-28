@@ -41,6 +41,7 @@
  |
  +===========================================================================*/
 
+#include <iterator>
 #include <string>
 #include <iostream>
 #include <iomanip>
@@ -175,6 +176,7 @@ int main(int argc, char *argv[]) {
         // else get input from user
         } else {
             input->clear_input();
+            cout << "[enter \"i\" for info][" << Car::getNumberOfCars() << " cars] main shell > ";
             input->get_input();
             if (!input->isValid()) {
                 input->clear_input();
@@ -298,6 +300,82 @@ int main(int argc, char *argv[]) {
                }
                 break;
             }
+            case 'u': {
+                cout << "Select the ID of the entry you would like to duplicate:" << endl;
+
+                const int size = cars.size();
+
+                // FIXME VLA
+                int ids[size];
+                //int ids[cars.size()];
+
+                for (size_t i = 0; i < cars.size(); i++) {
+                    cout << "(" << cars[i]->getID() << ") " << cars[i]->getCarMake() << endl;
+                    ids[i] = cars[i]->getID();
+                }
+
+                int id;
+                bool exists;
+
+                while(1) {
+                    cout << "(Enter a number) > ";
+                    cin >> id;
+
+                    for (size_t i = 0; i < size; i++) {
+                        if (ids[i] == id) {
+                            exists = true;
+                        }
+                    }
+
+                    if (!exists) {
+                        cout << "Such id does not exist" << endl;
+                        continue;
+                    }
+                    break;
+                }
+
+                int new_id;
+
+                cout << "Select the new ID of the duplicated entry:" << endl;
+
+                while(1) {
+                    cout << "(Enter a number) > ";
+                    cin >> new_id;
+
+                    exists = false;
+                    for (size_t i = 0; i < size; i++) {
+                        if (ids[i] == new_id) {
+                            exists = true;
+                        }
+                    }
+
+                    if (exists) {
+                        cout << "Such id already exists" << endl;
+                        continue;
+                    }
+                    break;
+                }
+
+                int index;
+
+                for (size_t i = 0; i < cars.size(); i++) {
+                    if (cars[i]->getID() == id) {
+                        index = i;
+                    }
+                }
+
+                StockCar *stockCar = dynamic_cast<StockCar*>(cars[index]);
+                if (stockCar != nullptr) {
+                    StockCar *newStockCar = new StockCar(*stockCar);
+                    //StockCar newStockCar = *stockCar;
+                    newStockCar->setID(new_id);
+                    cars.push_back(newStockCar);
+                    conn_stock_cars->write_to_file_stock_cars(cars);
+                    cout << "Successfully saved, ID = " << id << endl;
+                }
+                cin.get();
+                break;
+            }
             case 'd': {
                 bool id_set = false;
                 for (size_t i = 0; i < cars.size(); i++) {
@@ -305,16 +383,19 @@ int main(int argc, char *argv[]) {
                         if (Helpers::choice("Do you really want to delete this entry?")) {
                             StockCar *stockCar = dynamic_cast<StockCar*>(cars[i]);
                             if (stockCar != nullptr) {
+                                delete cars[i];
                                 cars.erase(cars.begin()+i);
                                 conn_stock_cars->write_to_file_stock_cars(cars);
                             } else {
                                 RaceCar *raceCar = dynamic_cast<RaceCar*>(cars[i]);
                                 if (raceCar != nullptr) {
+                                    delete cars[i];
                                     cars.erase(cars.begin()+i);
                                     conn_race_cars->write_to_file_race_cars(cars);
                                 } else {
                                     SUVCar *suvCar = dynamic_cast<SUVCar*>(cars[i]);
                                     if (suvCar != nullptr) {
+                                        delete cars[i];
                                         cars.erase(cars.begin()+i);
                                         conn_suv_cars->write_to_file_suv_cars(cars);
                                     } else {
@@ -418,6 +499,7 @@ void list_data(Table &table, vector<Car*> &cars, bool sortedByID /*=true*/, bool
         }
     }
 }
+
 
 
 void perform_action(Table &table, vector<Car*> &cars) {
@@ -551,6 +633,7 @@ void perform_action(Table &table, vector<Car*> &cars) {
             list_data(table, cars, false);
             break;
         }
+
     }
 }
 

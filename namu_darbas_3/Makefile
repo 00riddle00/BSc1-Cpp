@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -Wextra -g -lm -std=c++11 -DNDEBUG
+CFLAGS=-Wall -Wextra -Wvla -g -lm -std=c++11 -DNDEBUG
 
 program: program.cpp write_to_binary_file.o load_from_binary_file.o input.o wheels.o car.o stockcar.o racecar.o suvcar.o connection.o Helpers.o table.o filter.o sorting.o race.o
 	$(CC) $(CFLAGS) -o program program.cpp write_to_binary_file.o load_from_binary_file.o input.o wheels.o car.o stockcar.o racecar.o suvcar.o connection.o Helpers.o table.o filter.o sorting.o race.o
