@@ -687,7 +687,7 @@ void race(Table &table, vector<Car*> &cars) {
 
     cout << endl << "The " << distance << "m race begins" << endl << endl;
 
-    static Race <int> raceObject;
+    static Race <float> raceObject;
 
     //static Race raceObject;
     raceObject.setRaceDistance(distance);
