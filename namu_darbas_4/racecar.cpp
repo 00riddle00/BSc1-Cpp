@@ -12,7 +12,7 @@ RaceCar::RaceCar()
         "",
         0,
         0,
-        0,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -32,7 +32,7 @@ RaceCar::RaceCar(
         const string& car_model,
         int car_year,
         int car_price,
-        int max_speed,
+        float max_speed,
         float not_to_sixty,
         float sixty_to_max_speed,
         float offroad_hindrance,
@@ -200,7 +200,7 @@ float RaceCar::getSixtyToMaxSpeedForRace(const string& raceType) const {
     return sixtyToMaxSpeed;
 }
 
-int RaceCar::getMaxSpeedForRace(const string& raceType) const {
+float RaceCar::getMaxSpeedForRace(const string& raceType) const {
     float maxSpeed = getMaxSpeed();
 
     // if (raceType == "drag") -> nothing changes
@@ -210,6 +210,6 @@ int RaceCar::getMaxSpeedForRace(const string& raceType) const {
         maxSpeed = (maxSpeed - 150) * (2 - getOffroadHindrance());
     }
 
-    return floor(maxSpeed + 0.5);
+    return maxSpeed;
 }
 

@@ -17,7 +17,7 @@ Car::Car() {
     this->car_model = "";
     this->car_year = 0;
     this->car_price = 0;
-    this->max_speed = 0;
+    this->max_speed = 0.0;
     this->not_to_sixty = 0.0;
     this->sixty_to_max_speed = 0.0;
     this->offroad_hindrance = 0.0;
@@ -31,7 +31,7 @@ Car::Car(
         const string& car_model,
         int car_year,
         int car_price,
-        int max_speed,
+        float max_speed,
         float not_to_sixty,
         float sixty_to_max_speed,
         float offroad_hindrance,
@@ -82,6 +82,7 @@ Car::~Car() {
 #endif
 }
 
+
 void Car::setID(int id) {
     if (id <= 0) {
         throw std::invalid_argument("Please make sure that id is a positive integer");
@@ -131,7 +132,7 @@ void Car::setCarPrice(int car_price) {
     this->car_price = car_price;
 };
 
-void Car::setMaxSpeed(int max_speed) {
+void Car::setMaxSpeed(float max_speed) {
     if (max_speed <= 0) {
         throw std::invalid_argument("Max speed cannot be zero or negative!");
     }
@@ -237,7 +238,7 @@ int Car::getCarPrice() const {
     return this->car_price;
 };
 
-int Car::getMaxSpeed() const {
+float Car::getMaxSpeed() const {
     return this->max_speed;
 };
 
@@ -462,5 +463,33 @@ void Car::decrementNumberOfCars() {
     --numberOfCars;
 }
 
+void Car::setCompField(size_t cf) {
+    compField = cf;
+}
+
+size_t Car::getCompField() {
+    return compField;
+}
+
+
 size_t Car::numberOfCars = 0;
+size_t Car::compField = 0;
+
+
+bool operator>(const Car &obj1, const Car &obj2) {
+    cout << "HERE I COME" << endl;
+    switch(Car::getCompField()) {
+        case 1: 
+            cout << "CAR MAKE" << endl;
+            return obj1.getCarMake() > obj2.getCarMake();
+        case 2: 
+            return obj1.getCarModel() > obj2.getCarModel();
+        default:
+            // TODO add throw exception
+            cout << "Car object Comparison field is not set or set to the invalid value" << endl;
+            return false;
+    }
+}
+
+
 

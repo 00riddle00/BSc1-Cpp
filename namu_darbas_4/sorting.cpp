@@ -242,36 +242,19 @@ void Sorting::sort(vector<Car*> &cars) {
     vector<string> temp;
 
     switch(this->field) {
-        case SortingConstants::MAKE:
+        case SortingConstants::MAKE: {
 
-            for (size_t i = 0; i < cars.size(); i++) {
-                temp.push_back(cars[i]->getCarMake());
-            }
-
-            Helpers::sort_lexicographically(temp);
-
-            cout << "Sorted by make:" << endl << endl;
-
-            for (size_t i = 0; i < temp.size(); i++) {
-                cout << i << ". " << temp[i] << endl;
-            }
-
+            Car::setCompField(SortingConstants::MAKE);
+            Helpers::sort_lexicographically(cars);
             break;
-        case SortingConstants::MODEL:
+        }
 
-            for (size_t i = 0; i < cars.size(); i++) {
-                temp.push_back(cars[i]->getCarModel());
-            }
-
-            Helpers::sort_lexicographically(temp);
-
-            cout << "Sorted by model:" << endl << endl;
-
-            for (size_t i = 0; i < temp.size(); i++) {
-                cout << i << ". " << temp[i] << endl;
-            }
-
+        case SortingConstants::MODEL: {
+            Car::setCompField(SortingConstants::MODEL);
+            Helpers::sort_lexicographically(cars);
             break;
+        }
+
         case SortingConstants::YEAR:
             this->sort_by_year(cars, this->first, this->last);
             break;

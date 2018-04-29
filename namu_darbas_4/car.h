@@ -7,7 +7,7 @@ const int MAX_ENTRY_SIZE = 30;
 const int LATEST_YEAR = 2018;
 const int EARLIEST_YEAR = 1920;
 const int MAX_PRICE = 1e9;
-const int MAX_MAX_SPEED = 420;
+const float MAX_MAX_SPEED = 420.0;
 const float MAX_NOT_TO_SIXTY = 100.0;
 const float MAX_SIXTY_TO_MAX_SPEED = 1000.0;
 
@@ -21,7 +21,7 @@ class Car {
     std::string car_model;
     int car_year;
     int car_price;
-    int max_speed;
+    float max_speed;
     float not_to_sixty;
     float sixty_to_max_speed;
     float offroad_hindrance;
@@ -31,6 +31,7 @@ class Car {
     float constant2;
     float race_time;
     static size_t numberOfCars;
+    static size_t compField;
 
     public:
         Wheels wheels;
@@ -43,7 +44,7 @@ class Car {
             const std::string& car_model,
             int car_year,
             int car_price,
-            int max_speed,
+            float max_speed,
             float not_to_sixty,
             float sixty_to_max_speed,
             float offroad_hindrance,
@@ -53,9 +54,11 @@ class Car {
             float protectorDepth
         );
 
-        Car(const Car& orig);
+        Car(const Car&);
 
         virtual ~Car() = 0;
+
+        friend bool operator>(const Car& obj1, const Car& obj2);
 
         void setID(int);
         void setFilter(bool);
@@ -63,7 +66,7 @@ class Car {
         void setCarModel(const std::string&);
         void setCarYear(int);
         void setCarPrice(int);
-        void setMaxSpeed(int);
+        void setMaxSpeed(float);
         void setNotToSixty(float);
         void setSixtyToMaxSpeed(float);
         void setOffroadHindrance(float);
@@ -78,7 +81,7 @@ class Car {
         const std::string& getCarModel() const;
         int getCarYear() const;
         int getCarPrice() const;
-        int getMaxSpeed() const;
+        float getMaxSpeed() const;
         float getNotToSixty() const;
         float getSixtyToMaxSpeed() const;
         float getOffroadHindrance() const;
@@ -91,10 +94,14 @@ class Car {
 
         virtual float getNotToSixtyForRace(const std::string&) const = 0;
         virtual float getSixtyToMaxSpeedForRace(const std::string&) const = 0;
-        virtual int getMaxSpeedForRace(const std::string&) const = 0;
+        virtual float getMaxSpeedForRace(const std::string&) const = 0;
 
         static size_t getNumberOfCars();
         static void decrementNumberOfCars();
+        static void setCompField(size_t);
+        static size_t getCompField();
 };
+
+bool operator>(const Car& obj1, const Car& obj2);
 
 #endif

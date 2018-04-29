@@ -18,7 +18,7 @@ class SUVCar : public Car {
             const std::string& car_model,
             int car_year,
             int car_price,
-            int max_speed,
+            float max_speed,
             float not_to_sixty,
             float sixty_to_max_speed,
             float offroad_hindrance,
@@ -39,7 +39,7 @@ class SUVCar : public Car {
 
         float getNotToSixtyForRace(const std::string&) const override;
         float getSixtyToMaxSpeedForRace(const std::string&) const override;
-        int getMaxSpeedForRace(const std::string&) const override; 
+        float getMaxSpeedForRace(const std::string&) const override; 
 };
 
 
