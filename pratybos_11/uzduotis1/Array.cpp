@@ -43,8 +43,9 @@ void Array::setAt(size_t i, int value) {
 
 void Array::print() const{
     for (size_t i = 0; i < size; i++) {
-        cout << ptr[i] << endl;
+        cout << ptr[i] << " ";
     }
+    cout << endl;
 }
 
 

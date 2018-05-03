@@ -31,6 +31,8 @@ public:
       if (p == nullptr) {
           // Kodel ne nullptr p yra?
           cout << "nullptr" << endl;
+      } else {
+          cout << "not null" << endl;
       }
       return *p;
   }

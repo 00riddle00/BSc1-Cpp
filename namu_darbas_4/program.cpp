@@ -303,6 +303,7 @@ int main(int argc, char *argv[]) {
             case 'u': {
                 cout << "Select the ID of the entry you would like to duplicate:" << endl;
 
+                // ne kompiliavimo meto konstanta
                 const int size = cars.size();
 
                 // FIXME VLA
