@@ -1,0 +1,22 @@
+integers1 dydis yra: 5
+0 0 0 0 0
+integers2 dydis yra: 10
+0 0 0 0 0 0 0 0 0 0
+Iveskite 15 sveikuju skaiciu:
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Po ivedimo, masyvas integers1:
+1 2 3 4 5
+Po ivedimo, masyvas integers2:
+6 7 8 9 10 11 12 13 14 15
+Masyvai integers1 ir integers2 yra nelygus
+#1 Masyvai integers1 ir integers3 yra lygus
+#2 Masyvai integers3 ir integers1 yra lygus
+Masyvas integers1 po priskyrimo:
+6 7 8 9 10 11 12 13 14 15
+Masyvas integers1 po priskyrimo:
+1 2 3 4 5
+integers2[0] reiksme yra 6
+integers3[0] reiksme yra 1
+Masyvas integers1 po priskyrimo i 4 elementa:
+1 2 3 4 100
+
