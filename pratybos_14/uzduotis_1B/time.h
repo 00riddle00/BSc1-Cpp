@@ -36,7 +36,9 @@ class IncorrectTimeException : public std::range_error {
     const std::string function_name;
     public:
         IncorrectTimeException(const std::string& re, const std::string &fn = " ");
-        const char* what() const noexcept override;
+        std::string getFunctionName();
+        // TODO delete this comment below
+        //const char* what() const noexcept override;
 };
 
 

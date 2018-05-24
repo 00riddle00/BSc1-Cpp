@@ -99,11 +99,16 @@ void Time::printStandard() {
 IncorrectTimeException::IncorrectTimeException(const string& re, const string& fn)
         : range_error(re), function_name(fn) { }
 
-const char* IncorrectTimeException::what() const noexcept {
-    const string exc_message =  "[Incorrectly set time] [in function: " + function_name + "] " + range_error::what();
-    //cout << exc_message << endl;
-    return exc_message.c_str();
+string IncorrectTimeException::getFunctionName() {
+    return function_name;
 }
+
+// TODO delete  commented code below
+/*const char* IncorrectTimeException::what() const noexcept {*/
+    //const string exc_message =  "[Incorrectly set time] [in function: " + function_name + "] " + range_error::what();
+    ////cout << exc_message << endl;
+    //return exc_message.c_str();
+//}
 
 
 
