@@ -1,0 +1,35 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+CC	Makefile	/^CC=g++$/;"	m
+CFLAGS	Makefile	/^CFLAGS=-Wall -Wextra -Wvla -g -lm -std=c++11 -DNDEBUG$/;"	m
+IncorrectTimeException	Namespace.cpp	/^IncorrectTimeException::IncorrectTimeException(const string& re, const string& fn)$/;"	f	class:IncorrectTimeException
+IncorrectTimeException	Namespace1.h	/^class IncorrectTimeException : public std::range_error {$/;"	c
+IncorrectTimeException	Namespace2.h	/^class IncorrectTimeException : public std::range_error {$/;"	c
+TIME_H	Namespace1.h	7;"	d
+TIME_H	Namespace2.h	7;"	d
+Time	Namespace.cpp	/^Time::Time( int h \/*= 0*\/, int m \/*= 0*\/, int s \/*= 0*\/ ) {$/;"	f	class:Time
+Time	Namespace1.h	/^class Time $/;"	c
+Time	Namespace2.h	/^class Time $/;"	c
+function_name	Namespace1.h	/^    const std::string function_name;$/;"	m	class:IncorrectTimeException
+function_name	Namespace2.h	/^    const std::string function_name;$/;"	m	class:IncorrectTimeException
+getFunctionName	Namespace.cpp	/^string IncorrectTimeException::getFunctionName() {$/;"	f	class:IncorrectTimeException
+getHour	Namespace.cpp	/^int Time::getHour() {$/;"	f	class:Time
+getMinute	Namespace.cpp	/^int Time::getMinute() {$/;"	f	class:Time
+getSecond	Namespace.cpp	/^int Time::getSecond() {$/;"	f	class:Time
+hour	Namespace1.h	/^   int hour; \/\/ 0 - 23 (24-hour clock format)$/;"	m	class:Time
+hour	Namespace2.h	/^   int hour; \/\/ 0 - 23 (24-hour clock format)$/;"	m	class:Time
+main	main.cpp	/^int main() {$/;"	f
+minute	Namespace1.h	/^   int minute; \/\/ 0 - 59$/;"	m	class:Time
+minute	Namespace2.h	/^   int minute; \/\/ 0 - 59$/;"	m	class:Time
+printStandard	Namespace.cpp	/^void Time::printStandard() { $/;"	f	class:Time
+printUniversal	Namespace.cpp	/^void Time::printUniversal() {$/;"	f	class:Time
+second	Namespace1.h	/^   int second; \/\/ 0 - 59$/;"	m	class:Time
+second	Namespace2.h	/^   int second; \/\/ 0 - 59$/;"	m	class:Time
+setHour	Namespace.cpp	/^void Time::setHour( int h ) {$/;"	f	class:Time
+setMinute	Namespace.cpp	/^void Time::setMinute( int m ) {$/;"	f	class:Time
+setSecond	Namespace.cpp	/^void Time::setSecond( int s ) {$/;"	f	class:Time
+setTime	Namespace.cpp	/^void Time::setTime( int h, int m, int s ) {$/;"	f	class:Time
